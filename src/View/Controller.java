@@ -2,19 +2,32 @@ package View;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-
-import javax.swing.text.html.ListView;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
-public class Controller implements Initializable
-{
-    @FXML private ListView listView;
+public class Controller {
+    @FXML
+    public ListView listView = new ListView();
 
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources)
-    {
+    public void yuv() {
+        System.out.println("yuv");
+    }
 
+    public void emo() {
+        listView.getItems().addAll("test");
+        listView.refresh();
+    }
+
+    public void test1() {
+        listView.getItems().add("yuv");
+        listView.getItems().add("niz");
+        listView.getItems().add("ori");
+        listView.refresh();
     }
 }
