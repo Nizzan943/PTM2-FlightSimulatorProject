@@ -1,13 +1,9 @@
 package Model;
 
-import javax.swing.*;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListResourceBundle;
 import java.util.stream.Collectors;
 
 public class Commands {
@@ -278,7 +274,7 @@ public class Commands {
 		public void execute()
 		{
 
-			SimpleAnomalyDetector SAD = new SimpleAnomalyDetector();
+			LinearRegression SAD = new LinearRegression();
 
 			SAD.learnNormal(getSharedState().train);
 

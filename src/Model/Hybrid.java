@@ -1,11 +1,6 @@
 package Model;
 
-import Model.*;
 
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -20,7 +15,7 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
 
         //linearReg
         int flag;
-        SimpleAnomalyDetector linearReg = new SimpleAnomalyDetector();
+        LinearRegression linearReg = new LinearRegression();
         timeSeries1.setCorrelationTresh(0.95);
         linearReg.learnNormal(timeSeries1);
         List <AnomalyReport> linearReg_detect = linearReg.detect(timeSeries2);
@@ -31,7 +26,7 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
 
 
         //Hybrid
-        SimpleAnomalyDetector linearReg_hybrid = new SimpleAnomalyDetector();
+        LinearRegression linearReg_hybrid = new LinearRegression();
         timeSeries1.setCorrelationTresh(0);
         linearReg_hybrid.learnNormal(timeSeries1);
         List <CorrelatedFeatures> f = linearReg_hybrid.getNormalModel();

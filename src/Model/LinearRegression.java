@@ -3,7 +3,7 @@ package Model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector
+public class LinearRegression implements TimeSeriesAnomalyDetector
 {
 	private ArrayList<CorrelatedFeatures> arrCor = new ArrayList<CorrelatedFeatures>();
 	
