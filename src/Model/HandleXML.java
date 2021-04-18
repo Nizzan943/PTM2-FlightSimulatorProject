@@ -42,15 +42,18 @@ public class HandleXML {
 
             } catch (NumberFormatException e)
             {
-                WrongFormatAlert = true;
+                if (MissingArgumentsAlert == false)
+                    WrongFormatAlert = true;
                 break;
             }
             catch (ArrayIndexOutOfBoundsException e){
-                WrongFormatAlert = true;
+                if (MissingArgumentsAlert == false)
+                    WrongFormatAlert = true;
                 break;
             }
             catch (ClassCastException e){
-                MissingArgumentsAlert = true;
+                if (WrongFormatAlert == false)
+                    MissingArgumentsAlert = true;
                 break;
             }
         }
@@ -59,24 +62,29 @@ public class HandleXML {
 
         } catch (NumberFormatException e)
         {
-            WrongFormatAlert = true;
+            if (MissingArgumentsAlert == false)
+                WrongFormatAlert = true;
         }
         catch (ArrayIndexOutOfBoundsException e){
-            WrongFormatAlert = true;
+            if (MissingArgumentsAlert == false)
+                WrongFormatAlert = true;
         }
         catch (ClassCastException e){
-            MissingArgumentsAlert = true;
+            if (WrongFormatAlert == false)
+                MissingArgumentsAlert = true;
         }
 
         for (UserSettings userSettings: PropertyList)
         {
             if (userSettings.getRealName() == null || userSettings.getAssosicateName() == null || userSettings.getMin() == -1000000 || userSettings.getMax() == 1000000 ) {
-                WrongFormatAlert = true;
+                if (MissingArgumentsAlert == false)
+                    WrongFormatAlert = true;
                 break;
             }
         }
         if (additionalSettings.getDataSamplingRate() == 1000000 || additionalSettings.getProperFlightFile() == null || additionalSettings.algorithmFile == null)
-            WrongFormatAlert = true;
+            if (MissingArgumentsAlert == false)
+                WrongFormatAlert = true;
 
         decoder.close();
     }

@@ -12,9 +12,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -23,6 +26,8 @@ public class Controller {
 
     @FXML
     ListView listView;
+    TextFlow textFlow;
+    Label lable;
 
     public void openCSV() {
         FileChooser fc = new FileChooser();
@@ -40,16 +45,24 @@ public class Controller {
     public void WrongFormatAlert()
     {
         System.out.println("Wrong Format");
+        //Text text = new Text("Wrong format of XML, please check your format and try again");
+      //  text.setStyle("-fx-font-weight: bold");
+       // textFlow.getChildren().add(text);
+       // lable.textProperty().set("Wrong format of XML, please check your format and try again");
+       listView.getItems().add("Wrong format of XML, please check your format and try again");
+
     }
 
     public void MissingArgumentAlert()
     {
         System.out.println("Missing Argument");
+        listView.getItems().add("Missing Argument, please check your settings and try again");
     }
 
     public void SuccessAlert()
     {
         System.out.println("success");
+        listView.getItems().add("The file was uploaded successfully");
     }
 
     public void LoadXML() throws Exception {
@@ -65,8 +78,10 @@ public class Controller {
                 WrongFormatAlert();
             else if (handleXML.MissingArgumentsAlert == true)
                 MissingArgumentAlert();
-            else
+            else {
                 SuccessAlert();
+                XML_file = chozen.getAbsolutePath();
+            }
         }
     }
 

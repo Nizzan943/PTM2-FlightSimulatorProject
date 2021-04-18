@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -15,7 +21,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
    <children>
       <ListView fx:id="listView" layoutX="25.0" layoutY="43.0" prefHeight="342.0" prefWidth="163.0" />
       <Button layoutX="25.0" layoutY="411.0" mnemonicParsing="false" onMouseClicked="#openCSV" prefHeight="42.0" prefWidth="78.0" text="Open" />
@@ -85,5 +91,9 @@
          </font>
       </Label>
       <TextArea layoutX="667.0" layoutY="414.0" prefHeight="42.0" prefWidth="46.0" />
+      <TextFlow fx:id="textFlow" layoutX="159.0" layoutY="157.0" prefHeight="122.0" prefWidth="437.0">
+         <children>
+            <Label fx:id="lable" prefHeight="122.0" prefWidth="441.0" />
+         </children></TextFlow>
    </children>
 </AnchorPane>
