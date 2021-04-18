@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Time;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.geometry.NodeOrientation;
@@ -24,20 +25,41 @@ import javafx.stage.Stage;
 import javax.swing.*;
 
 public class Controller {
-    String XML_file;
+    HandleXML XML_settings;
 
     @FXML
     ListView listView;
 
     public void openCSV() {
+        int flag = 0;
         FileChooser fc = new FileChooser();
         fc.setTitle("Open CSV file"); //headline
         fc.setInitialDirectory(new File("/")); //what happens when we click
         File chozen = fc.showOpenDialog(null);
         if (chozen != null) {
             TimeSeries timeSeries = new TimeSeries(chozen.getAbsolutePath());
-            for (TimeSeries.col col : timeSeries.getCols()) {
-                listView.getItems().add(col.getName());
+            if (timeSeries.getCols().length != 2) {
+                JOptionPane.showMessageDialog(null,
+                        "Missing Argument, please check your file and try again",
+                        "ERROR",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+            for (int i = 0; i < timeSeries.getCols().length; i++)
+            {
+                flag = 0;
+                if (timeSeries.getCols()[i].getName().intern() != XML_settings.PropertyList.get(i).getRealName().intern())
+                {
+                    JOptionPane.showMessageDialog(null,
+                            "Incompatibility with XML file, please check your file and try again",
+                            "ERROR",
+                            JOptionPane.WARNING_MESSAGE);
+                    flag = 1;
+                }
+            }
+            if (timeSeries.getCols().length == 2 && flag == 0) {
+                for (TimeSeries.col col : timeSeries.getCols()) {
+                    listView.getItems().add(col.getName());
+                }
             }
         }
     }
@@ -82,7 +104,7 @@ public class Controller {
                 MissingArgumentAlert();
             else {
                 SuccessAlert();
-                XML_file = chozen.getAbsolutePath();
+                XML_settings = handleXML;
             }
         }
     }
