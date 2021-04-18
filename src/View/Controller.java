@@ -42,7 +42,7 @@ public class Controller {
                 JOptionPane.showMessageDialog(null,
                         "Missing Argument, please check your file and try again",
                         "ERROR",
-                        JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.ERROR_MESSAGE);
             }
             for (int i = 0; i < timeSeries.getCols().length; i++)
             {
@@ -52,7 +52,7 @@ public class Controller {
                     JOptionPane.showMessageDialog(null,
                             "Incompatibility with XML file, please check your file and try again",
                             "ERROR",
-                            JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.ERROR_MESSAGE);
                     flag = 1;
                 }
             }
@@ -69,7 +69,7 @@ public class Controller {
         JOptionPane.showMessageDialog(null,
                 "Wrong format of file, please check your format and try again",
                 "ERROR",
-                JOptionPane.WARNING_MESSAGE);
+                JOptionPane.ERROR_MESSAGE);
 
     }
 
@@ -78,7 +78,7 @@ public class Controller {
         JOptionPane.showMessageDialog(null,
                 "Missing Argument, please check your settings and try again",
                 "ERROR",
-                JOptionPane.WARNING_MESSAGE);
+                JOptionPane.ERROR_MESSAGE);
     }
 
     public void SuccessAlert()
@@ -86,7 +86,7 @@ public class Controller {
         JOptionPane.showMessageDialog(null,
                 "The file was uploaded successfully",
                 "Success",
-                JOptionPane.WARNING_MESSAGE);
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void LoadXML() throws Exception {
