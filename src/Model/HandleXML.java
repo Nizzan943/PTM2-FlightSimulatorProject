@@ -36,14 +36,21 @@ public class HandleXML {
                     new BufferedInputStream(new FileInputStream(path)));
         } catch (FileNotFoundException e){ e.printStackTrace(); }
         ArrayList<UserSettings> userSettings = new ArrayList<>();
-        for (int i = 0; i < 42; i++) {
+        for (int i = 0; i < 2; i++) {
             try {
                 UserSettings decodedSettings = (UserSettings) decoder.readObject();
                 PropertyList.add(decodedSettings);
 
-            } catch (Exception e)
+            } catch (NumberFormatException e)
             {
-                System.out.println(e);
+                System.out.println("Error: Incorrect data format, please check XML format doc. \n" + e);
+
+            }
+            catch (ArrayIndexOutOfBoundsException e){
+                System.out.println("Error: index is out of array bound. \n" + e);
+            }
+            catch (ClassCastException e){
+                System.out.println("Error: Cast error. \n" + e);
             }
         }
         Data_sampling_rate = (float)decoder.readObject();

@@ -6,12 +6,10 @@ public class UserSettings implements Serializable {
 
     public UserSettings() {
     }
-
-    private String realName;
+    private String assosicateName;
     private int max;
     private int min;
-    private String assosicateName;
-
+    private String realName;
 
     public String getRealName() {
         return realName;
