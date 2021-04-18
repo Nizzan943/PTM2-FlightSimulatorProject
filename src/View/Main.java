@@ -12,21 +12,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Controller test = new Controller();
-        test.test1();
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hey Yuv!");
+        primaryStage.setTitle("Flight Simulator");
         primaryStage.setScene(new Scene(root, 600  , 400));
         primaryStage.show();
-
-
     }
 
 
     public static void main(String[] args) {
         launch(args);
-
-
-
     }
 }

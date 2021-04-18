@@ -21,17 +21,17 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
    <children>
-      <ListView layoutX="25.0" layoutY="43.0" prefHeight="342.0" prefWidth="163.0" />
-      <Button layoutX="25.0" layoutY="411.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="78.0" text="Open" />
+      <ListView fx:id="listView" layoutX="25.0" layoutY="43.0" prefHeight="342.0" prefWidth="163.0" />
+      <Button layoutX="25.0" layoutY="411.0" mnemonicParsing="false" onMouseClicked="#openCSV" prefHeight="42.0" prefWidth="78.0" text="Open" />
       <MenuBar prefHeight="24.0" prefWidth="600.0">
         <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
+            <Menu mnemonicParsing="false" text="File">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#LoadXML" text="load XML file" />
+                </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
               <MenuItem mnemonicParsing="false" text="Delete" />

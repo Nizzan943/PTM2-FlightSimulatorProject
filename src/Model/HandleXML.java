@@ -9,7 +9,12 @@ import java.util.List;
 
 public class HandleXML {
 
-    public static void serializeToXML(UserSettings settings) throws IOException {
+    List<UserSettings> PropertyList = new ArrayList<>();
+    float Data_sampling_rate;
+    String Proper_flight_file;
+    String Algorithm_file;
+
+   /* public static void serializeToXML(UserSettings settings) throws IOException {
         FileOutputStream fos = new FileOutputStream("settings.xml");
         XMLEncoder encoder = new XMLEncoder(fos);
         encoder.setExceptionListener(new ExceptionListener() {
@@ -22,18 +27,28 @@ public class HandleXML {
         fos.close();
     }
 
-
-    public static void deserializeFromXML(String path) throws IOException
+*/
+    public void deserializeFromXML(String path)
     {
-        List<Object> PropertyList = new ArrayList<>();
-        XMLDecoder decoder = new XMLDecoder(
-                new BufferedInputStream(new FileInputStream(path)));
+        XMLDecoder decoder = null;
+        try {
+            decoder = new XMLDecoder(
+                    new BufferedInputStream(new FileInputStream(path)));
+        } catch (FileNotFoundException e){ e.printStackTrace(); }
         ArrayList<UserSettings> userSettings = new ArrayList<>();
         for (int i = 0; i < 42; i++) {
-            UserSettings decodedSettings = (UserSettings) decoder.readObject();
-            PropertyList.add(decodedSettings);
-        }
+            try {
+                UserSettings decodedSettings = (UserSettings) decoder.readObject();
+                PropertyList.add(decodedSettings);
 
+            } catch (Exception e)
+            {
+                System.out.println(e);
+            }
+        }
+        Data_sampling_rate = (float)decoder.readObject();
+        Proper_flight_file = (String)decoder.readObject();
+        Algorithm_file = (String)decoder.readObject();
         decoder.close();
     }
 }
