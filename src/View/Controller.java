@@ -21,13 +21,13 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.swing.*;
+
 public class Controller {
     String XML_file;
 
     @FXML
     ListView listView;
-    TextFlow textFlow;
-    Label lable;
 
     public void openCSV() {
         FileChooser fc = new FileChooser();
@@ -44,25 +44,27 @@ public class Controller {
 
     public void WrongFormatAlert()
     {
-        System.out.println("Wrong Format");
-        //Text text = new Text("Wrong format of XML, please check your format and try again");
-      //  text.setStyle("-fx-font-weight: bold");
-       // textFlow.getChildren().add(text);
-       // lable.textProperty().set("Wrong format of XML, please check your format and try again");
-       listView.getItems().add("Wrong format of XML, please check your format and try again");
+        JOptionPane.showMessageDialog(null,
+                "Wrong format of file, please check your format and try again",
+                "ERROR",
+                JOptionPane.WARNING_MESSAGE);
 
     }
 
     public void MissingArgumentAlert()
     {
-        System.out.println("Missing Argument");
-        listView.getItems().add("Missing Argument, please check your settings and try again");
+        JOptionPane.showMessageDialog(null,
+                "Missing Argument, please check your settings and try again",
+                "ERROR",
+                JOptionPane.WARNING_MESSAGE);
     }
 
     public void SuccessAlert()
     {
-        System.out.println("success");
-        listView.getItems().add("The file was uploaded successfully");
+        JOptionPane.showMessageDialog(null,
+                "The file was uploaded successfully",
+                "Success",
+                JOptionPane.WARNING_MESSAGE);
     }
 
     public void LoadXML() throws Exception {
