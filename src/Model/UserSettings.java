@@ -7,8 +7,8 @@ public class UserSettings implements Serializable {
     public UserSettings() {
     }
     private String assosicateName;
-    private int max;
-    private int min;
+    private int max = 1000000;
+    private int min = -1000000;
     private String realName;
 
 

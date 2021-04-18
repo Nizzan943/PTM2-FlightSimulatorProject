@@ -2,7 +2,7 @@ package Model;
 
 public class AdditionalSettings {
 
-    Float dataSamplingRate;
+    Float dataSamplingRate = (float)1000000;
     String properFlightFile;
     String algorithmFile;
 

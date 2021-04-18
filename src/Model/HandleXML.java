@@ -7,8 +7,8 @@ import java.util.List;
 
 public class HandleXML {
 
-    List<UserSettings> PropertyList = new ArrayList<>();
-    AdditionalSettings additionalSettings = new AdditionalSettings();
+    public List<UserSettings> PropertyList = new ArrayList<>();
+    public AdditionalSettings additionalSettings = new AdditionalSettings();
 
    /* public static void serializeToXML(UserSettings settings) throws IOException {
         FileOutputStream fos = new FileOutputStream("settings.xml");
@@ -34,10 +34,6 @@ public class HandleXML {
         for (int i = 0; i < 2; i++) {
             try {
                 UserSettings decodedSettings = (UserSettings) decoder.readObject();
-                if  (decodedSettings.getAssosicateName() == null)
-                {
-                    throw new NumberFormatException();
-                }
                 PropertyList.add(decodedSettings);
 
             } catch (NumberFormatException e)
