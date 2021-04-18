@@ -38,8 +38,7 @@ public class Controller
         }
     }
 
-    public void LoadXML()
-    {
+    public void LoadXML() throws Exception {
         FileChooser fc = new FileChooser();
         fc.setTitle("Load XML file"); //headline
         fc.setInitialDirectory(new File("/")); //what happens when we click

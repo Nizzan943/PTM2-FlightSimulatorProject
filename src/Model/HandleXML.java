@@ -24,7 +24,7 @@ public class HandleXML {
     }
 
 */
-    public void deserializeFromXML(String path)
+    public void deserializeFromXML(String path) throws Exception
     {
         XMLDecoder decoder = null;
         try {
@@ -34,11 +34,15 @@ public class HandleXML {
         for (int i = 0; i < 2; i++) {
             try {
                 UserSettings decodedSettings = (UserSettings) decoder.readObject();
+                if  (decodedSettings.getAssosicateName() == null)
+                {
+                    throw new NumberFormatException();
+                }
                 PropertyList.add(decodedSettings);
 
             } catch (NumberFormatException e)
             {
-                System.out.println("Error: Incorrect data format, please check XML format doc. \n" + e);
+                System.out.println("Error: Incorrect data format, please check XML format, do you provide string-assosiated name?. \n" + e);
 
             }
             catch (ArrayIndexOutOfBoundsException e){
