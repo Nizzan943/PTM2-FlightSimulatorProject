@@ -11,6 +11,7 @@ public class UserSettings implements Serializable {
     private int min;
     private String realName;
 
+
     public String getRealName() {
         return realName;
     }

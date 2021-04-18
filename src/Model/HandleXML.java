@@ -1,8 +1,6 @@
 package Model;
 
-import java.beans.ExceptionListener;
 import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +8,7 @@ import java.util.List;
 public class HandleXML {
 
     List<UserSettings> PropertyList = new ArrayList<>();
-    float Data_sampling_rate;
-    String Proper_flight_file;
-    String Algorithm_file;
+    AdditionalSettings additionalSettings = new AdditionalSettings();
 
    /* public static void serializeToXML(UserSettings settings) throws IOException {
         FileOutputStream fos = new FileOutputStream("settings.xml");
@@ -35,7 +31,6 @@ public class HandleXML {
             decoder = new XMLDecoder(
                     new BufferedInputStream(new FileInputStream(path)));
         } catch (FileNotFoundException e){ e.printStackTrace(); }
-        ArrayList<UserSettings> userSettings = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             try {
                 UserSettings decodedSettings = (UserSettings) decoder.readObject();
@@ -53,9 +48,7 @@ public class HandleXML {
                 System.out.println("Error: Cast error. \n" + e);
             }
         }
-        Data_sampling_rate = (float)decoder.readObject();
-        Proper_flight_file = (String)decoder.readObject();
-        Algorithm_file = (String)decoder.readObject();
+        additionalSettings = (AdditionalSettings) decoder.readObject();
         decoder.close();
     }
 }

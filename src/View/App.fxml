@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -21,7 +15,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
    <children>
       <ListView fx:id="listView" layoutX="25.0" layoutY="43.0" prefHeight="342.0" prefWidth="163.0" />
       <Button layoutX="25.0" layoutY="411.0" mnemonicParsing="false" onMouseClicked="#openCSV" prefHeight="42.0" prefWidth="78.0" text="Open" />
@@ -85,7 +79,7 @@
       </Button>
       <Circle fill="#e8e8e8" layoutX="706.0" layoutY="125.0" radius="61.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fill="#afb4b9" layoutX="706.0" layoutY="125.0" radius="39.0" stroke="BLACK" strokeType="INSIDE" />
-      <Label layoutX="565.0" layoutY="417.0" prefHeight="36.0" prefWidth="100.0" text="Play Speed">
+      <Label layoutX="560.0" layoutY="417.0" prefHeight="36.0" prefWidth="105.0" text="Play Speed">
          <font>
             <Font size="20.0" />
          </font>
