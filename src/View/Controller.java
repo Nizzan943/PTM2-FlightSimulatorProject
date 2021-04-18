@@ -39,6 +39,17 @@ public class Controller {
 
     public void WrongFormatAlert()
     {
+        System.out.println("Wrong Format");
+    }
+
+    public void MissingArgumentAlert()
+    {
+        System.out.println("Missing Argument");
+    }
+
+    public void SuccessAlert()
+    {
+        System.out.println("success");
     }
 
     public void LoadXML() throws Exception {
@@ -50,15 +61,12 @@ public class Controller {
         {
             HandleXML handleXML = new HandleXML();
             handleXML.deserializeFromXML(chozen.getAbsolutePath());
-            for (UserSettings userSettings: handleXML.PropertyList) {
-                if ((userSettings.getRealName() == null) || (userSettings.getAssosicateName() == null) || (userSettings.getMax() == 1000000) || (userSettings.getMin() == -1000000)) {
-                    WrongFormatAlert();
-                    break;
-                }
-            }
-            if ((handleXML.additionalSettings.getAlgorithmFile() == null) || (handleXML.additionalSettings.getProperFlightFile() == null)  || (handleXML.additionalSettings.getDataSamplingRate() == 1000000))
+            if (handleXML.WrongFormatAlert == true)
                 WrongFormatAlert();
-
+            else if (handleXML.MissingArgumentsAlert == true)
+                MissingArgumentAlert();
+            else
+                SuccessAlert();
         }
     }
 

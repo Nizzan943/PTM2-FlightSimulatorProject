@@ -9,6 +9,10 @@ public class HandleXML {
 
     public List<UserSettings> PropertyList = new ArrayList<>();
     public AdditionalSettings additionalSettings = new AdditionalSettings();
+    public boolean WrongFormatAlert = false;
+    public boolean MissingArgumentsAlert = false;
+
+
 
    /* public static void serializeToXML(UserSettings settings) throws IOException {
         FileOutputStream fos = new FileOutputStream("settings.xml");
@@ -38,17 +42,42 @@ public class HandleXML {
 
             } catch (NumberFormatException e)
             {
-                System.out.println("Error: Incorrect data format, please check XML format, do you provide string-assosiated name?. \n" + e);
-
+                WrongFormatAlert = true;
+                break;
             }
             catch (ArrayIndexOutOfBoundsException e){
-                System.out.println("Error: index is out of array bound. \n" + e);
+                WrongFormatAlert = true;
+                break;
             }
             catch (ClassCastException e){
-                System.out.println("Error: Cast error. \n" + e);
+                MissingArgumentsAlert = true;
+                break;
             }
         }
-        additionalSettings = (AdditionalSettings) decoder.readObject();
+        try {
+            additionalSettings = (AdditionalSettings) decoder.readObject();
+
+        } catch (NumberFormatException e)
+        {
+            WrongFormatAlert = true;
+        }
+        catch (ArrayIndexOutOfBoundsException e){
+            WrongFormatAlert = true;
+        }
+        catch (ClassCastException e){
+            MissingArgumentsAlert = true;
+        }
+
+        for (UserSettings userSettings: PropertyList)
+        {
+            if (userSettings.getRealName() == null || userSettings.getAssosicateName() == null || userSettings.getMin() == -1000000 || userSettings.getMax() == 1000000 ) {
+                WrongFormatAlert = true;
+                break;
+            }
+        }
+        if (additionalSettings.getDataSamplingRate() == 1000000 || additionalSettings.getProperFlightFile() == null || additionalSettings.algorithmFile == null)
+            WrongFormatAlert = true;
+
         decoder.close();
     }
 }
