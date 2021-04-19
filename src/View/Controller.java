@@ -1,26 +1,13 @@
 package View;
 
-import Model.AdditionalSettings;
 import Model.HandleXML;
 import Model.TimeSeries;
-import Model.UserSettings;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Time;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.geometry.NodeOrientation;
-import javafx.scene.Scene;
+
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import javax.swing.*;
 
@@ -100,11 +87,11 @@ public class Controller {
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
         fc.setTitle("Load XML file"); //headline
         fc.setInitialDirectory(new File("/")); //what happens when we click
-        File chozen = fc.showOpenDialog(null);
-        if (chozen != null)
+        File chosen = fc.showOpenDialog(null);
+        if (chosen != null)
         {
             HandleXML handleXML = new HandleXML();
-            handleXML.deserializeFromXML(chozen.getAbsolutePath());
+            handleXML.deserializeFromXML(chosen.getAbsolutePath());
             if (handleXML.WrongFormatAlert == true)
                 WrongFormatAlert();
             else if (handleXML.MissingArgumentsAlert == true)
@@ -115,5 +102,11 @@ public class Controller {
             }
         }
     }
+
+
+
+
+
+
 
 }
