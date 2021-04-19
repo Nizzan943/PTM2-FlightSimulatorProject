@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/" fx:controller="View.MenuBarController" prefHeight="400.0" prefWidth="600.0">
+<Pane xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/" fx:controller="View.MenuBarController" prefHeight="400.0" prefWidth="600.0">
     <MenuBar prefHeight="25.0" prefWidth="797.0">
         <menus>
             <Menu mnemonicParsing="false" text="File">
@@ -27,4 +25,4 @@
         </menus>
     </MenuBar>
 
-</AnchorPane>
+</Pane>

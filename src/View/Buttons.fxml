@@ -7,7 +7,9 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml" fx:controller="View.ButtonsController" prefHeight="400.0" prefWidth="600.0">
+<Pane xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml" fx:controller="View.ButtonsController" prefHeight="400.0" prefWidth="600.0">
+
+
 
     <Button layoutX="25.0" layoutY="411.0" mnemonicParsing="false" onMouseClicked="#openCSV" prefHeight="42.0" prefWidth="78.0" text="Open" />
 
@@ -31,4 +33,6 @@
     </Label>
 
     <TextArea layoutX="667.0" layoutY="414.0" prefHeight="42.0" prefWidth="46.0" />
-</AnchorPane>
+
+    <ListView fx:id="listView" layoutX="25.0" layoutY="43.0" prefHeight="342.0" prefWidth="163.0" />
+</Pane>

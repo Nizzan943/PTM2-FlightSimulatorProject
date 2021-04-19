@@ -4,11 +4,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="195.0" prefWidth="193.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.JoystickController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="195.0" prefWidth="193.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.JoystickController" layoutX="600" layoutY="50">
    <children>
       <Slider blockIncrement="0.1" layoutX="7.0" layoutY="33.0" max="1.0" orientation="VERTICAL" prefHeight="139.0" prefWidth="14.0" />
       <Slider layoutX="8.0" layoutY="174.0" prefHeight="14.0" prefWidth="160.0" />
        <Circle fill="#e8e8e8" layoutX="103.0" layoutY="90.0" radius="65.0" stroke="BLACK" strokeType="INSIDE" />
        <Circle fx:id="Joystick" fill="#afb4b9" layoutX="103.0" layoutY="90.0" onMouseDragged="#MouseMove" onMousePressed="#MouseDown" onMouseReleased="#MouseUp" radius="35.0" stroke="BLACK" strokeDashOffset="1.0" strokeLineCap="ROUND" strokeMiterLimit="1.0" strokeType="INSIDE" />
    </children>
-</AnchorPane>
+</Pane>

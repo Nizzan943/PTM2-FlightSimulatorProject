@@ -7,10 +7,5 @@ import javafx.scene.control.ListView;
 public class ListViewController
 {
 
-    @FXML
-     ListView listView;
-
-
-
 
 }

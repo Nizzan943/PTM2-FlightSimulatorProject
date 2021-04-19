@@ -1,15 +1,8 @@
 package View;
 
 import Model.HandleXML;
-import Model.TimeSeries;
 import javafx.fxml.FXML;
 
-import java.io.File;
-
-import javafx.scene.control.*;
-import javafx.stage.FileChooser;
-
-import javax.swing.*;
 
 public class Controller {
     public static HandleXML XML_settings;
