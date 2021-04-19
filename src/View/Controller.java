@@ -12,12 +12,11 @@ import javafx.stage.FileChooser;
 import javax.swing.*;
 
 public class Controller {
-    HandleXML XML_settings;
+    public static HandleXML XML_settings;
 
-    @FXML
-    ListView listView;
 
-    public void openCSV() {
+
+   /* public void openCSV() {
         int flag = 0;
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
@@ -53,9 +52,9 @@ public class Controller {
                 }
             }
         }
-    }
+    }*/
 
-    public void WrongFormatAlert()
+   /* public void WrongFormatAlert()
     {
         JOptionPane.showMessageDialog(null,
                 "Wrong format of XML\n" +
@@ -102,7 +101,7 @@ public class Controller {
             }
         }
     }
-
+*/
 
 
 
