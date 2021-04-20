@@ -9,7 +9,7 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
     public ArrayList<AnomalyReport> detections = new ArrayList<>();
 
 
-    public List<AnomalyReport> HyridAlgorithm(TimeSeries timeSeries1, TimeSeries timeSeries2) {
+    public List<AnomalyReport> HybridAlgorithm(TimeSeries timeSeries1, TimeSeries timeSeries2) {
 
         //linearReg
         int flag;

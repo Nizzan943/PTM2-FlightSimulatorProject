@@ -14,15 +14,16 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 
 import javax.swing.*;
-import java.io.File;
+import java.io.*;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ButtonsController implements Initializable {
     @FXML
     private ChoiceBox playSpeedDropDown;
-    @FXML
-    static Button play;
+  //  @FXML
+  //  static Button play;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -34,8 +35,24 @@ public class ButtonsController implements Initializable {
         //play.setGraphic(new ImageView(new Image("file:View\\Play.png")));
     }
 
-    public void Play(ActionEvent event) {
-        System.out.println("Play");
+    public void Play() throws IOException, InterruptedException {
+        Socket fg=new Socket("localhost", 5400);
+        BufferedReader in=new BufferedReader(new FileReader("C:\\Users\\yuval\\Downloads\\reg_flight (1).csv"));
+        PrintWriter out=new PrintWriter(fg.getOutputStream());
+        String line;
+        while((line=in.readLine())!=null) {
+            out.println(line);
+            out.flush();
+            Thread.sleep(Controller.XML_settings.additionalSettings.getDataSamplingRate()); //change to Eyal XML settings
+        }
+        out.close();
+        in.close();
+        fg.close();
+    }
+
+    public void Stop()
+    {
+
     }
 
     public void Pause(ActionEvent event) {

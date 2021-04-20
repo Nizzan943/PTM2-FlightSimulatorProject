@@ -2,17 +2,17 @@ package Model;
 
 public class AdditionalSettings {
 
-    Float dataSamplingRate = (float)1000000;
+    long dataSamplingRate = (long) 1000000;
     String properFlightFile;
     String algorithmFile;
 
     public AdditionalSettings(){}
 
-    public Float getDataSamplingRate() {
+    public long getDataSamplingRate() {
         return dataSamplingRate;
     }
 
-    public void setDataSamplingRate(Float dataSamplingRate) {
+    public void setDataSamplingRate(long dataSamplingRate) {
         this.dataSamplingRate = dataSamplingRate;
     }
 

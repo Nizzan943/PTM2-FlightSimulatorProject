@@ -28,7 +28,7 @@
             <NumberAxis prefHeight="109.0" prefWidth="18.0" side="LEFT" />
         </yAxis>
     </LineChart>
-    <LineChart layoutX="215.0" layoutY="176.0" prefHeight="210.0" prefWidth="379.0">
+    <LineChart layoutX="204.0" layoutY="176.0" prefHeight="210.0" prefWidth="395.0">
         <xAxis>
             <CategoryAxis side="BOTTOM" />
         </xAxis>
