@@ -43,6 +43,22 @@ public class ListViewController
                     flag = 1;
                     break;
                 }
+                for (int j = 0; j < timeSeries.getCols()[i].getFloats().size(); j++)
+                {
+                    if (timeSeries.getCols()[i].getFloats().get(j) > Controller.XML_settings.PropertyList.get(i).getMax() || timeSeries.getCols()[i].getFloats().get(j) < Controller.XML_settings.PropertyList.get(i).getMin())
+                    {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Incompatibility with XML file");
+                        alert.setContentText("Please check your file and try again");
+
+                        alert.showAndWait();
+                        flag = 1;
+                        break;
+                    }
+                }
+                if (flag == 1)
+                    break;
             }
             if (timeSeries.getCols().length == 42 && flag == 0) {
                 for (TimeSeries.col col : timeSeries.getCols()) {
