@@ -42,7 +42,7 @@ public class MenuBarController {
     public void MissingArgumentAlert()
     {
         JOptionPane.showMessageDialog(null,
-                "Missing ArgumentS\n" +
+                "Missing Arguments\n" +
                         "Please check your settings and try again",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);

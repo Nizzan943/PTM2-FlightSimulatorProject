@@ -13,13 +13,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 
-import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ButtonsController implements Initializable {
+
+    Timer timer = new Timer();
+
     @FXML
     private ChoiceBox playSpeedDropDown;
   //  @FXML
@@ -37,13 +41,13 @@ public class ButtonsController implements Initializable {
 
     public void Play() throws IOException, InterruptedException {
         Socket fg=new Socket("localhost", 5400);
-        BufferedReader in=new BufferedReader(new FileReader("C:\\Users\\yuval\\Downloads\\reg_flight (1).csv"));
+        BufferedReader in=new BufferedReader(new FileReader(Controller.CSVpath));
         PrintWriter out=new PrintWriter(fg.getOutputStream());
         String line;
         while((line=in.readLine())!=null) {
             out.println(line);
             out.flush();
-            Thread.sleep(Controller.XML_settings.additionalSettings.getDataSamplingRate()); //change to Eyal XML settings
+            Thread.sleep(Controller.XML_settings.additionalSettings.getDataSamplingRate());
         }
         out.close();
         in.close();

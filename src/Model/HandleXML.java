@@ -35,7 +35,7 @@ public class HandleXML {
             decoder = new XMLDecoder(
                     new BufferedInputStream(new FileInputStream(path)));
         } catch (FileNotFoundException e){ e.printStackTrace(); }
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 42; i++) {
             try {
                 UserSettings decodedSettings = (UserSettings) decoder.readObject();
                 PropertyList.add(decodedSettings);

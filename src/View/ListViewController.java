@@ -22,7 +22,7 @@ public class ListViewController
         File chozen = fc.showOpenDialog(null);
         if (chozen != null) {
             TimeSeries timeSeries = new TimeSeries(chozen.getAbsolutePath());
-            if (timeSeries.getCols().length != 2) {
+            if (timeSeries.getCols().length != 42) {
                 JOptionPane.showMessageDialog(null,
                         "Missing Arguments\n" +
                                 "Please check your file and try again",
@@ -43,10 +43,11 @@ public class ListViewController
                     break;
                 }
             }
-            if (timeSeries.getCols().length == 2 && flag == 0) {
+            if (timeSeries.getCols().length == 42 && flag == 0) {
                 for (TimeSeries.col col : timeSeries.getCols()) {
                     listView.getItems().add(col.getName());
                 }
+                Controller.CSVpath = chozen.getAbsolutePath();
             }
         }
     }
