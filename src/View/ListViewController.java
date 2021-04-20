@@ -2,10 +2,10 @@ package View;
 
 import Model.TimeSeries;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.stage.FileChooser;
 
-import javax.swing.*;
 import java.io.File;
 
 public class ListViewController
@@ -23,22 +23,23 @@ public class ListViewController
         if (chozen != null) {
             TimeSeries timeSeries = new TimeSeries(chozen.getAbsolutePath());
             if (timeSeries.getCols().length != 42) {
-                JOptionPane.showMessageDialog(null,
-                        "Missing Arguments\n" +
-                                "Please check your file and try again",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Missing Arguments");
+                alert.setContentText("Please check your settings and try again");
+                alert.showAndWait();
             }
             for (int i = 0; i < timeSeries.getCols().length; i++)
             {
                 flag = 0;
                 if (timeSeries.getCols()[i].getName().intern() != Controller.XML_settings.PropertyList.get(i).getRealName().intern())
                 {
-                    JOptionPane.showMessageDialog(null,
-                            "Incompatibility with XML file\n" +
-                                    "Please check your file and try again",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Incompatibility with XML file");
+                    alert.setContentText("Please check your file and try again");
+
+                    alert.showAndWait();
                     flag = 1;
                     break;
                 }

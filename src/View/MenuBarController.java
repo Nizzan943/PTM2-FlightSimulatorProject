@@ -1,9 +1,9 @@
 package View;
 
 import Model.HandleXML;
+import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 
-import javax.swing.*;
 import java.io.File;
 
 public class MenuBarController {
@@ -31,28 +31,31 @@ public class MenuBarController {
 
     public void WrongFormatAlert()
     {
-        JOptionPane.showMessageDialog(null,
-                "Wrong format of XML\n" +
-                        "Please check your format and try again",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Wrong format of XML");
+        alert.setContentText("Please check your format and try again");
 
+        alert.showAndWait();
     }
 
     public void MissingArgumentAlert()
     {
-        JOptionPane.showMessageDialog(null,
-                "Missing Arguments\n" +
-                        "Please check your settings and try again",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Missing Arguments");
+        alert.setContentText("Please check your settings and try again");
+
+        alert.showAndWait();
     }
 
     public void SuccessAlert()
     {
-        JOptionPane.showMessageDialog(null,
-                "The file was uploaded successfully",
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText("The file was uploaded successfully");
+        alert.setContentText(null);
+
+        alert.showAndWait();
     }
 }
