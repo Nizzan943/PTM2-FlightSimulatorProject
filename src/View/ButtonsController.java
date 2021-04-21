@@ -23,26 +23,20 @@ import java.util.TimerTask;
 public class ButtonsController implements Initializable {
 
     Timer timer = new Timer();
-    private String path = "D:\\Repos\\PTM2-FlightSimulatorProject\\Files\\reg_flight.csv";
+    Thread thread;
 
     @FXML
     private ChoiceBox playSpeedDropDown;
-  //  @FXML
-  //  static Button play;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         playSpeedDropDown.getItems().addAll("x0.5", "x1", "x1.5", "x2.0");
-        //String[] buttonLabels = {"\u25b6 Play", "\u23f8 Pause", "\u23F9 Stop", "\u23EA Fast Backward", "\u23E9  Fast Forward"};
-        //play.setBackground(new Background(new BackgroundImage(new Image(getClass().getResource("Images/Play.png").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
-        //String absolutePathToIcon =
-        //        getClass().getResource("Play.png").toExternalForm();
-        //play.setGraphic(new ImageView(new Image("file:View\\Play.png")));
     }
 
     public void Play()
     {
-        Thread thread = new Thread(() -> {
+        thread = new Thread(() -> {
             Socket fg= null;
             try {
                 fg = new Socket("localhost", 5400);
@@ -51,7 +45,7 @@ public class ButtonsController implements Initializable {
             }
             BufferedReader in= null;
             try {
-                in = new BufferedReader(new FileReader("D:\\Repos\\PTM2-FlightSimulatorProject\\Files\\reg_flight.csv"));
+                in = new BufferedReader(new FileReader(Controller.CSVpath));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -71,7 +65,7 @@ public class ButtonsController implements Initializable {
                 out.println(line);
                 out.flush();
                 try {
-                    Thread.sleep(20);
+                    Thread.sleep(Controller.XML_settings.additionalSettings.getDataSamplingRate());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -95,7 +89,6 @@ public class ButtonsController implements Initializable {
 
     public void Stop()
     {
-
     }
 
     public void Pause(ActionEvent event) {

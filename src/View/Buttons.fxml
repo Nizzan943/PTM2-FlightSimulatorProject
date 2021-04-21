@@ -10,7 +10,7 @@
    
        <Button fx:id="play" layoutX="25.0" layoutY="450.0" mnemonicParsing="false" onAction="#Play" prefHeight="42.0" prefWidth="74.0" text="Play" />
        <Button layoutX="105.0" layoutY="450.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" text="Pause" />
-       <Button layoutX="185.0" layoutY="450.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" text="Stop" />
+       <Button layoutX="185.0" layoutY="450.0" mnemonicParsing="false" onAction="#Stop" prefHeight="42.0" prefWidth="74.0" text="Stop" />
        <Button layoutX="265.0" layoutY="450.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" text="&lt;&lt;&lt;" />
        <Button layoutX="345.0" layoutY="450.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" text="&gt;&gt;&gt;" />
        <Button layoutX="425.0" layoutY="450.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" text="-15s" />
