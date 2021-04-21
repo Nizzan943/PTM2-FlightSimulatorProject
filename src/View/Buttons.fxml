@@ -9,7 +9,7 @@
    <children>
    
        <Button fx:id="play" layoutX="25.0" layoutY="450.0" mnemonicParsing="false" onAction="#Play" prefHeight="42.0" prefWidth="74.0" text="Play" />
-       <Button layoutX="105.0" layoutY="450.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" text="Pause" />
+       <Button layoutX="105.0" layoutY="450.0" mnemonicParsing="false" onAction="#Pause" prefHeight="42.0" prefWidth="74.0" text="Pause" />
        <Button layoutX="185.0" layoutY="450.0" mnemonicParsing="false" onAction="#Stop" prefHeight="42.0" prefWidth="74.0" text="Stop" />
        <Button layoutX="265.0" layoutY="450.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" text="&lt;&lt;&lt;" />
        <Button layoutX="345.0" layoutY="450.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" text="&gt;&gt;&gt;" />
@@ -29,6 +29,7 @@
            </font>
        </Label>
       <ChoiceBox fx:id="playSpeedDropDown" layoutX="695.0" layoutY="450.0" prefHeight="42.0" prefWidth="67.0" />
+      <Label fx:id="label" layoutX="679.0" layoutY="509.0" prefHeight="36.0" prefWidth="83.0" />
    </children>
 
 </Pane>

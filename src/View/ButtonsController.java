@@ -1,32 +1,33 @@
 package View;
 
-import Model.TimeSeries;
 
-import javafx.event.ActionEvent;
+import javafx.application.Platform;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.stage.FileChooser;
+import javafx.scene.control.Label;
+import javafx.scene.text.Font;
+
 
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class ButtonsController implements Initializable {
 
-    Timer timer = new Timer();
-    Thread thread;
+    Thread simulatorThread;
+    Thread timerThread;
+    int flag = 0;
 
     @FXML
     private ChoiceBox playSpeedDropDown;
+
+    @FXML
+    Label label;
 
 
     @Override
@@ -36,54 +37,80 @@ public class ButtonsController implements Initializable {
 
     public void Play()
     {
-        thread = new Thread(() -> {
-            Socket fg= null;
-            try {
-                fg = new Socket("localhost", 5400);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            BufferedReader in= null;
-            try {
-                in = new BufferedReader(new FileReader(Controller.CSVpath));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            PrintWriter out= null;
-            try {
-                out = new PrintWriter(fg.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String line = null;
-            while(true) {
+        label.setFont(new Font(15));
+        if (flag == 0) {
+            simulatorThread = new Thread(() -> {
+                Socket fg = null;
                 try {
-                    if (!((line=in.readLine())!=null)) break;
+                    fg = new Socket("localhost", 5400);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                out.println(line);
-                out.flush();
+                BufferedReader in = null;
                 try {
-                    Thread.sleep(Controller.XML_settings.additionalSettings.getDataSamplingRate());
-                } catch (InterruptedException e) {
+                    in = new BufferedReader(new FileReader(Controller.CSVpath));
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-            }
-            out.close();
-            try {
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                fg.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }) ;
+                PrintWriter out = null;
+                try {
+                    out = new PrintWriter(fg.getOutputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String line = null;
+                while (true) {
+                    try {
+                        if (!((line = in.readLine()) != null)) break;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    out.println(line);
+                    out.flush();
+                    try {
+                        Thread.sleep(Controller.XML_settings.additionalSettings.getDataSamplingRate());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                out.close();
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    fg.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            simulatorThread.start();
 
-        thread.start();
+            long starttime = System.currentTimeMillis();
+            timerThread = new Thread(() -> {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                while (true) {
+                    try {
+                        Thread.sleep(1000); //1 second
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    final String time = simpleDateFormat.format(System.currentTimeMillis() - starttime - 7200000);
+                    Platform.runLater(() -> {
+                        label.setText(time);
+                    });
+                }
+            });
+            timerThread.start();
+
+        }
+        if (flag == 1)
+        {
+            simulatorThread.resume();
+            timerThread.start();
+        }
+        flag = 1;
 
     }
 
@@ -91,23 +118,28 @@ public class ButtonsController implements Initializable {
     {
     }
 
-    public void Pause(ActionEvent event) {
-        System.out.println("Pause");
+    public void Pause()
+    {
+        simulatorThread.suspend();
     }
 
-    public void FastForward(ActionEvent event) {
+    public void FastForward()
+    {
         System.out.println("FastForward");
     }
 
-    public void FastBackward(ActionEvent event) {
+    public void FastBackward()
+    {
         System.out.println("FastBackward");
     }
 
-    public void Plus15(ActionEvent event) {
+    public void Plus15()
+    {
         System.out.println("+15");
     }
 
-    public void Minus15(ActionEvent event) {
+    public void Minus15()
+    {
         System.out.println("-15");
     }
 
