@@ -8,7 +8,7 @@ import java.io.File;
 
 public class MenuBarController {
 
-    public void LoadXML() throws Exception {
+    public void LoadXML()  {
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
         fc.setTitle("Load XML file"); //headline
@@ -17,7 +17,11 @@ public class MenuBarController {
         if (chosen != null)
         {
             HandleXML handleXML = new HandleXML();
-            handleXML.deserializeFromXML(chosen.getAbsolutePath());
+            try {
+                handleXML.deserializeFromXML(chosen.getAbsolutePath());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             if (handleXML.WrongFormatAlert == true)
                 WrongFormatAlert();
             else if (handleXML.MissingArgumentsAlert == true)

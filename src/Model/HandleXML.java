@@ -28,7 +28,7 @@ public class HandleXML {
     }
 
 */
-    public void deserializeFromXML(String path) throws Exception
+    public void deserializeFromXML(String path)
     {
         XMLDecoder decoder = null;
         try {
