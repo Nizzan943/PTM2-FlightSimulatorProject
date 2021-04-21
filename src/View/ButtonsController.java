@@ -23,6 +23,7 @@ import java.util.TimerTask;
 public class ButtonsController implements Initializable {
 
     Timer timer = new Timer();
+    private String path = "D:\\Repos\\PTM2-FlightSimulatorProject\\Files\\reg_flight.csv";
 
     @FXML
     private ChoiceBox playSpeedDropDown;
@@ -39,19 +40,57 @@ public class ButtonsController implements Initializable {
         //play.setGraphic(new ImageView(new Image("file:View\\Play.png")));
     }
 
-    public void Play() throws IOException, InterruptedException {
-        Socket fg=new Socket("localhost", 5400);
-        BufferedReader in=new BufferedReader(new FileReader(Controller.CSVpath));
-        PrintWriter out=new PrintWriter(fg.getOutputStream());
-        String line;
-        while((line=in.readLine())!=null) {
-            out.println(line);
-            out.flush();
-            Thread.sleep(Controller.XML_settings.additionalSettings.getDataSamplingRate());
-        }
-        out.close();
-        in.close();
-        fg.close();
+    public void Play()
+    {
+        Thread thread = new Thread(() -> {
+            Socket fg= null;
+            try {
+                fg = new Socket("localhost", 5400);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedReader in= null;
+            try {
+                in = new BufferedReader(new FileReader("D:\\Repos\\PTM2-FlightSimulatorProject\\Files\\reg_flight.csv"));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            PrintWriter out= null;
+            try {
+                out = new PrintWriter(fg.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String line = null;
+            while(true) {
+                try {
+                    if (!((line=in.readLine())!=null)) break;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                out.println(line);
+                out.flush();
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            out.close();
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                fg.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }) ;
+
+        thread.start();
+
     }
 
     public void Stop()
