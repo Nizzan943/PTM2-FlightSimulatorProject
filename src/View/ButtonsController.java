@@ -22,7 +22,7 @@ public class ButtonsController implements Initializable {
     Thread simulatorThread;
     Thread timerThread;
     int flag = 0;
-    long pausedTime;
+    long nowTime = 0;
 
     @FXML
     private ChoiceBox playSpeedDropDown;
@@ -88,7 +88,6 @@ public class ButtonsController implements Initializable {
                 }
             });
             simulatorThread.start();
-            pausedTime = System.currentTimeMillis();
             timerThread = new Thread(() -> {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
                 while (true) {
@@ -98,10 +97,8 @@ public class ButtonsController implements Initializable {
                         e.printStackTrace();
                     }
                     String time;
-                    long nowTime = System.currentTimeMillis();
-                    System.out.println(pausedTime);
-                    System.out.println(nowTime);
-                    time = simpleDateFormat.format(nowTime - pausedTime - 7200000);
+                    nowTime += 1000;
+                    time = simpleDateFormat.format(nowTime - 7200000);
                     Platform.runLater(() -> {
                         label.setText(time);
                     });
