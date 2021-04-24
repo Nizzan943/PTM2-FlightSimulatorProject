@@ -26,8 +26,12 @@ public class ButtonsController implements Initializable {
     Thread timer20Thread = null;
     Thread simulator05Thread = null;
     Thread timer05Thread = null;
+    Thread simulator10Thread = null;
+    Thread timer10Thread = null;
+    Thread simulator15Thread = null;
+    Thread timer15Thread = null;
 
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.S");
     int flag = 0;
     long nowTime = 0;
 
@@ -45,7 +49,8 @@ public class ButtonsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        playSpeedDropDown.getItems().addAll("x0.5", "x1", "x1.5", "x2.0");
+        playSpeedDropDown.getItems().addAll("x0.5", "x1.0", "x1.5", "x2.0");
+        playSpeedDropDown.setValue("x1.0");
     }
 
 
@@ -102,8 +107,26 @@ public class ButtonsController implements Initializable {
         }
         if (flag == 1)
         {
-            simulatorThread.resume();
-            timerThread.resume();
+            if (simulatorThread != null) {
+                simulatorThread.resume();
+                timerThread.resume();
+            }
+            if (simulator20Thread != null) {
+                simulator20Thread.resume();
+                timer20Thread.resume();
+            }
+            if (simulator05Thread != null) {
+                simulator05Thread.resume();
+                timer05Thread.resume();
+            }
+            if (simulator15Thread != null) {
+                simulator15Thread.resume();
+                timer15Thread.resume();
+            }
+            if (simulator10Thread != null) {
+                simulator10Thread.resume();
+                timer10Thread.resume();
+            }
         }
         flag = 1;
 
@@ -115,8 +138,26 @@ public class ButtonsController implements Initializable {
 
     public void Pause()
     {
-        simulatorThread.suspend();
-        timerThread.suspend();
+        if (simulatorThread != null) {
+            simulatorThread.suspend();
+            timerThread.suspend();
+        }
+        else if (simulator10Thread != null) {
+            simulator10Thread.suspend();
+            timer10Thread.suspend();
+        }
+        else if (simulator15Thread != null) {
+            simulator15Thread.suspend();
+            timer15Thread.suspend();
+        }
+        else if (simulator05Thread != null) {
+            simulator05Thread.suspend();
+            timer05Thread.suspend();
+        }
+        else if (simulator20Thread != null) {
+            simulator20Thread.suspend();
+            timer20Thread.suspend();
+        }
     }
 
     public void FastForward()
@@ -143,12 +184,26 @@ public class ButtonsController implements Initializable {
     public void GetChoice(ActionEvent actionEvent) {
         String speed = (String) playSpeedDropDown.getValue();
         if (speed.intern() == "x2.0") {
-            simulatorThread.suspend();
-            timerThread.suspend();
-            if (simulator05Thread!=null)
+            if (simulatorThread != null) {
+                simulatorThread.suspend();
+                timerThread.suspend();
+                simulatorThread = null;
+            }
+            if (simulator05Thread != null) {
                 simulator05Thread.suspend();
-            if (timer05Thread != null)
                 timer05Thread.suspend();
+                simulator05Thread = null;
+            }
+            if (simulator10Thread != null) {
+                simulator10Thread.suspend();
+                timer10Thread.suspend();
+                simulator10Thread = null;
+            }
+            if (simulator15Thread != null) {
+                simulator15Thread.suspend();
+                timer15Thread.suspend();
+                simulator15Thread = null;
+            }
             simulator20Thread = new Thread(() ->
             {
                 simulatorLoop(2);
@@ -160,15 +215,32 @@ public class ButtonsController implements Initializable {
             });
             timer20Thread.start();
         }
+
         if (speed.intern() == "x0.5")
         {
-            simulatorThread.suspend();
-            timerThread.suspend();
-            //simulator20Thread.suspend();
-          //  timer20Thread.suspend();
+            if (simulatorThread != null) {
+                simulatorThread.suspend();
+                timerThread.suspend();
+                simulatorThread = null;
+            }
+            if (simulator20Thread != null) {
+                simulator20Thread.suspend();
+                timer20Thread.suspend();
+                simulator20Thread = null;
+            }
+            if (simulator10Thread != null) {
+                simulator10Thread.suspend();
+                timer10Thread.suspend();
+                simulator10Thread = null;
+            }
+            if (simulator15Thread != null) {
+                simulator15Thread.suspend();
+                timer15Thread.suspend();
+                simulator15Thread = null;
+            }
             simulator05Thread = new Thread(() ->
             {
-                simulatorLoop((long)0.5);
+                simulatorLoop(0.5);
             });
             simulator05Thread.start();
             timer05Thread = new Thread(() ->
@@ -176,6 +248,76 @@ public class ButtonsController implements Initializable {
                 timerLoop(0.5);
             });
             timer05Thread.start();
+        }
+
+        if (speed.intern() == "x1.0")
+        {
+            if (simulator15Thread != null || simulator20Thread != null || simulator05Thread != null) {
+                if (simulatorThread != null) {
+                    simulatorThread.suspend();
+                    timerThread.suspend();
+                    simulatorThread = null;
+                }
+                if (simulator05Thread != null) {
+                    simulator05Thread.suspend();
+                    timer05Thread.suspend();
+                    simulator05Thread = null;
+                }
+                if (simulator20Thread != null) {
+                    simulator20Thread.suspend();
+                    timer20Thread.suspend();
+                    simulator20Thread = null;
+                }
+                if (simulator15Thread != null) {
+                    simulator15Thread.suspend();
+                    timer15Thread.suspend();
+                    simulator15Thread = null;
+                }
+                simulator10Thread = new Thread(() ->
+                {
+                    simulatorLoop(1);
+                });
+                simulator10Thread.start();
+                timer10Thread = new Thread(() ->
+                {
+                    timerLoop(1);
+                });
+                timer10Thread.start();
+            }
+        }
+
+        if (speed.intern() == "x1.5")
+        {
+            if (simulatorThread != null) {
+                simulatorThread.suspend();
+                timerThread.suspend();
+                simulatorThread = null;
+            }
+            if (simulator05Thread != null) {
+                simulator05Thread.suspend();
+                timer05Thread.suspend();
+                simulator05Thread = null;
+            }
+            if (simulator10Thread != null) {
+                simulator10Thread.suspend();
+                timer10Thread.suspend();
+                simulator10Thread = null;
+            }
+            if (simulator20Thread != null) {
+                simulator20Thread.suspend();
+                timer20Thread.suspend();
+                simulator20Thread = null;
+            }
+            simulator15Thread = new Thread(() ->
+            {
+                simulatorLoop(1.5);
+            });
+            simulator15Thread.start();
+            timer15Thread = new Thread(() ->
+            {
+                timerLoop(1.5);
+            });
+            timer15Thread.start();
         }
     }
 
