@@ -26,11 +26,10 @@ public class MainTrain
 */
 
     public static void main(String[] args) throws Exception {
-        TimeSeries ts=new TimeSeries("C:\\Users\\yuval\\Desktop\\anomalyTrain.csv");
-        TimeSeries ts2=new TimeSeries("C:\\Users\\yuval\\Desktop\\anomalyTest.csv");
-        LinearRegression ad=new LinearRegression();
-        ad.learnNormal(ts);
-        List<AnomalyReport> temp =  ad.detect(ts2);
+        TimeSeries ts=new TimeSeries("C:\\Users\\yuval\\Desktop\\reg_flight (4).csv");
+        TimeSeries ts2=new TimeSeries("C:\\Users\\yuval\\Desktop\\reg_flight (4).csv");
+        Hybrid ad=new Hybrid();
+        List<AnomalyReport> temp =  ad.HybridAlgorithm(ts,ts2);
         for (AnomalyReport a : temp)
         {
             System.out.println(a.description + "-" + a.timeStep);

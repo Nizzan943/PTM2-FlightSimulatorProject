@@ -22,6 +22,7 @@ public class ButtonsController implements Initializable {
     Thread simulatorThread;
     Thread timerThread;
     int flag = 0;
+    long pausedTime;
 
     @FXML
     private ChoiceBox playSpeedDropDown;
@@ -34,6 +35,7 @@ public class ButtonsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         playSpeedDropDown.getItems().addAll("x0.5", "x1", "x1.5", "x2.0");
     }
+
 
     public void Play()
     {
@@ -86,8 +88,7 @@ public class ButtonsController implements Initializable {
                 }
             });
             simulatorThread.start();
-
-            long starttime = System.currentTimeMillis();
+            pausedTime = System.currentTimeMillis();
             timerThread = new Thread(() -> {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
                 while (true) {
@@ -96,7 +97,11 @@ public class ButtonsController implements Initializable {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    final String time = simpleDateFormat.format(System.currentTimeMillis() - starttime - 7200000);
+                    String time;
+                    long nowTime = System.currentTimeMillis();
+                    System.out.println(pausedTime);
+                    System.out.println(nowTime);
+                    time = simpleDateFormat.format(nowTime - pausedTime - 7200000);
                     Platform.runLater(() -> {
                         label.setText(time);
                     });
@@ -108,7 +113,7 @@ public class ButtonsController implements Initializable {
         if (flag == 1)
         {
             simulatorThread.resume();
-            timerThread.start();
+            timerThread.resume();
         }
         flag = 1;
 
@@ -121,6 +126,7 @@ public class ButtonsController implements Initializable {
     public void Pause()
     {
         simulatorThread.suspend();
+        timerThread.suspend();
     }
 
     public void FastForward()
