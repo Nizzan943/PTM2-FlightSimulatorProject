@@ -3,6 +3,7 @@ package View;
 
 import javafx.application.Platform;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -35,6 +36,8 @@ public class ButtonsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         playSpeedDropDown.getItems().addAll("x0.5", "x1", "x1.5", "x2.0");
     }
+
+
 
 
     public void Play()
@@ -146,4 +149,10 @@ public class ButtonsController implements Initializable {
         System.out.println("-15");
     }
 
+
+    public void GetChoice(ActionEvent actionEvent) {
+        String speed = (String) playSpeedDropDown.getValue();
+
+        System.out.println(speed);
+    }
 }

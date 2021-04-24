@@ -8,24 +8,24 @@ import java.util.List;
 
 public class MainTrain
 {
-/*
+
     public static void main(String[] args) throws Exception {
         Socket fg=new Socket("localhost", 5400);
-        BufferedReader in=new BufferedReader(new FileReader("C:\\Users\\yuval\\Downloads\\reg_flight (1).csv"));
+        BufferedReader in=new BufferedReader(new FileReader("D:\\Repos\\PTM2-FlightSimulatorProject\\Files\\reg_flight.csv"));
         PrintWriter out=new PrintWriter(fg.getOutputStream());
         String line;
         while((line=in.readLine())!=null) {
             out.println(line);
             out.flush();
-            Thread.sleep(20);
+            Thread.sleep(40);
         }
         out.close();
         in.close();
         fg.close();
     }
-*/
 
-    public static void main(String[] args) throws Exception {
+
+   /* public static void main(String[] args) throws Exception {
         TimeSeries ts=new TimeSeries("C:\\Users\\yuval\\Desktop\\reg_flight (4).csv");
         TimeSeries ts2=new TimeSeries("C:\\Users\\yuval\\Desktop\\reg_flight (4).csv");
         Hybrid ad=new Hybrid();
@@ -35,6 +35,6 @@ public class MainTrain
             System.out.println(a.description + "-" + a.timeStep);
         }
         System.out.println("done");
-    }
+    }*/
 
 }

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ButtonsController">
+<Pane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ButtonsController">
    <children>
    
        <Button fx:id="play" layoutX="25.0" layoutY="450.0" mnemonicParsing="false" onAction="#Play" prefHeight="42.0" prefWidth="74.0" text="Play" />
@@ -28,7 +27,7 @@
                <Font size="20.0" />
            </font>
        </Label>
-      <ChoiceBox fx:id="playSpeedDropDown" layoutX="695.0" layoutY="450.0" prefHeight="42.0" prefWidth="67.0" />
+      <ChoiceBox fx:id="playSpeedDropDown" layoutX="695.0" layoutY="450.0" onAction="#GetChoice" prefHeight="42.0" prefWidth="67.0" />
       <Label fx:id="label" layoutX="679.0" layoutY="509.0" prefHeight="36.0" prefWidth="83.0" />
    </children>
 
