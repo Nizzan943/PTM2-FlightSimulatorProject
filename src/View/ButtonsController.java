@@ -20,10 +20,21 @@ import java.util.ResourceBundle;
 
 public class ButtonsController implements Initializable {
 
-    Thread simulatorThread;
-    Thread timerThread;
+    Thread simulatorThread = null;
+    Thread simulator20Thread = null;
+    Thread timerThread = null;
+    Thread timer20Thread = null;
+    Thread simulator05Thread = null;
+    Thread timer05Thread = null;
+
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
     int flag = 0;
     long nowTime = 0;
+
+    Socket fg = null;
+    BufferedReader in = null;
+    PrintWriter out = null;
+    String line = null;
 
     @FXML
     private ChoiceBox playSpeedDropDown;
@@ -45,39 +56,31 @@ public class ButtonsController implements Initializable {
         label.setFont(new Font(15));
         if (flag == 0) {
             simulatorThread = new Thread(() -> {
-                Socket fg = null;
+
                 try {
                     fg = new Socket("localhost", 5400);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                BufferedReader in = null;
-                try {
-                    in = new BufferedReader(new FileReader(Controller.CSVpath));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                PrintWriter out = null;
-                try {
-                    out = new PrintWriter(fg.getOutputStream());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                String line = null;
-                while (true) {
+
+
+                {
                     try {
-                        if (!((line = in.readLine()) != null)) break;
+                        in = new BufferedReader(new FileReader(Controller.CSVpath));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+                {
+                    try {
+                        out = new PrintWriter(fg.getOutputStream());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    out.println(line);
-                    out.flush();
-                    try {
-                        Thread.sleep(Controller.XML_settings.additionalSettings.getDataSamplingRate());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
+                simulatorLoop(1);
                 out.close();
                 try {
                     in.close();
@@ -92,20 +95,7 @@ public class ButtonsController implements Initializable {
             });
             simulatorThread.start();
             timerThread = new Thread(() -> {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-                while (true) {
-                    try {
-                        Thread.sleep(1000); //1 second
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    String time;
-                    nowTime += 1000;
-                    time = simpleDateFormat.format(nowTime - 7200000);
-                    Platform.runLater(() -> {
-                        label.setText(time);
-                    });
-                }
+                timerLoop(1);
             });
             timerThread.start();
 
@@ -152,7 +142,87 @@ public class ButtonsController implements Initializable {
 
     public void GetChoice(ActionEvent actionEvent) {
         String speed = (String) playSpeedDropDown.getValue();
-
-        System.out.println(speed);
+        if (speed.intern() == "x2.0") {
+            simulatorThread.suspend();
+            timerThread.suspend();
+            if (simulator05Thread!=null)
+                simulator05Thread.suspend();
+            if (timer05Thread != null)
+                timer05Thread.suspend();
+            simulator20Thread = new Thread(() ->
+            {
+                simulatorLoop(2);
+            });
+            simulator20Thread.start();
+            timer20Thread = new Thread(() ->
+            {
+                timerLoop(2);
+            });
+            timer20Thread.start();
+        }
+        if (speed.intern() == "x0.5")
+        {
+            simulatorThread.suspend();
+            timerThread.suspend();
+            //simulator20Thread.suspend();
+          //  timer20Thread.suspend();
+            simulator05Thread = new Thread(() ->
+            {
+                simulatorLoop((long)0.5);
+            });
+            simulator05Thread.start();
+            timer05Thread = new Thread(() ->
+            {
+                timerLoop(0.5);
+            });
+            timer05Thread.start();
+        }
     }
+
+    public void changeSpeed (double speed)
+    {
+        try {
+            Thread.sleep((long)(Controller.XML_settings.additionalSettings.getDataSamplingRate() / speed));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void changeTimerSpeed (double speed)
+    {
+        nowTime += 1000 * speed;
+    }
+
+    public void simulatorLoop (double speed)
+    {
+        while (true) {
+            try {
+                if (!((line = in.readLine()) != null)) break;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            out.println(line);
+            out.flush();
+            changeSpeed(speed);
+        }
+    }
+
+    public void timerLoop (double speed)
+    {
+        while (true) {
+            try {
+                Thread.sleep(1000); //1 second
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            String time;
+            changeTimerSpeed(speed);
+            time = simpleDateFormat.format(nowTime - 7200000);
+            Platform.runLater(() -> {
+                label.setText(time);
+            });
+        }
+    }
+
+
 }
