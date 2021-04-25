@@ -1,38 +1,14 @@
-package Model;/*
- * Smallest enclosing circle - Library (Java)
- *
- * Copyright (c) 2020 Project Nayuki
- * https://www.nayuki.io/page/smallest-enclosing-circle
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program (see COPYING.txt and COPYING.LESSER.txt).
- * If not, see <http://www.gnu.org/licenses/>.
- */
+package Model;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import Model.Point;
-
 
 public final class Welzl {
 
-    /*
-     * Returns the smallest circle that encloses all the given points. Runs in expected O(n) time, randomized.
-     * Note: If 0 points are given, null is returned. If 1 point is given, a circle of radius 0 is returned.
-     */
     // Initially: No boundary points known
     public static Circle makeCircle(List<Point> points) {
         // Clone list to preserve the caller's data, randomize order
