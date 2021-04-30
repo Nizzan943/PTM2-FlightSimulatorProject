@@ -1,4 +1,7 @@
-package Model;
+package Server;
+
+import Server.AdditionalSettings;
+import Server.UserSettings;
 
 import java.beans.XMLDecoder;
 import java.io.*;

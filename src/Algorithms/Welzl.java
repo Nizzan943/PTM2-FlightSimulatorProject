@@ -1,5 +1,7 @@
-package Model;
+package Algorithms;
 
+
+import Server.Point;
 
 import java.util.ArrayList;
 import java.util.Collection;

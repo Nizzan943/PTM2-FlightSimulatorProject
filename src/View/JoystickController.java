@@ -1,6 +1,8 @@
 package View;
 
+import Model.Model;
 import javafx.fxml.FXML;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import java.util.Observable;
@@ -10,9 +12,28 @@ public class JoystickController extends Observable
 
     @FXML
     Circle Joystick;
+
+    @FXML
+    Slider aileron;
+
     double defaultY;
     double defaultX;
     boolean mousePushed;
+
+    public void joystickAileron(int speed)
+    {
+        Model model = new Model();
+
+        for (Float data : model.getAileron())
+        {
+            aileron.adjustValue(data);
+            try {
+                Thread.sleep(1000 * speed); //1 second
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public JoystickController() {
         this.mousePushed = false;

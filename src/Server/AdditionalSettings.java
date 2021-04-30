@@ -1,4 +1,4 @@
-package Model;
+package Server;
 
 public class AdditionalSettings {
 

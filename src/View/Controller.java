@@ -1,7 +1,6 @@
 package View;
 
-import Model.HandleXML;
-import javafx.fxml.FXML;
+import Server.HandleXML;
 
 
 public class Controller {

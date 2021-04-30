@@ -1,9 +1,8 @@
 package View;
 
-import Model.TimeSeries;
+import Server.TimeSeries;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.FileChooser;
 

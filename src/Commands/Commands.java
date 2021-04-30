@@ -1,4 +1,9 @@
-package Model;
+package Commands;
+
+import Algorithms.LinearRegression;
+import Server.AnomalyReport;
+import Server.Point;
+import Server.TimeSeries;
 
 import java.io.FileWriter;
 import java.text.DecimalFormat;

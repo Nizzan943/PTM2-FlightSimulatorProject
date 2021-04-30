@@ -1,6 +1,6 @@
 package View;
 
-import Model.HandleXML;
+import Server.HandleXML;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 

@@ -1,15 +1,14 @@
-package Model;
+package Algorithms;
 
-import Model.AnomalyReport;
-import Model.StatLib;
-import Model.TimeSeries;
-import Model.TimeSeriesAnomalyDetector;
+import Server.AnomalyReport;
+import Server.TimeSeries;
+import Server.TimeSeriesAnomalyDetector;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static Model.StatLib.avg;
-import static Model.StatLib.var;
+import static Server.StatLib.avg;
+import static Server.StatLib.var;
 
 public class ZScore implements TimeSeriesAnomalyDetector {
     public float[] thresholdArray;

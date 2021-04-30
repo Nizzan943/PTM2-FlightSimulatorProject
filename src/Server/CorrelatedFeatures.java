@@ -1,4 +1,6 @@
-package Model;
+package Server;
+
+import Server.Line;
 
 public class CorrelatedFeatures {
 	public final String feature1,feature2;

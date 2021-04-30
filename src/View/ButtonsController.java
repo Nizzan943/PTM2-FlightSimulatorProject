@@ -1,6 +1,7 @@
 package View;
 
 
+import Model.Model;
 import javafx.application.Platform;
 
 import javafx.event.ActionEvent;
@@ -9,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
+import sun.awt.windows.ThemeReader;
 
 
 import java.io.*;
@@ -58,6 +60,10 @@ public class ButtonsController implements Initializable {
 
     public void Play()
     {
+       // JoystickController joystickController = new JoystickController();
+       // Thread joystickAileron = new Thread(() ->{joystickController.joystickAileron();  });
+       // joystickAileron.start();
+       // joystickController.joystickAileron();
         label.setFont(new Font(15));
         if (flag == 0) {
             simulatorThread = new Thread(() -> {
@@ -86,17 +92,6 @@ public class ButtonsController implements Initializable {
                     }
                 }
                 simulatorLoop(1);
-                out.close();
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    fg.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             });
             simulatorThread.start();
             timerThread = new Thread(() -> {
@@ -335,8 +330,11 @@ public class ButtonsController implements Initializable {
         nowTime += 1000 * speed;
     }
 
+
     public void simulatorLoop (double speed)
     {
+        int i = 0;
+        Model model = new Model();
         while (true) {
             try {
                 if (!((line = in.readLine()) != null)) break;
@@ -346,6 +344,17 @@ public class ButtonsController implements Initializable {
             out.println(line);
             out.flush();
             changeSpeed(speed);
+        }
+        out.close();
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            fg.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
