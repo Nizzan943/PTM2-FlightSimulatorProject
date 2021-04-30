@@ -1,51 +1,43 @@
 package Model;
 
+import Server.HandleXML;
 import Server.TimeSeries;
 import View.Controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Model extends Observable implements Observer
+public class Model extends Observable
 {
-    public ArrayList<Float> getAileron() {
-        return aileron;
+    public static HandleXML XML_settings;
+    public static String CSVpath;
+
+    public String getResultLoadXML() {
+        return resultLoadXML;
     }
 
-    public ArrayList<Float> getElevator() {
-        return elevator;
-    }
+    private String resultLoadXML;
 
-    private ArrayList<Float> aileron;
-    private ArrayList<Float> elevator;
+     public void ModelLoadXML(String chosenPath)
+     {
+         HandleXML handleXML = new HandleXML();
+         try {
+             handleXML.deserializeFromXML(chosenPath);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+         if (handleXML.WrongFormatAlert == true)
+             resultLoadXML = "WrongFormatAlert";
+         else if (handleXML.MissingArgumentsAlert == true)
+             resultLoadXML = "MissingArgumentAlert";
+         else {
+             XML_settings = handleXML;
+             resultLoadXML = "SuccessAlert";
+         }
+         setChanged();
+         notifyObservers();
+     }
 
-    public void getJoystickParameters()
-    {
-        TimeSeries timeSeries = new TimeSeries(Controller.CSVpath);
-        for (TimeSeries.col col: timeSeries.getCols())
-        {
-            if (col.getName().intern() == "aileron")
-                aileron = col.getFloats();
-            if (col.getName().intern() == "elevator")
-                elevator = col.getFloats();
-        }
-    }
-
-
-    public void setRudder(float rudder)
-    {
-
-    }
-
-    public void setThrottle(float throttle)
-    {
-
-    }
-
-
-    @Override
-    public void update(Observable o, Object arg) {
-
-    }
 }
