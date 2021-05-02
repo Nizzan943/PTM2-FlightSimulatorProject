@@ -48,6 +48,7 @@ public class TimeSeries
 	}
 	
 	private col[] cols;
+	public ArrayList<String> rows = new ArrayList<>();
 
 	public void setCorrelationTresh(double correlationTresh) {
 		this.correlationTresh = correlationTresh;
@@ -58,6 +59,8 @@ public class TimeSeries
 	String myCSVname ;
 
 	Path path_of_file;
+
+
 
 
 	public TimeSeries(String csvFileName)
@@ -82,6 +85,7 @@ public class TimeSeries
 				cols[i] = new col(value[i]);
 				
 			line = bufferedReader.readLine();
+			rows.add(line);
 
 			while (line!=null)
 			{
@@ -102,6 +106,7 @@ public class TimeSeries
 
 
 				line = bufferedReader.readLine();
+				rows.add(line);
 
 			}
 			bufferedReader.close();
@@ -130,6 +135,7 @@ public class TimeSeries
 		return f;
 		
 	}
+
 	
 	public Point[] ArrToPoint(float[] x, float[] y)
 	{

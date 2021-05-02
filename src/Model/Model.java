@@ -1,3 +1,4 @@
+
 package Model;
 
 import Server.HandleXML;
@@ -36,9 +37,8 @@ public class Model extends Observable
     long nowTime = 0;
 
     Socket fg = null;
-    BufferedReader in = null;
+    TimeSeries in = null;
     PrintWriter out = null;
-    String line = null;
     private String time;
 
     public String gettime() {
@@ -62,25 +62,25 @@ public class Model extends Observable
     }
 
 
-     public void ModelLoadXML(String chosenPath)
-     {
-         HandleXML handleXML = new HandleXML();
-         try {
-             handleXML.deserializeFromXML(chosenPath);
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
-         if (handleXML.WrongFormatAlert == true)
-             resultLoadXML = "WrongFormatAlert";
-         else if (handleXML.MissingArgumentsAlert == true)
-             resultLoadXML = "MissingArgumentAlert";
-         else {
-             XML_settings = handleXML;
-             resultLoadXML = "SuccessAlert";
-         }
-         setChanged();
-         notifyObservers("resultLoadXML");
-     }
+    public void ModelLoadXML(String chosenPath)
+    {
+        HandleXML handleXML = new HandleXML();
+        try {
+            handleXML.deserializeFromXML(chosenPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (handleXML.WrongFormatAlert == true)
+            resultLoadXML = "WrongFormatAlert";
+        else if (handleXML.MissingArgumentsAlert == true)
+            resultLoadXML = "MissingArgumentAlert";
+        else {
+            XML_settings = handleXML;
+            resultLoadXML = "SuccessAlert";
+        }
+        setChanged();
+        notifyObservers("resultLoadXML");
+    }
 
     public void ModelOpenCSV(String chosenPath)
     {
@@ -134,16 +134,7 @@ public class Model extends Observable
                     e.printStackTrace();
                 }
 
-
-                {
-                    try {
-                        in = new BufferedReader(new FileReader(Model.CSVpath));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
+                in = new TimeSeries(Model.CSVpath);
                 {
                     try {
                         out = new PrintWriter(fg.getOutputStream());
@@ -201,27 +192,18 @@ public class Model extends Observable
         nowTime += 1000 * speed;
     }
 
+    int numofrow = 0;
 
     public void simulatorLoop (double speed)
     {
-        int i = 0;
-        Model model = new Model();
-        while (true) {
-            try {
-                if (!((line = in.readLine()) != null)) break;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            out.println(line);
+        while (numofrow != in.rows.size() - 1)
+        {
+            out.println(in.rows.get(numofrow));
             out.flush();
             changeSpeed(speed);
+            numofrow++;
         }
         out.close();
-        try {
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         try {
             fg.close();
         } catch (IOException e) {
