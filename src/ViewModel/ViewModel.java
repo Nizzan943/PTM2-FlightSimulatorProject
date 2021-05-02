@@ -19,6 +19,8 @@ public class ViewModel extends Observable implements Observer
     StringProperty chosenCSVFilePath;
     public ArrayList<String> colsNames;
 
+    public String time;
+
     public StringProperty chosenXMLFilePathProperty() {
         return chosenXMLFilePath;
     }
@@ -38,6 +40,7 @@ public class ViewModel extends Observable implements Observer
     public StringProperty loadXMLProperty() {
         return loadXMLResult;
     }
+
 
     public StringProperty OpenCSVProperty() {
         return openCSVResult;
@@ -83,7 +86,26 @@ public class ViewModel extends Observable implements Observer
                 notifyObservers("colNames");
             }
         }
-
+        if (p.intern() == "time")
+        {
+            time = model.gettime();
+            setChanged();
+            notifyObservers("time");
+        }
     }
 
+    public void VMplay()
+    {
+        model.modelPlay();
+    }
+
+    public void VMGetChoice(String speed)
+    {
+        model.modelGetChoice(speed);
+    }
+
+    public void VMpause()
+    {
+        model.modelpause();
+    }
 }

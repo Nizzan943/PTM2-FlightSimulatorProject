@@ -13,6 +13,10 @@
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ChoiceBox?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
     <!-- <ListView fx:id="listView" layoutX="25.0" layoutY="43.0" prefHeight="342.0" prefWidth="163.0" />-->
     <!--   <fx:include source="Buttons.fxml" /> -->
@@ -70,6 +74,30 @@
 
         <ListView fx:id="listView" layoutX="25.0" layoutY="43.0" prefHeight="342.0" prefWidth="163.0" />
 
+            <Button fx:id="play" layoutX="25.0" layoutY="450.0" mnemonicParsing="false" onAction="#Play" prefHeight="42.0" prefWidth="74.0" text="Play" />
+            <Button layoutX="105.0" layoutY="450.0" mnemonicParsing="false" onAction="#Pause" prefHeight="42.0" prefWidth="74.0" text="Pause" />
+            <Button layoutX="185.0" layoutY="450.0" mnemonicParsing="false" onAction="#Stop" prefHeight="42.0" prefWidth="74.0" text="Stop" />
+            <Button layoutX="265.0" layoutY="450.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" text="&lt;&lt;&lt;" />
+            <Button layoutX="345.0" layoutY="450.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" text="&gt;&gt;&gt;" />
+            <Button layoutX="425.0" layoutY="450.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" text="-15s" />
+            <Button layoutX="505.0" layoutY="450.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="74.0" text="+15s" />
+
+            <Slider layoutX="24.0" layoutY="510.0" prefHeight="42.0" prefWidth="643.0" />
+            <Button layoutX="604.0" layoutY="251.0" mnemonicParsing="false" prefHeight="97.0" prefWidth="163.0" text="Panel clocks" textAlignment="CENTER">
+
+                <font>
+                    <Font size="24.0" />
+                </font>
+            </Button>
+            <Label layoutX="588.0" layoutY="450.0" prefHeight="36.0" prefWidth="105.0" text="Play Speed">
+                <font>
+                    <Font size="20.0" />
+                </font>
+            </Label>
+            <ChoiceBox fx:id="playSpeedDropDown" layoutX="695.0" layoutY="450.0" onAction="#GetChoice" prefHeight="42.0" prefWidth="67.0" />
+            <Label fx:id="label" layoutX="679.0" layoutY="509.0" prefHeight="36.0" prefWidth="83.0" />
+
     </Pane>
+
 
 </BorderPane>

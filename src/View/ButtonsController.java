@@ -5,6 +5,8 @@ import Model.Model;
 import ViewModel.ViewModel;
 import javafx.application.Platform;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,37 +20,24 @@ import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
 
-public class ButtonsController implements Initializable {
-
-    Thread simulatorThread = null;
-    Thread simulator20Thread = null;
-    Thread timerThread = null;
-    Thread timer20Thread = null;
-    Thread simulator05Thread = null;
-    Thread timer05Thread = null;
-    Thread simulator10Thread = null;
-    Thread timer10Thread = null;
-    Thread simulator15Thread = null;
-    Thread timer15Thread = null;
-
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.S");
-    int flag = 0;
-    long nowTime = 0;
-
-    Socket fg = null;
-    BufferedReader in = null;
-    PrintWriter out = null;
-    String line = null;
-
+public class ButtonsController implements Initializable, Observer {
+    ViewModel viewModel;
     @FXML
     private ChoiceBox playSpeedDropDown;
 
     @FXML
     Label label;
 
+
+    public void setViewModel(ViewModel viewModel)
+    {
+        this.viewModel = viewModel;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -62,72 +51,13 @@ public class ButtonsController implements Initializable {
     public void Play()
     {
         label.setFont(new Font(15));
-        if (flag == 0) {
-            simulatorThread = new Thread(() -> {
-
-                try {
-                    fg = new Socket("localhost", 5400);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                {
-                    try {
-                        in = new BufferedReader(new FileReader(Model.CSVpath));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
-                {
-                    try {
-                        out = new PrintWriter(fg.getOutputStream());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                simulatorLoop(1);
-            });
-            simulatorThread.start();
-            timerThread = new Thread(() -> {
-                timerLoop(1);
-            });
-            timerThread.start();
-
-        }
-        if (flag == 1)
-        {
-            if (simulatorThread != null) {
-                simulatorThread.resume();
-                timerThread.resume();
-            }
-            if (simulator20Thread != null) {
-                simulator20Thread.resume();
-                timer20Thread.resume();
-            }
-            if (simulator05Thread != null) {
-                simulator05Thread.resume();
-                timer05Thread.resume();
-            }
-            if (simulator15Thread != null) {
-                simulator15Thread.resume();
-                timer15Thread.resume();
-            }
-            if (simulator10Thread != null) {
-                simulator10Thread.resume();
-                timer10Thread.resume();
-            }
-        }
-        flag = 1;
-
+        viewModel.VMplay();
     }
 
     public void Stop()
     {
     }
-
+/*
     public void Pause()
     {
         if (simulatorThread != null) {
@@ -151,7 +81,7 @@ public class ButtonsController implements Initializable {
             timer20Thread.suspend();
         }
     }
-
+*/
     public void FastForward()
     {
         System.out.println("FastForward");
@@ -172,7 +102,15 @@ public class ButtonsController implements Initializable {
         System.out.println("-15");
     }
 
+    @Override
+    public void update(Observable o, Object arg)
+    {
+        String p = (String)arg;
+        if (p.intern() == "time")
+            label.setText(viewModel.time);
+    }
 
+/*
     public void GetChoice(ActionEvent actionEvent) {
         String speed = (String) playSpeedDropDown.getValue();
         if (speed.intern() == "x2.0") {
@@ -313,64 +251,7 @@ public class ButtonsController implements Initializable {
         }
     }
 
-    public void changeSpeed (double speed)
-    {
-        try {
-            Thread.sleep((long)(Model.XML_settings.additionalSettings.getDataSamplingRate() / speed));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void changeTimerSpeed (double speed)
-    {
-        nowTime += 1000 * speed;
-    }
-
-
-    public void simulatorLoop (double speed)
-    {
-        int i = 0;
-        Model model = new Model();
-        while (true) {
-            try {
-                if (!((line = in.readLine()) != null)) break;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            out.println(line);
-            out.flush();
-            changeSpeed(speed);
-        }
-        out.close();
-        try {
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            fg.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void timerLoop (double speed)
-    {
-        while (true) {
-            try {
-                Thread.sleep(1000); //1 second
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            String time;
-            changeTimerSpeed(speed);
-            time = simpleDateFormat.format(nowTime - 7200000);
-            Platform.runLater(() -> {
-                label.setText(time);
-            });
-        }
-    }
+*/
 
 
 }

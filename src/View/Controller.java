@@ -4,17 +4,24 @@ import Server.HandleXML;
 import ViewModel.ViewModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.ResourceBundle;
 
-public class Controller implements Observer{
+public class Controller implements Observer, Initializable {
 
     @FXML
     ListView listView;
@@ -67,6 +74,8 @@ public class Controller implements Observer{
             {
                 for (String names: colsNames)
                     listView.getItems().add(names);
+                label.setFont(new Font(15));
+                label.setText("00:00:00.000");
             }
         }
     }
@@ -126,6 +135,45 @@ public class Controller implements Observer{
         alert.showAndWait();
     }
 
+    @FXML
+    private ChoiceBox playSpeedDropDown;
+
+    @FXML
+    Label label;
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        playSpeedDropDown.getItems().addAll("x0.5", "x1.0", "x1.5", "x2.0");
+    }
+
+    int flag = 0;
+    public void Play()
+    {
+        label.setFont(new Font(15));
+        if (flag == 0) {
+            playSpeedDropDown.setValue("x1.0");
+            flag = 1;
+        }
+        viewModel.VMplay();
+    }
+
+    public void GetChoice(ActionEvent actionEvent)
+    {
+        String speed = (String) playSpeedDropDown.getValue();
+        viewModel.VMGetChoice(speed);
+    }
+
+    public void Stop()
+    {
+    }
+
+    public void Pause()
+    {
+        viewModel.VMpause();
+    }
+
+
     @Override
     public void update(Observable o, Object arg)
     {
@@ -137,5 +185,7 @@ public class Controller implements Observer{
                 colsNames.add(name);
             }
         }
+        if (p.intern() == "time")
+            label.setText(viewModel.time);
     }
 }
