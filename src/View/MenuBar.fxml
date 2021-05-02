@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/" fx:controller="View.MenuBarController" prefHeight="400.0" prefWidth="600.0">
+<Pane xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/" fx:controller="View.Controller" prefHeight="400.0" prefWidth="600.0">
     <MenuBar prefHeight="25.0" prefWidth="797.0">
         <menus>
             <Menu mnemonicParsing="false" text="Settings">

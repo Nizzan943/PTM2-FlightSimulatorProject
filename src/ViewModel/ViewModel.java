@@ -17,7 +17,7 @@ public class ViewModel extends Observable implements Observer
 
     StringProperty chosenXMLFilePath;
     StringProperty chosenCSVFilePath;
-    ArrayList<StringProperty> colsNames;
+    public ArrayList<String> colsNames;
 
     public StringProperty chosenXMLFilePathProperty() {
         return chosenXMLFilePath;
@@ -74,12 +74,13 @@ public class ViewModel extends Observable implements Observer
                 openCSVResult.set("Incompatibility with XML file");
             if (model.getResultOpenCSV().intern() == "OK")
             {
+                openCSVResult.set("OK");
                 for (String name : model.getColsNames())
                 {
-                    StringProperty temp = new SimpleStringProperty();
-                    temp.set(name);
-                    colsNames.add(temp);
+                    colsNames.add(name);
                 }
+                setChanged();
+                notifyObservers("colNames");
             }
         }
 

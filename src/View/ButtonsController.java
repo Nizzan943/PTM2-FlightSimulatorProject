@@ -2,6 +2,7 @@ package View;
 
 
 import Model.Model;
+import ViewModel.ViewModel;
 import javafx.application.Platform;
 
 import javafx.event.ActionEvent;
@@ -60,10 +61,6 @@ public class ButtonsController implements Initializable {
 
     public void Play()
     {
-       // JoystickController joystickController = new JoystickController();
-       // Thread joystickAileron = new Thread(() ->{joystickController.joystickAileron();  });
-       // joystickAileron.start();
-       // joystickController.joystickAileron();
         label.setFont(new Font(15));
         if (flag == 0) {
             simulatorThread = new Thread(() -> {

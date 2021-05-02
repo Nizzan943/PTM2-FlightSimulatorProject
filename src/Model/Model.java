@@ -91,8 +91,7 @@ public class Model extends Observable
             CSVpath = chosenPath;
         }
         setChanged();
-        notifyObservers("resultOpenXML");
+        notifyObservers("resultOpenCSV");
         notifyObservers("cols");
-
     }
 }

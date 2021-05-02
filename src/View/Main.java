@@ -23,9 +23,9 @@ public class Main extends Application {
         ViewModel viewModel = new ViewModel(model);
         model.addObserver(viewModel);
         FXMLLoader fxml = new FXMLLoader();
-        fxml.setLocation(getClass().getResource("MenuBar.fxml"));
+        fxml.setLocation(getClass().getResource("App.fxml"));
         Parent root = fxml.load();
-        MenuBarController mwc = fxml.getController(); // View
+        Controller mwc = fxml.getController(); // View
         mwc.setViewModel(viewModel);
         viewModel.addObserver(mwc);
         primaryStage.setTitle("Flight Simulator");
