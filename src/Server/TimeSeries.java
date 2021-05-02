@@ -48,7 +48,7 @@ public class TimeSeries
 	}
 	
 	private col[] cols;
-	public ArrayList<String> rows = new ArrayList<>();
+	private ArrayList<String> rows = new ArrayList<>();
 
 	public void setCorrelationTresh(double correlationTresh) {
 		this.correlationTresh = correlationTresh;
@@ -134,6 +134,11 @@ public class TimeSeries
 		
 		return f;
 		
+	}
+
+	public ArrayList<String> getRows()
+	{
+		return rows;
 	}
 
 	

@@ -196,9 +196,9 @@ public class Model extends Observable
 
     public void simulatorLoop (double speed)
     {
-        while (numofrow != in.rows.size() - 1)
+        while (numofrow != in.getRows().size() - 1)
         {
-            out.println(in.rows.get(numofrow));
+            out.println(in.getRows().get(numofrow));
             out.flush();
             changeSpeed(speed);
             numofrow++;
