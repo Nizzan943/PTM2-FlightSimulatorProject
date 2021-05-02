@@ -2,6 +2,7 @@ package View;
 
 import Server.HandleXML;
 import ViewModel.ViewModel;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
@@ -13,27 +14,36 @@ import java.util.Observer;
 public class MenuBarController implements Observer{
 
     StringProperty resultLoadXML;
-    StringProperty chosenFilePath;
+    StringProperty chosenXMLFilePath;
     ViewModel viewModel;
 
-    public void setViewModel(ViewModel viewModel) {
-        this.viewModel = viewModel;
-        viewModel.loadXMLProperty().bind(resultLoadXML);
-        chosenFilePath.bind(viewModel.chosenFilePathProperty());
+    public MenuBarController()
+    {
+        resultLoadXML = new SimpleStringProperty();
+        chosenXMLFilePath = new SimpleStringProperty();
     }
+
+    public void setViewModel(ViewModel viewModel)
+    {
+        this.viewModel = viewModel;
+        viewModel.chosenXMLFilePathProperty().bind(chosenXMLFilePath);
+        resultLoadXML.bind(viewModel.loadXMLProperty());
+    }
+
+
     public void LoadXML()  {
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
         fc.setTitle("Load XML file"); //headline
         fc.setInitialDirectory(new File("/")); //what happens when we click
         File chosen = fc.showOpenDialog(null);
-        chosenFilePath.set(chosen.getAbsolutePath());
+        chosenXMLFilePath.set(chosen.getAbsolutePath());
         if (chosen != null)
         {
             viewModel.VMLoadXML();
-            if (resultLoadXML.equals("WrongFormatAlert"))
+            if (resultLoadXML.getValue().equals("WrongFormatAlert"))
                 WrongFormatAlert();
-            else if (resultLoadXML.equals("MissingArgumentAlert"))
+            else if (resultLoadXML.getValue().equals("MissingArgumentAlert"))
                 MissingArgumentAlert();
             else {
                 SuccessAlert();

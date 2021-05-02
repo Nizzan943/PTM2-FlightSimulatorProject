@@ -4,10 +4,11 @@
 <?import javafx.scene.layout.Pane?>
 
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
     <!-- <ListView fx:id="listView" layoutX="25.0" layoutY="43.0" prefHeight="342.0" prefWidth="163.0" />-->
-       <fx:include source="Buttons.fxml" />
-       <fx:include source="ListView.fxml" />
-       <fx:include source="Joystick.fxml" />
-       <fx:include source="MenuBar.fxml" />
+    <!--   <fx:include source="Buttons.fxml" /> -->
+     <!--  <fx:include source="ListView.fxml" /> -->
+    <!--    <fx:include source="Joystick.fxml" /> -->
+     <fx:include source="MenuBar.fxml" />
 </BorderPane>

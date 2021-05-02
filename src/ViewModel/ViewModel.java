@@ -5,33 +5,52 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
 public class ViewModel extends Observable implements Observer
 {
     Model model = new Model();
-    StringProperty loadXML;
+    StringProperty loadXMLResult;
+    StringProperty openCSVResult;
 
-    public StringProperty chosenFilePathProperty() {
-        return chosenFilePath;
+    StringProperty chosenXMLFilePath;
+    StringProperty chosenCSVFilePath;
+    ArrayList<StringProperty> colsNames;
+
+    public StringProperty chosenXMLFilePathProperty() {
+        return chosenXMLFilePath;
     }
-
-    StringProperty chosenFilePath;
+    public StringProperty chosenCSVFilePathProperty() {
+        return chosenCSVFilePath;
+    }
 
     public ViewModel(Model model) {
         this.model = model;
-        loadXML = new SimpleStringProperty();
-        chosenFilePath = new SimpleStringProperty();
+        loadXMLResult = new SimpleStringProperty();
+        openCSVResult = new SimpleStringProperty();
+        chosenXMLFilePath = new SimpleStringProperty();
+        chosenCSVFilePath = new SimpleStringProperty();
+        colsNames = new ArrayList<>();
     }
 
     public StringProperty loadXMLProperty() {
-        return loadXML;
+        return loadXMLResult;
+    }
+
+    public StringProperty OpenCSVProperty() {
+        return openCSVResult;
     }
 
     public void VMLoadXML()
     {
-        model.ModelLoadXML(chosenFilePath.toString());
+        model.ModelLoadXML(chosenXMLFilePath.getValue());
+    }
+
+    public void VMOpenCSV()
+    {
+        model.ModelOpenCSV(chosenCSVFilePath.getValue());
     }
 
     @Override
@@ -41,11 +60,29 @@ public class ViewModel extends Observable implements Observer
         if (p.intern() == "resultLoadXML")
         {
             if (model.getResultLoadXML().intern() == "WrongFormatAlert")
-                loadXML.set("WrongFormatAlert");
+                loadXMLResult.set("WrongFormatAlert");
             if (model.getResultLoadXML().intern() == "MissingArgumentAlert")
-                loadXML.set("MissingArgumentAlert");
+                loadXMLResult.set("MissingArgumentAlert");
             if (model.getResultLoadXML().intern() == "SuccessAlert")
-                loadXML.set("SuccessAlert");
+                loadXMLResult.set("SuccessAlert");
         }
+        if (p.intern() == "resultOpenCSV")
+        {
+            if (model.getResultOpenCSV().intern() == "Missing Arguments")
+                openCSVResult.set("Missing Arguments");
+            if (model.getResultOpenCSV().intern() == "Incompatibility with XML file")
+                openCSVResult.set("Incompatibility with XML file");
+            if (model.getResultOpenCSV().intern() == "OK")
+            {
+                for (String name : model.getColsNames())
+                {
+                    StringProperty temp = new SimpleStringProperty();
+                    temp.set(name);
+                    colsNames.add(temp);
+                }
+            }
+        }
+
     }
+
 }

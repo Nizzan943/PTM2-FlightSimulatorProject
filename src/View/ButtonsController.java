@@ -77,7 +77,7 @@ public class ButtonsController implements Initializable {
 
                 {
                     try {
-                        in = new BufferedReader(new FileReader(Controller.CSVpath));
+                        in = new BufferedReader(new FileReader(Model.CSVpath));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -319,7 +319,7 @@ public class ButtonsController implements Initializable {
     public void changeSpeed (double speed)
     {
         try {
-            Thread.sleep((long)(Controller.XML_settings.additionalSettings.getDataSamplingRate() / speed));
+            Thread.sleep((long)(Model.XML_settings.additionalSettings.getDataSamplingRate() / speed));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
