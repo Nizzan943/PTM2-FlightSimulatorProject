@@ -3,18 +3,14 @@ package Model;
 
 import Server.HandleXML;
 import Server.TimeSeries;
-import View.Controller;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.scene.control.Alert;
+
 
 import java.io.*;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Observer;
 
 public class Model extends Observable
 {

@@ -11,7 +11,7 @@ import java.util.Observer;
 
 public class ViewModel extends Observable implements Observer
 {
-    Model model = new Model();
+    Model model;
     StringProperty loadXMLResult;
     StringProperty openCSVResult;
 
