@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 
@@ -21,11 +22,37 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
-public class Controller implements Observer, Initializable {
+public class Controller extends Pane implements Observer, Initializable {
 
     @FXML
-    ListView listView;
+    Pane board;
 
+    @FXML
+    MyMenu myMenu;
+
+    @FXML
+    MyListView myListView;
+
+    @FXML
+    MyButtons myButtons;
+
+    @FXML
+    MyJoystick myJoystick;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources)
+    {
+        board.getChildren().add(myMenu.set());
+        myMenu.m1.setOnAction((e)->LoadXML()); //load XML func
+        board.getChildren().addAll(myListView.set());
+        myListView.open.setOnAction((e)->openCSV()); //open CSV func
+        board.getChildren().addAll(myButtons.set());
+        myButtons.play.setOnAction((e)->Play());
+        myButtons.pause.setOnAction((e)->Pause());
+        myButtons.stop.setOnAction((e)->Stop());
+        myButtons.playSpeedDropDown.setOnAction((e)->GetChoice()); //GetChoice func
+        board.getChildren().addAll(myJoystick.set());
+    }
 
     StringProperty resultOpenCSV;
     StringProperty chosenCSVFilePath;
@@ -73,9 +100,8 @@ public class Controller implements Observer, Initializable {
             if (resultOpenCSV.getValue().intern() == "OK")
             {
                 for (String names: colsNames)
-                    listView.getItems().add(names);
-                label.setFont(new Font(15));
-                label.setText("00:00:00.000");
+                    myListView.listView.getItems().add(names);
+                myButtons.timer.setText("00:00:00.000");
             }
         }
     }
@@ -135,32 +161,19 @@ public class Controller implements Observer, Initializable {
         alert.showAndWait();
     }
 
-    @FXML
-    private ChoiceBox playSpeedDropDown;
-
-    @FXML
-    Label label;
-
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        playSpeedDropDown.getItems().addAll("x0.5", "x1.0", "x1.5", "x2.0");
-    }
-
     int flag = 0;
     public void Play()
     {
-        label.setFont(new Font(15));
         if (flag == 0) {
-            playSpeedDropDown.setValue("x1.0");
+            myButtons.playSpeedDropDown.setValue("x1.0");
             flag = 1;
         }
         viewModel.VMplay();
     }
 
-    public void GetChoice(ActionEvent actionEvent)
+    public void GetChoice()
     {
-        String speed = (String) playSpeedDropDown.getValue();
+        String speed = (String)  myButtons.playSpeedDropDown.getValue();
         viewModel.VMGetChoice(speed);
     }
 
@@ -186,6 +199,6 @@ public class Controller implements Observer, Initializable {
             }
         }
         if (p.intern() == "time")
-            label.setText(viewModel.time);
+            myButtons.timer.setText(viewModel.time);
     }
 }
