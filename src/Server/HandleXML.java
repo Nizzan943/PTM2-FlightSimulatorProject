@@ -13,7 +13,10 @@ import java.util.Map;
 public class HandleXML {
 
     public List<UserSettings> PropertyList = new ArrayList<>();
-    public Map<String, String> settingsMap = new HashMap<>();
+    public Map <String, String> names = new HashMap<>();
+    public Map <String, Integer> max = new HashMap<>();
+    public Map <String, Integer> min = new HashMap<>();
+
     public AdditionalSettings additionalSettings = new AdditionalSettings();
     public boolean WrongFormatAlert = false;
     public boolean MissingArgumentsAlert = false;
@@ -41,7 +44,7 @@ public class HandleXML {
             decoder = new XMLDecoder(
                     new BufferedInputStream(new FileInputStream(path)));
         } catch (FileNotFoundException e){ e.printStackTrace(); }
-        for (int i = 0; i < 42; i++) {
+        for (int i = 0; i < 11; i++) {
             try {
                 UserSettings decodedSettings = (UserSettings) decoder.readObject();
                 PropertyList.add(decodedSettings);
@@ -92,10 +95,11 @@ public class HandleXML {
             if (MissingArgumentsAlert == false)
                 WrongFormatAlert = true;
         }
-
-        for (UserSettings userSettings : PropertyList)
+        for (UserSettings userSettings: PropertyList)
         {
-            settingsMap.put(userSettings.getAssosicateName(), userSettings.getRealName());
+            names.put(userSettings.getRealName(), userSettings.getAssosicateName());
+            max.put(userSettings.getRealName(), userSettings.getMax());
+            min.put(userSettings.getRealName(), userSettings.getMin());
         }
         decoder.close();
     }

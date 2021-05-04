@@ -10,10 +10,13 @@ import java.io.*;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 
 public class Model extends Observable
 {
+    public Map<String, Integer> CSVindexmap = new HashMap<>();
     public static HandleXML XML_settings;
     public static String CSVpath;
 
@@ -82,35 +85,45 @@ public class Model extends Observable
     {
         int flag1 = 0;
         TimeSeries timeSeries = new TimeSeries(chosenPath);
-        if (timeSeries.getCols().length != 42)
-            resultOpenCSV = "Missing Arguments";
+        int count = 0;
         for (int i = 0; i < timeSeries.getCols().length; i++)
         {
-            flag1 = 0;
-            if (timeSeries.getCols()[i].getName().intern() != XML_settings.PropertyList.get(i).getRealName().intern())
-            {
-                resultOpenCSV = "Incompatibility with XML file";
-                flag1 = 1;
-                break;
-            }
-            for (int j = 0; j < timeSeries.getCols()[i].getFloats().size(); j++)
-            {
-                if (timeSeries.getCols()[i].getFloats().get(j) > XML_settings.PropertyList.get(i).getMax() || timeSeries.getCols()[i].getFloats().get(j) < XML_settings.PropertyList.get(i).getMin())
-                {
-                    resultOpenCSV = "Incompatibility with XML file";
-                    flag1 = 1;
+            int k = 0;
+            while (k != 11) {
+                if (timeSeries.getCols()[i].getName().intern() == XML_settings.PropertyList.get(k).getRealName().intern()) {
+                    count++;
+                    CSVindexmap.put(XML_settings.PropertyList.get(k).getAssosicateName(), i);
                     break;
                 }
+                k++;
+            }
+        }
+
+        for (String colname : XML_settings.names.keySet())
+        {
+            int index = CSVindexmap.get(XML_settings.names.get(colname));
+            for (Float num :  timeSeries.getCols()[index].getFloats())
+            {
+                if (num < XML_settings.min.get(colname) || num > XML_settings.max.get(colname)) {
+                    resultOpenCSV = "Incompatibility with XML file";
+                    flag1 = 1;
+                }
+                if (flag1 == 1)
+                    break;
             }
             if (flag1 == 1)
                 break;
         }
-        if (timeSeries.getCols().length == 42 && flag1 == 0)
+
+        if (count != 12)
+            resultOpenCSV = "Missing Arguments";
+        if (count == 12 && flag1 == 0)
         {
             resultOpenCSV = "OK";
-            for (TimeSeries.col col : timeSeries.getCols())
+            for (String colName : XML_settings.names.keySet())
             {
-                colsNames.add(col.getName());
+                if (colName == "slip-skid-ball_indicated-slip-skid" || colName == "pitch-deg" || colName == "roll-deg" || colName == "altimeter_indicated-altitude-ft" || colName == "indicated-heading-deg" || colName == "airspeed-kt")
+                    colsNames.add(colName);
             }
             CSVpath = chosenPath;
             try {
@@ -129,7 +142,6 @@ public class Model extends Observable
         }
         setChanged();
         notifyObservers("resultOpenCSV");
-        notifyObservers("cols");
     }
 
     public void modelPlay()
