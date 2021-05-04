@@ -19,6 +19,9 @@ public class MyButtons extends Pane
     Button play;
     Button pause;
     Button stop;
+    Button plus15;
+    Button minus15;
+
 
     public List<Node> set()
     {
@@ -54,13 +57,13 @@ public class MyButtons extends Pane
         right.setPrefSize(74,42);
         ret.add(right);
 
-        Button minus15 = new Button("-15s");
+        minus15 = new Button("-15s");
         minus15.setLayoutX(425);
         minus15.setLayoutY(470);
         minus15.setPrefSize(74,42);
         ret.add(minus15);
 
-        Button plus15 = new Button("+15s");
+        plus15 = new Button("+15s");
         plus15.setLayoutX(505);
         plus15.setLayoutY(470);
         plus15.setPrefSize(74,42);

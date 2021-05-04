@@ -108,4 +108,14 @@ public class ViewModel extends Observable implements Observer
     {
         model.modelpause();
     }
+
+    public void VMplus15()
+    {
+        model.modelPlus15();
+    }
+
+    public void VMminus15()
+    {
+        model.modelMinus15();
+    }
 }

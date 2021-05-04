@@ -282,11 +282,6 @@ public class Model extends Observable
         if (speed.intern() == "x1.0")
         {
             if (simulator15Thread != null || simulator20Thread != null || simulator05Thread != null) {
-                if (simulatorThread != null) {
-                    simulatorThread.suspend();
-                    timerThread.suspend();
-                    simulatorThread = null;
-                }
                 if (simulator05Thread != null) {
                     simulator05Thread.suspend();
                     timer05Thread.suspend();
@@ -355,5 +350,17 @@ public class Model extends Observable
             simulator20Thread.suspend();
             timer20Thread.suspend();
         }
+    }
+
+    public void modelPlus15()
+    {
+        numofrow += (XML_settings.additionalSettings.getDataSamplingRate()/10) * 15;
+        nowTime += 15000;
+    }
+
+    public void modelMinus15()
+    {
+        numofrow -= (XML_settings.additionalSettings.getDataSamplingRate()/10) * 15;
+        nowTime -= 15000;
     }
 }
