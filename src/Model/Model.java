@@ -85,18 +85,18 @@ public class Model extends Observable
     {
         int flag1 = 0;
         TimeSeries timeSeries = new TimeSeries(chosenPath);
-        int count = 0;
         for (int i = 0; i < timeSeries.getCols().length; i++)
         {
             int k = 0;
             while (k != 11) {
-                if (timeSeries.getCols()[i].getName().intern() == XML_settings.PropertyList.get(k).getRealName().intern()) {
-                    count++;
+                if (timeSeries.getCols()[i].getName().intern() == XML_settings.PropertyList.get(k).getRealName().intern()) { ;
                     CSVindexmap.put(XML_settings.PropertyList.get(k).getAssosicateName(), i);
                     break;
                 }
                 k++;
             }
+            if (CSVindexmap.size() == 11)
+                break;
         }
 
         for (String colname : XML_settings.names.keySet())
@@ -115,9 +115,9 @@ public class Model extends Observable
                 break;
         }
 
-        if (count != 12)
+        if (CSVindexmap.size() != 11)
             resultOpenCSV = "Missing Arguments";
-        if (count == 12 && flag1 == 0)
+        if (CSVindexmap.size() == 11 && flag1 == 0)
         {
             resultOpenCSV = "OK";
             for (String colName : XML_settings.names.keySet())
