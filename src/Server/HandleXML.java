@@ -6,11 +6,14 @@ import Server.UserSettings;
 import java.beans.XMLDecoder;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HandleXML {
 
     public List<UserSettings> PropertyList = new ArrayList<>();
+    public Map<String, String> settingsMap = new HashMap<>();
     public AdditionalSettings additionalSettings = new AdditionalSettings();
     public boolean WrongFormatAlert = false;
     public boolean MissingArgumentsAlert = false;
@@ -85,10 +88,15 @@ public class HandleXML {
                 break;
             }
         }
-        if (additionalSettings.getDataSamplingRate() == 1000000 || additionalSettings.getProperFlightFile() == null || additionalSettings.algorithmFile == null)
+        if (additionalSettings.getDataSamplingRate() == 1000000 || additionalSettings.getProperFlightFile() == null || additionalSettings.algorithmFile == null) {
             if (MissingArgumentsAlert == false)
                 WrongFormatAlert = true;
+        }
 
+        for (UserSettings userSettings : PropertyList)
+        {
+            settingsMap.put(userSettings.getAssosicateName(), userSettings.getRealName());
+        }
         decoder.close();
     }
 }
