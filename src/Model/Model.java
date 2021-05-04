@@ -113,6 +113,19 @@ public class Model extends Observable
                 colsNames.add(col.getName());
             }
             CSVpath = chosenPath;
+            try {
+                fg = new Socket("localhost", 5400);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            in = new TimeSeries(Model.CSVpath);
+
+            try {
+                out = new PrintWriter(fg.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         setChanged();
         notifyObservers("resultOpenCSV");
@@ -122,29 +135,14 @@ public class Model extends Observable
     public void modelPlay()
     {
         if (flag == 0) {
-            simulatorThread = new Thread(() -> {
-
-                try {
-                    fg = new Socket("localhost", 5400);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                in = new TimeSeries(Model.CSVpath);
-                {
-                    try {
-                        out = new PrintWriter(fg.getOutputStream());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+            simulator10Thread = new Thread(() -> {
                 simulatorLoop(1);
             });
-            simulatorThread.start();
-            timerThread = new Thread(() -> {
+            simulator10Thread.start();
+            timer10Thread = new Thread(() -> {
                 timerLoop(1);
             });
-            timerThread.start();
+            timer10Thread.start();
 
         }
         if (flag == 1)
@@ -170,8 +168,6 @@ public class Model extends Observable
                 timer10Thread.resume();
             }
         }
-        flag = 1;
-
     }
 
     public void changeSpeed (double speed)
@@ -227,11 +223,6 @@ public class Model extends Observable
     public void modelGetChoice(String speed)
     {
         if (speed.intern() == "x2.0") {
-            if (simulatorThread != null) {
-                simulatorThread.suspend();
-                timerThread.suspend();
-                simulatorThread = null;
-            }
             if (simulator05Thread != null) {
                 simulator05Thread.suspend();
                 timer05Thread.suspend();
@@ -261,11 +252,6 @@ public class Model extends Observable
 
         if (speed.intern() == "x0.5")
         {
-            if (simulatorThread != null) {
-                simulatorThread.suspend();
-                timerThread.suspend();
-                simulatorThread = null;
-            }
             if (simulator20Thread != null) {
                 simulator20Thread.suspend();
                 timer20Thread.suspend();
@@ -316,26 +302,12 @@ public class Model extends Observable
                     timer15Thread.suspend();
                     simulator15Thread = null;
                 }
-                simulator10Thread = new Thread(() ->
-                {
-                    simulatorLoop(1);
-                });
-                simulator10Thread.start();
-                timer10Thread = new Thread(() ->
-                {
-                    timerLoop(1);
-                });
-                timer10Thread.start();
+                modelPlay();
             }
         }
 
         if (speed.intern() == "x1.5")
         {
-            if (simulatorThread != null) {
-                simulatorThread.suspend();
-                timerThread.suspend();
-                simulatorThread = null;
-            }
             if (simulator05Thread != null) {
                 simulator05Thread.suspend();
                 timer05Thread.suspend();
@@ -366,11 +338,8 @@ public class Model extends Observable
 
     public void modelpause()
     {
-        if (simulatorThread != null) {
-            simulatorThread.suspend();
-            timerThread.suspend();
-        }
-        else if (simulator10Thread != null) {
+        flag = 1;
+        if (simulator10Thread != null) {
             simulator10Thread.suspend();
             timer10Thread.suspend();
         }
