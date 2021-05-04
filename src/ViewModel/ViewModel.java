@@ -118,4 +118,14 @@ public class ViewModel extends Observable implements Observer
     {
         model.modelMinus15();
     }
+
+    public void VMminus30()
+    {
+        model.modelMinus30();
+    }
+
+    public void VMplus30()
+    {
+        model.modelPlus30();
+    }
 }

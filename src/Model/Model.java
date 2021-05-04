@@ -354,13 +354,34 @@ public class Model extends Observable
 
     public void modelPlus15()
     {
-        numofrow += (XML_settings.additionalSettings.getDataSamplingRate()/10) * 15;
-        nowTime += 15000;
+        Plus_Minus_Time (15, "+");
     }
 
     public void modelMinus15()
     {
-        numofrow -= (XML_settings.additionalSettings.getDataSamplingRate()/10) * 15;
-        nowTime -= 15000;
+        Plus_Minus_Time (15, "-");
+    }
+
+    public void modelMinus30()
+    {
+        Plus_Minus_Time (30, "-");
+    }
+
+    public void modelPlus30()
+    {
+        Plus_Minus_Time (30, "+");
+    }
+
+    public void Plus_Minus_Time (int seconds, String math)
+    {
+        if (math.intern() == "+") {
+            numofrow += (XML_settings.additionalSettings.getDataSamplingRate() / 10) * seconds;
+            nowTime += seconds * 1000;
+        }
+        else
+        {
+            numofrow -= (XML_settings.additionalSettings.getDataSamplingRate() / 10) * seconds;
+            nowTime -= seconds * 1000;
+        }
     }
 }

@@ -52,6 +52,8 @@ public class Controller extends Pane implements Observer, Initializable {
         myButtons.stop.setOnAction((e)->Stop());
         myButtons.plus15.setOnAction((e)->Plus15());
         myButtons.minus15.setOnAction((e)->Minus15());
+        myButtons.plus30.setOnAction((e)->Plus30());
+        myButtons.minus30.setOnAction((e)->Minus30());
         myButtons.playSpeedDropDown.setOnAction((e)->GetChoice()); //GetChoice func
         board.getChildren().addAll(myJoystick.set());
     }
@@ -196,6 +198,16 @@ public class Controller extends Pane implements Observer, Initializable {
     public void Minus15()
     {
         viewModel.VMminus15();
+    }
+
+    public void Minus30()
+    {
+        viewModel.VMminus30();
+    }
+
+    public void Plus30()
+    {
+        viewModel.VMplus30();
     }
 
     @Override
