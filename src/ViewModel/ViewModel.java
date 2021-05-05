@@ -23,7 +23,7 @@ public class ViewModel extends Observable implements Observer
     StringProperty chosenCSVFilePath;
     public ArrayList<String> colsNames;
 
-    public String time;
+    StringProperty time;
     public float aileronstep;
     public float elevatorstep;
 
@@ -51,6 +51,12 @@ public class ViewModel extends Observable implements Observer
         return maxTimeSlider;
     }
 
+
+    public StringProperty getTime() {
+        return time;
+    }
+
+
     public ViewModel(Model model) {
         this.model = model;
         loadXMLResult = new SimpleStringProperty();
@@ -63,6 +69,7 @@ public class ViewModel extends Observable implements Observer
         maxElevator = new SimpleDoubleProperty();
         maxTimeSlider = new SimpleDoubleProperty();
         colsNames = new ArrayList<>();
+        time = new SimpleStringProperty();
     }
 
     public StringProperty loadXMLProperty() {
@@ -116,9 +123,9 @@ public class ViewModel extends Observable implements Observer
         }
         if (p.intern() == "time")
         {
-            time = model.gettime();
-            setChanged();
-            notifyObservers("time");
+            time.set(model.gettime());
+           // setChanged();
+           // notifyObservers("time");
         }
         if (p.intern() == "aileron")
         {

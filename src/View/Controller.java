@@ -2,10 +2,13 @@ package View;
 
 import Server.HandleXML;
 import ViewModel.ViewModel;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -70,6 +73,8 @@ public class Controller extends Pane implements Observer, Initializable {
     ArrayList <String> colsNames = new ArrayList<>();
     ViewModel viewModel;
 
+    StringProperty time;
+
 
     public void setViewModel(ViewModel viewModel) {
         this.viewModel = viewModel;
@@ -91,6 +96,9 @@ public class Controller extends Pane implements Observer, Initializable {
         maxElevator.bind(viewModel.getMaxElevator());
         maxtimeSlider = new SimpleDoubleProperty();
         maxtimeSlider.bind(viewModel.getMaxTimeSlider());
+
+        time = new SimpleStringProperty();
+        time.bind(viewModel.getTime());
     }
 
     public void openCSV() {
@@ -195,6 +203,12 @@ public class Controller extends Pane implements Observer, Initializable {
     int flag = 0;
     public void Play()
     {
+        time.addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                myButtons.timer.setText(time.getValue());
+            }
+        });
         if (flag == 0) {
             myButtons.playSpeedDropDown.setValue("x1.0");
             flag = 1;
@@ -248,8 +262,6 @@ public class Controller extends Pane implements Observer, Initializable {
                 colsNames.add(name);
             }
         }
-        if (p.intern() == "time")
-            myButtons.timer.setText(viewModel.time);
         if (p.intern() == "aileron")
             myJoystick.aileron.setValue(viewModel.aileronstep);
         if (p.intern() == "elevator")
