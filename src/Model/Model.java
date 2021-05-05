@@ -179,6 +179,7 @@ public class Model extends Observable
                 simulator10Thread.resume();
                 timer10Thread.resume();
             }
+            flag = 0;
         }
     }
 
