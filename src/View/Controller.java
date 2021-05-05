@@ -66,6 +66,7 @@ public class Controller extends Pane implements Observer, Initializable {
     DoubleProperty maxAileron;
     DoubleProperty minElevator;
     DoubleProperty maxElevator;
+    DoubleProperty maxtimeSlider;
     ArrayList <String> colsNames = new ArrayList<>();
     ViewModel viewModel;
 
@@ -88,6 +89,8 @@ public class Controller extends Pane implements Observer, Initializable {
         minElevator.bind(viewModel.getMinElevator());
         maxElevator = new SimpleDoubleProperty();
         maxElevator.bind(viewModel.getMaxElevator());
+        maxtimeSlider = new SimpleDoubleProperty();
+        maxtimeSlider.bind(viewModel.getMaxTimeSlider());
     }
 
     public void openCSV() {
@@ -120,6 +123,8 @@ public class Controller extends Pane implements Observer, Initializable {
                 for (String names: colsNames)
                     myListView.listView.getItems().add(names);
                 myButtons.timer.setText("00:00:00.000");
+                viewModel.setMaxTimeSlider();
+                myButtons.slider.setMax(maxtimeSlider.getValue());
             }
         }
     }

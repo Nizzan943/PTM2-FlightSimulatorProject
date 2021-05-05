@@ -432,4 +432,9 @@ public class Model extends Observable
     {
         return XML_settings.max.get("elevator");
     }
+
+    public double modelSetMaxTimeSlider()
+    {
+        return ((in.getCols()[0].getFloats().size() + 1) / XML_settings.additionalSettings.getDataSamplingRate());
+    }
 }

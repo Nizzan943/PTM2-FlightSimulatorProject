@@ -23,6 +23,7 @@ public class MyButtons extends Pane
     Button minus15;
     Button minus30;
     Button plus30;
+    Slider slider;
 
     public List<Node> set()
     {
@@ -84,7 +85,7 @@ public class MyButtons extends Pane
         playSpeedDropDown.setPrefSize(67,42);
         ret.add(playSpeedDropDown);
 
-        Slider slider = new Slider();
+        slider = new Slider();
         slider.setLayoutX(25);
         slider.setLayoutY(520);
         slider.setPrefSize(560,42);

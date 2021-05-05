@@ -2,6 +2,7 @@ package ViewModel;
 
 import Model.Model;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class ViewModel extends Observable implements Observer
     DoubleProperty maxAileron;
     DoubleProperty minElevator;
     DoubleProperty maxElevator;
+    DoubleProperty maxTimeSlider;
     StringProperty chosenXMLFilePath;
     StringProperty chosenCSVFilePath;
     public ArrayList<String> colsNames;
@@ -45,6 +47,10 @@ public class ViewModel extends Observable implements Observer
         return maxElevator;
     }
 
+    public DoubleProperty getMaxTimeSlider() {
+        return maxTimeSlider;
+    }
+
     public ViewModel(Model model) {
         this.model = model;
         loadXMLResult = new SimpleStringProperty();
@@ -55,6 +61,7 @@ public class ViewModel extends Observable implements Observer
         maxAileron = new SimpleDoubleProperty();
         minElevator = new SimpleDoubleProperty();
         maxElevator = new SimpleDoubleProperty();
+        maxTimeSlider = new SimpleDoubleProperty();
         colsNames = new ArrayList<>();
     }
 
@@ -180,5 +187,10 @@ public class ViewModel extends Observable implements Observer
     public void VMsetMaxElevator()
     {
         maxElevator.setValue(model.modelSetMaxElevator());
+    }
+
+    public void setMaxTimeSlider()
+    {
+        maxTimeSlider.setValue(model.modelSetMaxTimeSlider());
     }
 }
