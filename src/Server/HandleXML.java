@@ -13,7 +13,8 @@ import java.util.Map;
 public class HandleXML {
 
     public List<UserSettings> PropertyList = new ArrayList<>();
-    public Map <String, String> names = new HashMap<>();
+    public Map <String, String> RealToAssosicate = new HashMap<>();
+    public Map <String, String> AssosicateToReal = new HashMap<>();
     public Map <String, Integer> max = new HashMap<>();
     public Map <String, Integer> min = new HashMap<>();
 
@@ -97,7 +98,8 @@ public class HandleXML {
         }
         for (UserSettings userSettings: PropertyList)
         {
-            names.put(userSettings.getRealName(), userSettings.getAssosicateName());
+            RealToAssosicate.put(userSettings.getRealName(), userSettings.getAssosicateName());
+            AssosicateToReal.put(userSettings.getAssosicateName(), userSettings.getRealName());
             max.put(userSettings.getRealName(), userSettings.getMax());
             min.put(userSettings.getRealName(), userSettings.getMin());
         }

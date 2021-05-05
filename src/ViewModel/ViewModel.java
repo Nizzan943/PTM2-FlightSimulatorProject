@@ -1,8 +1,7 @@
 package ViewModel;
 
 import Model.Model;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,18 +13,36 @@ public class ViewModel extends Observable implements Observer
     Model model;
     StringProperty loadXMLResult;
     StringProperty openCSVResult;
-
+    DoubleProperty minAileron;
+    DoubleProperty maxAileron;
+    DoubleProperty minElevator;
+    DoubleProperty maxElevator;
     StringProperty chosenXMLFilePath;
     StringProperty chosenCSVFilePath;
     public ArrayList<String> colsNames;
 
     public String time;
+    public float aileronstep;
+    public float elevatorstep;
 
     public StringProperty chosenXMLFilePathProperty() {
         return chosenXMLFilePath;
     }
     public StringProperty chosenCSVFilePathProperty() {
         return chosenCSVFilePath;
+    }
+    public DoubleProperty getMinAileron() {
+        return minAileron;
+    }
+    public DoubleProperty getMaxAileron() {
+        return maxAileron;
+    }
+
+    public DoubleProperty getMinElevator() {
+        return minElevator;
+    }
+    public DoubleProperty getMaxElevator() {
+        return maxElevator;
     }
 
     public ViewModel(Model model) {
@@ -34,6 +51,10 @@ public class ViewModel extends Observable implements Observer
         openCSVResult = new SimpleStringProperty();
         chosenXMLFilePath = new SimpleStringProperty();
         chosenCSVFilePath = new SimpleStringProperty();
+        minAileron = new SimpleDoubleProperty();
+        maxAileron = new SimpleDoubleProperty();
+        minElevator = new SimpleDoubleProperty();
+        maxElevator = new SimpleDoubleProperty();
         colsNames = new ArrayList<>();
     }
 
@@ -92,6 +113,18 @@ public class ViewModel extends Observable implements Observer
             setChanged();
             notifyObservers("time");
         }
+        if (p.intern() == "aileron")
+        {
+            aileronstep = model.getAileronstep();
+            setChanged();
+            notifyObservers("aileron");
+        }
+        if (p.intern() == "elevator")
+        {
+            elevatorstep = model.getElevatorstep();
+            setChanged();
+            notifyObservers("elevator");
+        }
     }
 
     public void VMplay()
@@ -127,5 +160,25 @@ public class ViewModel extends Observable implements Observer
     public void VMplus30()
     {
         model.modelPlus30();
+    }
+
+    public void VMsetMinAileron()
+    {
+        minAileron.setValue(model.modelSetMinAileron());
+    }
+
+    public void VMsetMaxAileron()
+    {
+        maxAileron.setValue(model.modelSetMaxAileron());
+    }
+
+    public void VMsetMinElevator()
+    {
+        minElevator.setValue(model.modelSetMinElevator());
+    }
+
+    public void VMsetMaxElevator()
+    {
+        maxElevator.setValue(model.modelSetMaxElevator());
     }
 }

@@ -99,9 +99,9 @@ public class Model extends Observable
                 break;
         }
 
-        for (String colname : XML_settings.names.keySet())
+        for (String colname : XML_settings.RealToAssosicate.keySet())
         {
-            int index = CSVindexmap.get(XML_settings.names.get(colname));
+            int index = CSVindexmap.get(XML_settings.RealToAssosicate.get(colname));
             for (Float num :  timeSeries.getCols()[index].getFloats())
             {
                 if (num < XML_settings.min.get(colname) || num > XML_settings.max.get(colname)) {
@@ -120,7 +120,7 @@ public class Model extends Observable
         if (CSVindexmap.size() == 11 && flag1 == 0)
         {
             resultOpenCSV = "OK";
-            for (String colName : XML_settings.names.keySet())
+            for (String colName : XML_settings.RealToAssosicate.keySet())
             {
                 if (colName == "slip-skid-ball_indicated-slip-skid" || colName == "pitch-deg" || colName == "roll-deg" || colName == "altimeter_indicated-altitude-ft" || colName == "indicated-heading-deg" || colName == "airspeed-kt")
                     colsNames.add(colName);
@@ -198,12 +198,29 @@ public class Model extends Observable
 
     int numofrow = 0;
 
+    public float getAileronstep() {
+        return aileronstep;
+    }
+
+    public float getElevatorstep() {
+        return elevatorstep;
+    }
+
+    private float aileronstep;
+    private float elevatorstep;
+
     public void simulatorLoop (double speed)
     {
         while (numofrow != in.getRows().size() - 1)
         {
             out.println(in.getRows().get(numofrow));
             out.flush();
+            aileronstep = in.getCols()[CSVindexmap.get("aileron")].getFloats().get(numofrow);
+            setChanged();
+            notifyObservers("aileron");
+            elevatorstep = in.getCols()[CSVindexmap.get("elevator")].getFloats().get(numofrow);
+            setChanged();
+            notifyObservers("elevator");
             changeSpeed(speed);
             numofrow++;
         }
@@ -395,5 +412,24 @@ public class Model extends Observable
             numofrow -= (XML_settings.additionalSettings.getDataSamplingRate() / 10) * seconds;
             nowTime -= seconds * 1000;
         }
+    }
+
+    public double modelSetMinAileron()
+    {
+        return XML_settings.min.get("aileron");
+    }
+
+    public double modelSetMaxAileron() {
+        return XML_settings.max.get("aileron");
+    }
+
+    public double modelSetMinElevator()
+    {
+        return XML_settings.min.get("elevator");
+    }
+
+    public double modelSetMaxElevator()
+    {
+        return XML_settings.max.get("elevator");
     }
 }

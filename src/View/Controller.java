@@ -2,6 +2,8 @@ package View;
 
 import Server.HandleXML;
 import ViewModel.ViewModel;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
@@ -60,6 +62,10 @@ public class Controller extends Pane implements Observer, Initializable {
 
     StringProperty resultOpenCSV;
     StringProperty chosenCSVFilePath;
+    DoubleProperty minAileron;
+    DoubleProperty maxAileron;
+    DoubleProperty minElevator;
+    DoubleProperty maxElevator;
     ArrayList <String> colsNames = new ArrayList<>();
     ViewModel viewModel;
 
@@ -74,6 +80,14 @@ public class Controller extends Pane implements Observer, Initializable {
         chosenXMLFilePath = new SimpleStringProperty();
         viewModel.chosenXMLFilePathProperty().bind(chosenXMLFilePath);
         resultLoadXML.bind(viewModel.loadXMLProperty());
+        minAileron = new SimpleDoubleProperty();
+        minAileron.bind(viewModel.getMinAileron());
+        maxAileron = new SimpleDoubleProperty();
+        maxAileron.bind(viewModel.getMaxAileron());
+        minElevator = new SimpleDoubleProperty();
+        minElevator.bind(viewModel.getMinElevator());
+        maxElevator = new SimpleDoubleProperty();
+        maxElevator.bind(viewModel.getMaxElevator());
     }
 
     public void openCSV() {
@@ -131,6 +145,14 @@ public class Controller extends Pane implements Observer, Initializable {
                 MissingArgumentAlert();
             else {
                 SuccessAlert();
+                viewModel.VMsetMinAileron();
+                myJoystick.aileron.setMin(minAileron.getValue());
+                viewModel.VMsetMaxAileron();
+                myJoystick.aileron.setMax(maxAileron.getValue());
+                viewModel.VMsetMinElevator();
+                myJoystick.elevator.setMin(minElevator.getValue());
+                viewModel.VMsetMaxElevator();
+                myJoystick.elevator.setMax(maxElevator.getValue());
             }
         }
     }
@@ -223,5 +245,9 @@ public class Controller extends Pane implements Observer, Initializable {
         }
         if (p.intern() == "time")
             myButtons.timer.setText(viewModel.time);
+        if (p.intern() == "aileron")
+            myJoystick.aileron.setValue(viewModel.aileronstep);
+        if (p.intern() == "elevator")
+            myJoystick.elevator.setValue(viewModel.elevatorstep);
     }
 }
