@@ -3,10 +3,7 @@ package View;
 import Server.HandleXML;
 import ViewModel.ViewModel;
 import javafx.beans.InvalidationListener;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -74,6 +71,8 @@ public class Controller extends Pane implements Observer, Initializable {
     ViewModel viewModel;
 
     StringProperty time;
+    FloatProperty aileronstep;
+    FloatProperty elevatorstep;
 
 
     public void setViewModel(ViewModel viewModel) {
@@ -99,6 +98,12 @@ public class Controller extends Pane implements Observer, Initializable {
 
         time = new SimpleStringProperty();
         time.bind(viewModel.getTime());
+
+        aileronstep = new SimpleFloatProperty();
+        aileronstep.bind(viewModel.getAileronstep());
+        elevatorstep = new SimpleFloatProperty();
+        elevatorstep.bind(viewModel.getElevatorstep());
+
     }
 
     public void openCSV() {
@@ -209,6 +214,21 @@ public class Controller extends Pane implements Observer, Initializable {
                 myButtons.timer.setText(time.getValue());
             }
         });
+
+        aileronstep.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                myJoystick.aileron.setValue(aileronstep.getValue());
+            }
+        });
+
+        elevatorstep.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                myJoystick.elevator.setValue(elevatorstep.getValue());
+            }
+        });
+
         if (flag == 0) {
             myButtons.playSpeedDropDown.setValue("x1.0");
             flag = 1;
@@ -262,9 +282,5 @@ public class Controller extends Pane implements Observer, Initializable {
                 colsNames.add(name);
             }
         }
-        if (p.intern() == "aileron")
-            myJoystick.aileron.setValue(viewModel.aileronstep);
-        if (p.intern() == "elevator")
-            myJoystick.elevator.setValue(viewModel.elevatorstep);
     }
 }

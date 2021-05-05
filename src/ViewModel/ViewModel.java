@@ -24,8 +24,8 @@ public class ViewModel extends Observable implements Observer
     public ArrayList<String> colsNames;
 
     StringProperty time;
-    public float aileronstep;
-    public float elevatorstep;
+    FloatProperty aileronstep;
+    FloatProperty elevatorstep;
 
     public StringProperty chosenXMLFilePathProperty() {
         return chosenXMLFilePath;
@@ -56,6 +56,16 @@ public class ViewModel extends Observable implements Observer
         return time;
     }
 
+    public FloatProperty getAileronstep()
+    {
+        return aileronstep;
+    }
+
+    public FloatProperty getElevatorstep()
+    {
+        return elevatorstep;
+    }
+
 
     public ViewModel(Model model) {
         this.model = model;
@@ -70,6 +80,8 @@ public class ViewModel extends Observable implements Observer
         maxTimeSlider = new SimpleDoubleProperty();
         colsNames = new ArrayList<>();
         time = new SimpleStringProperty();
+        aileronstep = new SimpleFloatProperty();
+        elevatorstep = new SimpleFloatProperty();
     }
 
     public StringProperty loadXMLProperty() {
@@ -122,23 +134,11 @@ public class ViewModel extends Observable implements Observer
             }
         }
         if (p.intern() == "time")
-        {
             time.set(model.gettime());
-           // setChanged();
-           // notifyObservers("time");
-        }
         if (p.intern() == "aileron")
-        {
-            aileronstep = model.getAileronstep();
-            setChanged();
-            notifyObservers("aileron");
-        }
+            aileronstep.set(model.getAileronstep());
         if (p.intern() == "elevator")
-        {
-            elevatorstep = model.getElevatorstep();
-            setChanged();
-            notifyObservers("elevator");
-        }
+            elevatorstep.set(model.getElevatorstep());
     }
 
     public void VMplay()
