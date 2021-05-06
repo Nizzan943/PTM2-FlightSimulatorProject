@@ -294,11 +294,11 @@ public class Model extends Observable
                 e.printStackTrace();
             }
             changeTimerSpeed(speed);
+            if (nowTime > ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate()/10)) * 1000)
+                break;
             time = simpleDateFormat.format(nowTime - 7200000);
-            Platform.runLater(() -> {
-                setChanged();
-                notifyObservers("time");
-            });
+            setChanged();
+            notifyObservers("time");
         }
     }
 

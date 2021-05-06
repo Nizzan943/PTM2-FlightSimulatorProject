@@ -314,6 +314,7 @@ public class Controller extends Pane implements Observer, Initializable {
             flag = 1;
         }
         viewModel.VMplay();
+
     }
 
     public void GetChoice()
