@@ -208,6 +208,13 @@ public class Controller extends Pane implements Observer, Initializable {
     int flag = 0;
     public void Play()
     {
+        myButtons.slider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                viewModel.VMtimeslider(myButtons.slider.getValue());
+            }
+        });
+
         time.addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -244,6 +251,8 @@ public class Controller extends Pane implements Observer, Initializable {
 
     public void Stop()
     {
+        myButtons.slider.setValue(0);
+        viewModel.VMstop();
     }
 
     public void Pause()

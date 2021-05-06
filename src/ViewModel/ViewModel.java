@@ -200,4 +200,14 @@ public class ViewModel extends Observable implements Observer
     {
         maxTimeSlider.setValue(model.modelSetMaxTimeSlider());
     }
+
+    public void VMtimeslider(double second)
+    {
+        model.modelTimeSlider(second);
+    }
+
+    public void VMstop()
+    {
+        model.modelStop();
+    }
 }

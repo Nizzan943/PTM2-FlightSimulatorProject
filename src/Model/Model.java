@@ -436,6 +436,25 @@ public class Model extends Observable
 
     public double modelSetMaxTimeSlider()
     {
-        return ((in.getCols()[0].getFloats().size() + 1) / XML_settings.additionalSettings.getDataSamplingRate());
+        return ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate()/10));
+    }
+
+    public void modelTimeSlider(double second) {
+        numofrow = (int) (second * (XML_settings.additionalSettings.getDataSamplingRate()/10));
+        nowTime = (long)(second * 1000);
+    }
+
+    public void modelStop()
+    {
+        simulator10Thread = null;
+        timer10Thread = null;
+        simulator15Thread = null;
+        timer15Thread = null;
+        simulator05Thread = null;
+        timer05Thread = null;
+        simulator20Thread = null;
+        timer20Thread = null;
+        nowTime = 0;
+        numofrow = 0;
     }
 }
