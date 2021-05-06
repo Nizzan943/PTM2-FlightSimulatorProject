@@ -4,6 +4,7 @@ package Model;
 import Server.HandleXML;
 import Server.TimeSeries;
 import javafx.application.Platform;
+import javafx.beans.property.FloatProperty;
 
 
 import java.io.*;
@@ -210,18 +211,69 @@ public class Model extends Observable
     private float aileronstep;
     private float elevatorstep;
 
+    private float altimeterstep;
+    private float airspeedstep;
+    private float directionstep;
+    private float pitchstep;
+
+    public float getAltimeterstep() {
+        return altimeterstep;
+    }
+
+    public float getAirspeedstep() {
+        return airspeedstep;
+    }
+
+    public float getDirectionstep() {
+        return directionstep;
+    }
+
+    public float getPitchstep() {
+        return pitchstep;
+    }
+
+    public float getRollstep() {
+        return rollstep;
+    }
+
+    public float getYawstep() {
+        return yawstep;
+    }
+
+    private float rollstep;
+    private float yawstep;
+
     public void simulatorLoop (double speed)
     {
         while (numofrow != in.getRows().size() - 1)
         {
             out.println(in.getRows().get(numofrow));
             out.flush();
-            aileronstep = in.getCols()[CSVindexmap.get("aileron")].getFloats().get(numofrow);
+            aileronstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("aileron"))].getFloats().get(numofrow);
             setChanged();
             notifyObservers("aileron");
-            elevatorstep = in.getCols()[CSVindexmap.get("elevator")].getFloats().get(numofrow);
+            elevatorstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("elevator"))].getFloats().get(numofrow);
             setChanged();
             notifyObservers("elevator");
+
+            altimeterstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("altimeter_indicated-altitude-ft"))].getFloats().get(numofrow);
+            setChanged();
+            notifyObservers("altimeter");
+            airspeedstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("airspeed-kt"))].getFloats().get(numofrow);
+            setChanged();
+            notifyObservers("airspeed");
+            directionstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("indicated-heading-deg"))].getFloats().get(numofrow);
+            setChanged();
+            notifyObservers("direction");
+            pitchstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("pitch-deg"))].getFloats().get(numofrow);
+            setChanged();
+            notifyObservers("pitch");
+            rollstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("roll-deg"))].getFloats().get(numofrow);
+            setChanged();
+            notifyObservers("roll");
+            yawstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("slip-skid-ball_indicated-slip-skid"))].getFloats().get(numofrow);
+            setChanged();
+            notifyObservers("yaw");
             changeSpeed(speed);
             numofrow++;
         }

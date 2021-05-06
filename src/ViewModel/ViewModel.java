@@ -27,6 +27,13 @@ public class ViewModel extends Observable implements Observer
     FloatProperty aileronstep;
     FloatProperty elevatorstep;
 
+    StringProperty altimeterstep;
+    StringProperty airspeedstep;
+    StringProperty directionstep;
+    StringProperty pitchstep;
+    StringProperty rollstep;
+    StringProperty yawstep;
+
     public StringProperty chosenXMLFilePathProperty() {
         return chosenXMLFilePath;
     }
@@ -66,6 +73,35 @@ public class ViewModel extends Observable implements Observer
         return elevatorstep;
     }
 
+    public StringProperty getAltimeterstep()
+    {
+        return altimeterstep;
+    }
+
+    public StringProperty getAirspeedstep()
+    {
+        return airspeedstep;
+    }
+
+    public StringProperty getDirectionstep()
+    {
+        return directionstep;
+    }
+
+    public StringProperty getPitchstep()
+    {
+        return pitchstep;
+    }
+
+    public StringProperty getRollstep()
+    {
+        return rollstep;
+    }
+
+    public StringProperty getYawstep()
+    {
+        return yawstep;
+    }
 
     public ViewModel(Model model) {
         this.model = model;
@@ -82,6 +118,12 @@ public class ViewModel extends Observable implements Observer
         time = new SimpleStringProperty();
         aileronstep = new SimpleFloatProperty();
         elevatorstep = new SimpleFloatProperty();
+        altimeterstep = new SimpleStringProperty();
+        airspeedstep = new SimpleStringProperty();
+        directionstep = new SimpleStringProperty();
+        pitchstep = new SimpleStringProperty();
+        rollstep = new SimpleStringProperty();
+        yawstep = new SimpleStringProperty();
     }
 
     public StringProperty loadXMLProperty() {
@@ -139,6 +181,18 @@ public class ViewModel extends Observable implements Observer
             aileronstep.set(model.getAileronstep());
         if (p.intern() == "elevator")
             elevatorstep.set(model.getElevatorstep());
+        if (p.intern() == "altimeter")
+            altimeterstep.set(model.getAltimeterstep() + "");
+        if (p.intern() == "airspeed")
+            airspeedstep.set(model.getAirspeedstep() + "");
+        if (p.intern() == "direction")
+            directionstep.set(model.getDirectionstep() + "");
+        if (p.intern() == "pitch")
+            pitchstep.set(model.getPitchstep() + "");
+        if (p.intern() == "roll")
+            rollstep.set(model.getRollstep() + "");
+        if (p.intern() == "yaw")
+            yawstep.set(model.getYawstep() + "");
     }
 
     public void VMplay()

@@ -2,6 +2,7 @@ package View;
 
 import Server.HandleXML;
 import ViewModel.ViewModel;
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -41,6 +42,9 @@ public class Controller extends Pane implements Observer, Initializable {
     @FXML
     MyJoystick myJoystick;
 
+    @FXML
+    MyClocksPannel myClocksPannel;
+
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
@@ -58,6 +62,7 @@ public class Controller extends Pane implements Observer, Initializable {
         myButtons.minus30.setOnAction((e)->Minus30());
         myButtons.playSpeedDropDown.setOnAction((e)->GetChoice()); //GetChoice func
         board.getChildren().addAll(myJoystick.set());
+        board.getChildren().addAll(myClocksPannel.set());
     }
 
     StringProperty resultOpenCSV;
@@ -73,6 +78,13 @@ public class Controller extends Pane implements Observer, Initializable {
     StringProperty time;
     FloatProperty aileronstep;
     FloatProperty elevatorstep;
+
+    StringProperty altimeterstep;
+    StringProperty airspeedstep;
+    StringProperty directionstep;
+    StringProperty pitchstep;
+    StringProperty rollstep;
+    StringProperty yawstep;
 
 
     public void setViewModel(ViewModel viewModel) {
@@ -103,6 +115,19 @@ public class Controller extends Pane implements Observer, Initializable {
         aileronstep.bind(viewModel.getAileronstep());
         elevatorstep = new SimpleFloatProperty();
         elevatorstep.bind(viewModel.getElevatorstep());
+
+        altimeterstep = new SimpleStringProperty();
+        altimeterstep.bind(viewModel.getAltimeterstep());
+        airspeedstep = new SimpleStringProperty();
+        airspeedstep.bind(viewModel.getAirspeedstep());
+        directionstep = new SimpleStringProperty();
+        directionstep.bind(viewModel.getDirectionstep());
+        pitchstep = new SimpleStringProperty();
+        pitchstep.bind(viewModel.getPitchstep());
+        rollstep = new SimpleStringProperty();
+        rollstep.bind(viewModel.getRollstep());
+        yawstep = new SimpleStringProperty();
+        yawstep.bind(viewModel.getYawstep());
 
     }
 
@@ -138,6 +163,12 @@ public class Controller extends Pane implements Observer, Initializable {
                 myButtons.timer.setText("00:00:00.000");
                 viewModel.setMaxTimeSlider();
                 myButtons.slider.setMax(maxtimeSlider.getValue());
+                myClocksPannel.altimeter.setText("altimeter: 0");
+                myClocksPannel.airspeed.setText("airspeed: 0");
+                myClocksPannel.direction.setText("direction: 0");
+                myClocksPannel.pitch.setText("pitch: 0");
+                myClocksPannel.roll.setText("roll: 0");
+                myClocksPannel.yaw.setText("yaw: 0");
             }
         }
     }
@@ -215,10 +246,52 @@ public class Controller extends Pane implements Observer, Initializable {
             }
         });
 
+        altimeterstep.addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(()->myClocksPannel.altimeter.setText("altimeter: " + altimeterstep.getValue()));
+            }
+        });
+
+        airspeedstep.addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(()->myClocksPannel.airspeed.setText("airspeed: " + airspeedstep.getValue()));
+            }
+        });
+
+        directionstep.addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(()->myClocksPannel.direction.setText("direction: " + directionstep.getValue()));
+            }
+        });
+
+        pitchstep.addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(()->myClocksPannel.pitch.setText("pitch: " + pitchstep.getValue()));
+            }
+        });
+
+        rollstep.addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(()->myClocksPannel.roll.setText("roll: " + rollstep.getValue()));
+            }
+        });
+
+        yawstep.addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(()->myClocksPannel.yaw.setText("yaw: " + yawstep.getValue()));
+            }
+        });
+
         time.addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                myButtons.timer.setText(time.getValue());
+                Platform.runLater(()->myButtons.timer.setText(time.getValue()));
             }
         });
 
