@@ -1,31 +1,30 @@
 package View;
 
-import Server.HandleXML;
+import Server.PluginLoader;
+import Server.TimeSeriesAnomalyDetector;
 import ViewModel.ViewModel;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.net.MalformedURLException;
+import java.net.URLClassLoader;
 
-public class Controller extends Pane implements Observer, Initializable {
+public class Controller extends Pane implements Observer, Initializable, PluginLoader<TimeSeriesAnomalyDetector> {
 
     @FXML
     Pane board;
@@ -46,21 +45,20 @@ public class Controller extends Pane implements Observer, Initializable {
     MyClocksPannel myClocksPannel;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)
-    {
+    public void initialize(URL location, ResourceBundle resources) {
         board.getChildren().add(myMenu.set());
-        myMenu.m1.setOnAction((e)->LoadXML()); //load XML func
+        myMenu.loadXML.setOnAction((e) -> LoadXML()); //load XML func
         board.getChildren().addAll(myListView.set());
-        myListView.open.setOnAction((e)->openCSV()); //open CSV func
+        myListView.open.setOnAction((e) -> openCSV()); //open CSV func
         board.getChildren().addAll(myButtons.set());
-        myButtons.play.setOnAction((e)->Play());
-        myButtons.pause.setOnAction((e)->Pause());
-        myButtons.stop.setOnAction((e)->Stop());
-        myButtons.plus15.setOnAction((e)->Plus15());
-        myButtons.minus15.setOnAction((e)->Minus15());
-        myButtons.plus30.setOnAction((e)->Plus30());
-        myButtons.minus30.setOnAction((e)->Minus30());
-        myButtons.playSpeedDropDown.setOnAction((e)->GetChoice()); //GetChoice func
+        myButtons.play.setOnAction((e) -> Play());
+        myButtons.pause.setOnAction((e) -> Pause());
+        myButtons.stop.setOnAction((e) -> Stop());
+        myButtons.plus15.setOnAction((e) -> Plus15());
+        myButtons.minus15.setOnAction((e) -> Minus15());
+        myButtons.plus30.setOnAction((e) -> Plus30());
+        myButtons.minus30.setOnAction((e) -> Minus30());
+        myButtons.playSpeedDropDown.setOnAction((e) -> GetChoice()); //GetChoice func
         board.getChildren().addAll(myJoystick.set());
         board.getChildren().addAll(myClocksPannel.set());
     }
@@ -72,7 +70,7 @@ public class Controller extends Pane implements Observer, Initializable {
     DoubleProperty minElevator;
     DoubleProperty maxElevator;
     DoubleProperty maxtimeSlider;
-    ArrayList <String> colsNames = new ArrayList<>();
+    ArrayList<String> colsNames = new ArrayList<>();
     ViewModel viewModel;
 
     StringProperty time;
@@ -140,25 +138,22 @@ public class Controller extends Pane implements Observer, Initializable {
         chosenCSVFilePath.set(chozen.getAbsolutePath());
         if (chozen != null) {
             viewModel.VMOpenCSV();
-            if (resultOpenCSV.getValue().intern() == "Missing Arguments")
-            {
+            if (resultOpenCSV.getValue().intern() == "Missing Arguments") {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Missing Arguments");
                 alert.setContentText("Please check your settings and try again");
                 alert.showAndWait();
             }
-            if (resultOpenCSV.getValue().intern() == "Incompatibility with XML file")
-            {
+            if (resultOpenCSV.getValue().intern() == "Incompatibility with XML file") {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Incompatibility with XML file");
                 alert.setContentText("Please check your file and try again");
                 alert.showAndWait();
             }
-            if (resultOpenCSV.getValue().intern() == "OK")
-            {
-                for (String names: colsNames)
+            if (resultOpenCSV.getValue().intern() == "OK") {
+                for (String names : colsNames)
                     myListView.listView.getItems().add(names);
                 myButtons.timer.setText("00:00:00.000");
                 viewModel.setMaxTimeSlider();
@@ -177,16 +172,14 @@ public class Controller extends Pane implements Observer, Initializable {
     StringProperty chosenXMLFilePath;
 
 
-
-    public void LoadXML()  {
+    public void LoadXML() {
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
         fc.setTitle("Load XML file"); //headline
         fc.setInitialDirectory(new File("/")); //what happens when we click
         File chosen = fc.showOpenDialog(null);
         chosenXMLFilePath.set(chosen.getAbsolutePath());
-        if (chosen != null)
-        {
+        if (chosen != null) {
             viewModel.VMLoadXML();
             if (resultLoadXML.getValue().equals("WrongFormatAlert"))
                 WrongFormatAlert();
@@ -206,8 +199,7 @@ public class Controller extends Pane implements Observer, Initializable {
         }
     }
 
-    public void WrongFormatAlert()
-    {
+    public void WrongFormatAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Wrong format of XML");
@@ -216,8 +208,7 @@ public class Controller extends Pane implements Observer, Initializable {
         alert.showAndWait();
     }
 
-    public void MissingArgumentAlert()
-    {
+    public void MissingArgumentAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Missing Arguments");
@@ -226,8 +217,7 @@ public class Controller extends Pane implements Observer, Initializable {
         alert.showAndWait();
     }
 
-    public void SuccessAlert()
-    {
+    public void SuccessAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
         alert.setHeaderText("The file was uploaded successfully");
@@ -237,8 +227,8 @@ public class Controller extends Pane implements Observer, Initializable {
     }
 
     int flag = 0;
-    public void Play()
-    {
+
+    public void Play() {
         myButtons.slider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -249,49 +239,49 @@ public class Controller extends Pane implements Observer, Initializable {
         altimeterstep.addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(()->myClocksPannel.altimeter.setText("altimeter: " + altimeterstep.getValue()));
+                Platform.runLater(() -> myClocksPannel.altimeter.setText("altimeter: " + altimeterstep.getValue()));
             }
         });
 
         airspeedstep.addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(()->myClocksPannel.airspeed.setText("airspeed: " + airspeedstep.getValue()));
+                Platform.runLater(() -> myClocksPannel.airspeed.setText("airspeed: " + airspeedstep.getValue()));
             }
         });
 
         directionstep.addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(()->myClocksPannel.direction.setText("direction: " + directionstep.getValue()));
+                Platform.runLater(() -> myClocksPannel.direction.setText("direction: " + directionstep.getValue()));
             }
         });
 
         pitchstep.addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(()->myClocksPannel.pitch.setText("pitch: " + pitchstep.getValue()));
+                Platform.runLater(() -> myClocksPannel.pitch.setText("pitch: " + pitchstep.getValue()));
             }
         });
 
         rollstep.addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(()->myClocksPannel.roll.setText("roll: " + rollstep.getValue()));
+                Platform.runLater(() -> myClocksPannel.roll.setText("roll: " + rollstep.getValue()));
             }
         });
 
         yawstep.addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(()->myClocksPannel.yaw.setText("yaw: " + yawstep.getValue()));
+                Platform.runLater(() -> myClocksPannel.yaw.setText("yaw: " + yawstep.getValue()));
             }
         });
 
         time.addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(()->myButtons.timer.setText(time.getValue()));
+                Platform.runLater(() -> myButtons.timer.setText(time.getValue()));
             }
         });
 
@@ -317,53 +307,90 @@ public class Controller extends Pane implements Observer, Initializable {
 
     }
 
-    public void GetChoice()
-    {
-        String speed = (String)  myButtons.playSpeedDropDown.getValue();
+    public void GetChoice() {
+        String speed = (String) myButtons.playSpeedDropDown.getValue();
         viewModel.VMGetChoice(speed);
     }
 
-    public void Stop()
-    {
+    public void Stop() {
         myButtons.slider.setValue(0);
         viewModel.VMstop();
     }
 
-    public void Pause()
-    {
+    public void Pause() {
         viewModel.VMpause();
     }
 
-    public void Plus15()
-    {
+    public void Plus15() {
         viewModel.VMplus15();
     }
 
-    public void Minus15()
-    {
+    public void Minus15() {
         viewModel.VMminus15();
     }
 
-    public void Minus30()
-    {
+    public void Minus30() {
         viewModel.VMminus30();
     }
 
-    public void Plus30()
-    {
+    public void Plus30() {
         viewModel.VMplus30();
     }
 
     @Override
-    public void update(Observable o, Object arg)
-    {
-        String p = (String)arg;
-        if (p.intern() == "colNames")
-        {
-            for (String name: viewModel.colsNames)
-            {
+    public void update(Observable o, Object arg) {
+        String p = (String) arg;
+        if (p.intern() == "colNames") {
+            for (String name : viewModel.colsNames) {
                 colsNames.add(name);
             }
         }
     }
+
+    @Override
+    public void LoadClass(String path, String className) {
+
+        File file = new File(path);
+
+        URL url;
+
+        URL[] urlArray;
+
+        FileInputStream fileInputStream = null;
+
+        URLClassLoader urlClassLoader = null;
+
+        Class<?> aClass = null;
+
+        try {
+            url = file.toURI().toURL();
+
+            urlArray = new URL[]{url};
+
+            urlClassLoader = URLClassLoader.newInstance(urlArray);
+
+        } catch (MalformedURLException e) {
+
+        }
+
+        try {
+            fileInputStream = new FileInputStream(path);
+
+        } catch (FileNotFoundException e) {
+
+        }
+
+        ClassLoader.getSystemClassLoader().getResourceAsStream(fileInputStream.toString());
+
+        try {
+            aClass = urlClassLoader.loadClass(className);
+        } catch (ClassNotFoundException e) {
+        }
+
+        try {
+            aClass.newInstance();
+        } catch (IllegalAccessException | InstantiationException e) {
+        }
+    }
+
 }
