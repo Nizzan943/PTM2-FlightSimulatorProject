@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ViewModel extends Observable implements Observer
-{
+public class ViewModel extends Observable implements Observer {
     Model model;
     StringProperty loadXMLResult;
     StringProperty openCSVResult;
@@ -37,12 +36,15 @@ public class ViewModel extends Observable implements Observer
     public StringProperty chosenXMLFilePathProperty() {
         return chosenXMLFilePath;
     }
+
     public StringProperty chosenCSVFilePathProperty() {
         return chosenCSVFilePath;
     }
+
     public DoubleProperty getMinAileron() {
         return minAileron;
     }
+
     public DoubleProperty getMaxAileron() {
         return maxAileron;
     }
@@ -50,6 +52,7 @@ public class ViewModel extends Observable implements Observer
     public DoubleProperty getMinElevator() {
         return minElevator;
     }
+
     public DoubleProperty getMaxElevator() {
         return maxElevator;
     }
@@ -63,43 +66,35 @@ public class ViewModel extends Observable implements Observer
         return time;
     }
 
-    public FloatProperty getAileronstep()
-    {
+    public FloatProperty getAileronstep() {
         return aileronstep;
     }
 
-    public FloatProperty getElevatorstep()
-    {
+    public FloatProperty getElevatorstep() {
         return elevatorstep;
     }
 
-    public StringProperty getAltimeterstep()
-    {
+    public StringProperty getAltimeterstep() {
         return altimeterstep;
     }
 
-    public StringProperty getAirspeedstep()
-    {
+    public StringProperty getAirspeedstep() {
         return airspeedstep;
     }
 
-    public StringProperty getDirectionstep()
-    {
+    public StringProperty getDirectionstep() {
         return directionstep;
     }
 
-    public StringProperty getPitchstep()
-    {
+    public StringProperty getPitchstep() {
         return pitchstep;
     }
 
-    public StringProperty getRollstep()
-    {
+    public StringProperty getRollstep() {
         return rollstep;
     }
 
-    public StringProperty getYawstep()
-    {
+    public StringProperty getYawstep() {
         return yawstep;
     }
 
@@ -135,22 +130,18 @@ public class ViewModel extends Observable implements Observer
         return openCSVResult;
     }
 
-    public void VMLoadXML()
-    {
+    public void VMLoadXML() {
         model.ModelLoadXML(chosenXMLFilePath.getValue());
     }
 
-    public void VMOpenCSV()
-    {
+    public void VMOpenCSV() {
         model.ModelOpenCSV(chosenCSVFilePath.getValue());
     }
 
     @Override
-    public void update(Observable o, Object arg)
-    {
-        String p = (String)arg;
-        if (p.intern() == "resultLoadXML")
-        {
+    public void update(Observable o, Object arg) {
+        String p = (String) arg;
+        if (p.intern() == "resultLoadXML") {
             if (model.getResultLoadXML().intern() == "WrongFormatAlert")
                 loadXMLResult.set("WrongFormatAlert");
             if (model.getResultLoadXML().intern() == "MissingArgumentAlert")
@@ -158,17 +149,14 @@ public class ViewModel extends Observable implements Observer
             if (model.getResultLoadXML().intern() == "SuccessAlert")
                 loadXMLResult.set("SuccessAlert");
         }
-        if (p.intern() == "resultOpenCSV")
-        {
+        if (p.intern() == "resultOpenCSV") {
             if (model.getResultOpenCSV().intern() == "Missing Arguments")
                 openCSVResult.set("Missing Arguments");
             if (model.getResultOpenCSV().intern() == "Incompatibility with XML file")
                 openCSVResult.set("Incompatibility with XML file");
-            if (model.getResultOpenCSV().intern() == "OK")
-            {
+            if (model.getResultOpenCSV().intern() == "OK") {
                 openCSVResult.set("OK");
-                for (String name : model.getColsNames())
-                {
+                for (String name : model.getColsNames()) {
                     colsNames.add(name);
                 }
                 setChanged();
@@ -195,73 +183,59 @@ public class ViewModel extends Observable implements Observer
             yawstep.set(model.getYawstep() + "");
     }
 
-    public void VMplay()
-    {
+    public void VMplay() {
         model.modelPlay();
     }
 
-    public void VMGetChoice(String speed)
-    {
+    public void VMGetChoice(String speed) {
         model.modelGetChoice(speed);
     }
 
-    public void VMpause()
-    {
+    public void VMpause() {
         model.modelpause();
     }
 
-    public void VMplus15()
-    {
+    public void VMplus15() {
         model.modelPlus15();
     }
 
-    public void VMminus15()
-    {
+    public void VMminus15() {
         model.modelMinus15();
     }
 
-    public void VMminus30()
-    {
+    public void VMminus30() {
         model.modelMinus30();
     }
 
-    public void VMplus30()
-    {
+    public void VMplus30() {
         model.modelPlus30();
     }
 
-    public void VMsetMinAileron()
-    {
+    public void VMsetMinAileron() {
         minAileron.setValue(model.modelSetMinAileron());
     }
 
-    public void VMsetMaxAileron()
-    {
+    public void VMsetMaxAileron() {
         maxAileron.setValue(model.modelSetMaxAileron());
     }
 
-    public void VMsetMinElevator()
-    {
+    public void VMsetMinElevator() {
         minElevator.setValue(model.modelSetMinElevator());
     }
 
-    public void VMsetMaxElevator()
-    {
+    public void VMsetMaxElevator() {
         maxElevator.setValue(model.modelSetMaxElevator());
     }
 
-    public void setMaxTimeSlider()
-    {
+    public void setMaxTimeSlider() {
         maxTimeSlider.setValue(model.modelSetMaxTimeSlider());
     }
 
-    public void VMtimeslider(double second)
-    {
+    public void VMtimeslider(double second) {
         model.modelTimeSlider(second);
     }
 
-    public void VMstop()
-    {
+    public void VMstop() {
         model.modelStop();
     }
 }

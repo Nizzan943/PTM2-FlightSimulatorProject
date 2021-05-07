@@ -7,23 +7,28 @@ import javafx.scene.layout.Pane;
 
 public class MyMenu extends Pane {
 
-    Menu m;
-    MenuItem m1;
-    MenuBar mb;
+    Menu menu;
+    MenuItem loadXML;
+    MenuItem loadAlgorithm;
+    MenuBar menuBar;
 
-    public MenuBar set()
-    {
-        m = new Menu("Settings");
+    public MenuBar set() {
+        menu = new Menu("Settings");
 
-        m1 = new MenuItem("Load XML file");
+        loadXML = new MenuItem("Load XML file");
 
-        m.getItems().add(m1);
+        loadAlgorithm = new MenuItem("Load Algorithm class");
 
-       mb = new MenuBar();
+        menu.getItems().addAll(loadXML,loadAlgorithm);
 
-        mb.getMenus().add(m);
-        mb.setPrefHeight(25);
-        mb.setPrefWidth(797);
-        return mb;
+        menuBar = new MenuBar();
+
+        menuBar.getMenus().add(menu);
+
+        menuBar.setPrefHeight(25);
+
+        menuBar.setPrefWidth(797);
+
+        return menuBar;
     }
 }

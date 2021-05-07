@@ -6,7 +6,8 @@ public class AdditionalSettings {
     String properFlightFile;
     String algorithmFile;
 
-    public AdditionalSettings(){}
+    public AdditionalSettings() {
+    }
 
     public long getDataSamplingRate() {
         return dataSamplingRate;

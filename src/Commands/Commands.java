@@ -11,495 +11,457 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Commands {
-	
-	// Default IO interface
-	public interface DefaultIO{
-		public String readText();
-		public void write(String text);
-		public float readVal();
-		public void write(float val);
 
-		// you may add default methods here
-	}
+    // Default IO interface
+    public interface DefaultIO {
+        public String readText();
 
+        public void write(String text);
 
+        public float readVal();
 
-	// the default IO to be used in all commands
-	DefaultIO dio;
-	public Commands(DefaultIO dio) {
-		this.dio=dio;
-	}
-	
-	// you may add other helper classes here
-	
-	
-	
-	// the shared state of all commands
-	private class SharedState{
+        public void write(float val);
 
-		TimeSeries train = null;
+        // you may add default methods here
+    }
 
-		TimeSeries test = null;
 
-		List<AnomalyReport>  anomalyList = null;  //????
+    // the default IO to be used in all commands
+    DefaultIO dio;
 
-		List<Point> pointList = null;
+    public Commands(DefaultIO dio) {
+        this.dio = dio;
+    }
 
-	}
+    // you may add other helper classes here
 
-	private SharedState sharedState=new SharedState();
-	public SharedState getSharedState()
-	{
-		return sharedState;
-	}
 
+    // the shared state of all commands
+    private class SharedState {
 
-	public DefaultIO getDio() {
-		return dio;
-	}
+        TimeSeries train = null;
 
+        TimeSeries test = null;
 
-	// Command abstract class
-	public abstract class Command{
-		protected String description;
-		
-		public Command(String description) {
-			this.description=description;
-		}
-		
-		public abstract void execute();
-	}
-	
-	// Command class for example:
-	public class ExampleCommand extends Command{
+        List<AnomalyReport> anomalyList = null;  //????
 
-		public ExampleCommand() {
-			super("this is an example of command");
-		}
+        List<Point> pointList = null;
 
-		@Override
-		public void execute() {
-			dio.write(description);
-		}		
-	}
+    }
 
+    private SharedState sharedState = new SharedState();
 
-	public class menuCommand extends Command{
+    public SharedState getSharedState() {
+        return sharedState;
+    }
 
-		public menuCommand() {
 
-			super("Welcome to the Anomaly Detection Server.\n"+
-					"Please choose an option:\n"+
-					"1. upload a time series csv file\n"+
-					"2. algorithm settings\n"+
-					"3. detect anomalies\n"+
-					"4. display results\n"+
-					"5. upload anomalies and analyze results\n"+
-					"6. exit\n");
-		}
+    public DefaultIO getDio() {
+        return dio;
+    }
 
-		@Override
-		public void execute() {
 
-			dio.write(description);
+    // Command abstract class
+    public abstract class Command {
+        protected String description;
 
-			String readSelection = dio.readText();
+        public Command(String description) {
+            this.description = description;
+        }
 
-			int selection= Integer.parseInt(readSelection);
+        public abstract void execute();
+    }
 
-			switch (selection) {
-				case 1: // upload csv
-					new uploadCSVFileCommand().execute();;
-					break;
+    // Command class for example:
+    public class ExampleCommand extends Command {
 
-				case 2:  // algo settings
-					new algoSettingsCommand().execute();
-					break;
+        public ExampleCommand() {
+            super("this is an example of command");
+        }
 
-				case 3:  // detect
-					new detectAnomaliesCommand().execute();
-					break;
+        @Override
+        public void execute() {
+            dio.write(description);
+        }
+    }
 
-				case 4:  // display
-					new displayResultsCommand().execute();
-					break;
 
-				case 5:  // upload anomalies and analyze
-					new uploadAndAnalyzeCommand().execute();
-					break;
+    public class menuCommand extends Command {
 
-				case 6:  // exit
-					new exitCommand().execute();
-					break;
+        public menuCommand() {
 
-			}
+            super("Welcome to the Anomaly Detection Server.\n" +
+                    "Please choose an option:\n" +
+                    "1. upload a time series csv file\n" +
+                    "2. algorithm settings\n" +
+                    "3. detect anomalies\n" +
+                    "4. display results\n" +
+                    "5. upload anomalies and analyze results\n" +
+                    "6. exit\n");
+        }
 
-		}
-	}  // end of menu command
+        @Override
+        public void execute() {
 
+            dio.write(description);
 
-	public class uploadCSVFileCommand extends Command{
+            String readSelection = dio.readText();
 
-		public uploadCSVFileCommand() {
-			super("Please upload your local train CSV file.\n");
-		}
+            int selection = Integer.parseInt(readSelection);
 
+            switch (selection) {
+                case 1: // upload csv
+                    new uploadCSVFileCommand().execute();
+                    ;
+                    break;
 
-		@Override
-		public void execute() {
+                case 2:  // algo settings
+                    new algoSettingsCommand().execute();
+                    break;
 
-			///// file 1 /////
+                case 3:  // detect
+                    new detectAnomaliesCommand().execute();
+                    break;
 
-			dio.write(description);
+                case 4:  // display
+                    new displayResultsCommand().execute();
+                    break;
 
-			String line = null;
+                case 5:  // upload anomalies and analyze
+                    new uploadAndAnalyzeCommand().execute();
+                    break;
 
-			ArrayList<String> read = new ArrayList<>();
+                case 6:  // exit
+                    new exitCommand().execute();
+                    break;
 
-			while (!(line=dio.readText()).equals("done"))
-			{
-				read.add(line);
+            }
 
-				read.add("\n");
-			}
+        }
+    }  // end of menu command
 
-			try {
 
-				FileWriter csvFile= new FileWriter("anomalyTrain.csv");
+    public class uploadCSVFileCommand extends Command {
 
-				String all = read.stream().collect(Collectors.joining(""));
+        public uploadCSVFileCommand() {
+            super("Please upload your local train CSV file.\n");
+        }
 
-				csvFile.write(all);
 
-				csvFile.close();
+        @Override
+        public void execute() {
 
-			}
+            ///// file 1 /////
 
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+            dio.write(description);
 
-			getSharedState().train=new TimeSeries("anomalyTrain.csv");
+            String line = null;
 
-			dio.write("Upload complete.\n");
+            ArrayList<String> read = new ArrayList<>();
 
+            while (!(line = dio.readText()).equals("done")) {
+                read.add(line);
 
+                read.add("\n");
+            }
 
-					///// file 2 /////
+            try {
 
-			dio.write("Please upload your local test CSV file.\n");
+                FileWriter csvFile = new FileWriter("anomalyTrain.csv");
 
-			String line2 = null;
+                String all = read.stream().collect(Collectors.joining(""));
 
-			ArrayList<String> read2 = new ArrayList<>();
+                csvFile.write(all);
 
-			while (!(line2=dio.readText()).equals("done"))
-			{
-				read2.add(line2);
+                csvFile.close();
 
-				read2.add("\n");
-			}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-			try {
+            getSharedState().train = new TimeSeries("anomalyTrain.csv");
 
-				FileWriter csvFile= new FileWriter("anomalyTest.csv");
+            dio.write("Upload complete.\n");
 
-				String all2 = read2.stream().collect(Collectors.joining(""));
 
-				csvFile.write(all2);
+            ///// file 2 /////
 
-				csvFile.close();
+            dio.write("Please upload your local test CSV file.\n");
 
-			}
+            String line2 = null;
 
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+            ArrayList<String> read2 = new ArrayList<>();
 
-			getSharedState().test=new TimeSeries("anomalyTest.csv");
+            while (!(line2 = dio.readText()).equals("done")) {
+                read2.add(line2);
 
-			dio.write("Upload complete.\n");
+                read2.add("\n");
+            }
 
-			new menuCommand().execute();
+            try {
 
-		}
+                FileWriter csvFile = new FileWriter("anomalyTest.csv");
 
-	}
+                String all2 = read2.stream().collect(Collectors.joining(""));
 
+                csvFile.write(all2);
 
-	public class algoSettingsCommand extends Command{
+                csvFile.close();
 
-		String msg;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-		double treshold;
+            getSharedState().test = new TimeSeries("anomalyTest.csv");
 
-		public algoSettingsCommand() {
+            dio.write("Upload complete.\n");
 
-			super("");
+            new menuCommand().execute();
 
-			treshold=getSharedState().train.correlationTresh;
+        }
 
-			msg = "The current correlation treshold is ";
-			msg = msg.concat(String.valueOf(treshold));
-			msg = msg.concat("\nType a new threshold\n");
+    }
 
-		}
 
-		@Override
-		public void execute()
-		{
-			dio.write(msg);
+    public class algoSettingsCommand extends Command {
 
-			double tempTresh = Double.parseDouble(dio.readText());
+        String msg;
 
-			while (tempTresh>1||tempTresh<0)
-			{
-				dio.write("please choose a value between 0 and 1.");
+        double treshold;
 
-				tempTresh = Double.parseDouble(dio.readText());
+        public algoSettingsCommand() {
 
-			}
+            super("");
 
-			getSharedState().train.setCorrelationTresh(tempTresh);
+            treshold = getSharedState().train.correlationTresh;
 
-			new menuCommand().execute();
+            msg = "The current correlation treshold is ";
+            msg = msg.concat(String.valueOf(treshold));
+            msg = msg.concat("\nType a new threshold\n");
 
-		}
-	}
+        }
 
-	public class detectAnomaliesCommand extends Command{
+        @Override
+        public void execute() {
+            dio.write(msg);
 
-		public detectAnomaliesCommand()
-		{
-			super("anomaly detection complete.\n");
-		}
+            double tempTresh = Double.parseDouble(dio.readText());
 
-		@Override
-		public void execute()
-		{
+            while (tempTresh > 1 || tempTresh < 0) {
+                dio.write("please choose a value between 0 and 1.");
 
-			LinearRegression SAD = new LinearRegression();
+                tempTresh = Double.parseDouble(dio.readText());
 
-			SAD.learnNormal(getSharedState().train);
+            }
 
-			List<AnomalyReport> tempList = new ArrayList<>();
+            getSharedState().train.setCorrelationTresh(tempTresh);
 
-			tempList.addAll(SAD.detect(getSharedState().test));
+            new menuCommand().execute();
 
-			getSharedState().anomalyList = tempList;
+        }
+    }
 
-			dio.write(description);
+    public class detectAnomaliesCommand extends Command {
 
-			new menuCommand().execute();
+        public detectAnomaliesCommand() {
+            super("anomaly detection complete.\n");
+        }
 
-		}
-	}
+        @Override
+        public void execute() {
 
+            LinearRegression SAD = new LinearRegression();
 
+            SAD.learnNormal(getSharedState().train);
 
+            List<AnomalyReport> tempList = new ArrayList<>();
 
+            tempList.addAll(SAD.detect(getSharedState().test));
 
-	public class displayResultsCommand extends Command{
+            getSharedState().anomalyList = tempList;
 
-		public displayResultsCommand()
-		{
+            dio.write(description);
 
-			super("Done.\n");
+            new menuCommand().execute();
 
-		}
+        }
+    }
 
 
-		@Override
-		public void execute()
-		{
-			for (AnomalyReport ar: getSharedState().anomalyList)
-				dio.write((String.valueOf(ar.timeStep))+ "\t" + ar.description + "\n");
+    public class displayResultsCommand extends Command {
 
-			dio.write(description);
+        public displayResultsCommand() {
 
-			new menuCommand().execute();
-		}
-	}
+            super("Done.\n");
 
+        }
 
 
+        @Override
+        public void execute() {
+            for (AnomalyReport ar : getSharedState().anomalyList)
+                dio.write((String.valueOf(ar.timeStep)) + "\t" + ar.description + "\n");
 
+            dio.write(description);
 
+            new menuCommand().execute();
+        }
+    }
 
 
+    public class uploadAndAnalyzeCommand extends Command {
 
+        public uploadAndAnalyzeCommand() {
+            super("Please upload your local anomalies file.\n" + "Upload complete.\n");
+        }
 
+        @Override
+        public void execute() {
 
+            dio.write(description);
 
+            float rangeSum = 0;
 
+            String line = null;
 
+            getSharedState().pointList = new ArrayList<>();
 
-	public class uploadAndAnalyzeCommand extends Command{
+            while (!((line = dio.readText()).equals("done"))) {
 
-		public uploadAndAnalyzeCommand()
-		{
-			super("Please upload your local anomalies file.\n" + "Upload complete.\n" );
-		}
+                String[] temp = line.split(",");
 
-		@Override
-		public void execute()
-		{
+                getSharedState().pointList.add(new Point(Float.valueOf(temp[0]), Float.valueOf(temp[1])));
 
-			dio.write(description);
+            }
 
-			float rangeSum=0;
+            for (Point p : getSharedState().pointList)
+                rangeSum += p.y - p.x + 1;
 
-			String line=null;
+            float N = getSharedState().test.getCols()[0].getFloats().size() - rangeSum;     ///////////////////////////
 
-			getSharedState().pointList=new ArrayList<>();
 
-			while (!((line = dio.readText()).equals("done")))
-			{
+            ArrayList<String> discription = new ArrayList<>();
 
-				String [] temp = line.split(",");
+            ArrayList<Point> time = new ArrayList<>();
 
-				getSharedState().pointList.add(new Point(Float.valueOf(temp[0]),Float.valueOf(temp[1]) ));
+            int q = 0;
 
-			}
+            if (getSharedState().anomalyList == null)
+                return;
 
-			for (Point p:getSharedState().pointList)
-			  	rangeSum+= p.y - p.x + 1;
+            for (int i = 0; i < getSharedState().anomalyList.size(); i++) {
+                AnomalyReport start = getSharedState().anomalyList.get(i);
 
-			float N = getSharedState().test.getCols()[0].getFloats().size()- rangeSum;     ///////////////////////////
+                AnomalyReport end = null;
 
+                int j = i + 1;
 
+                while (j < getSharedState().anomalyList.size()
+                        && start.description.equals(getSharedState().anomalyList.get(j).description)
+                        && start.timeStep + j - q == getSharedState().anomalyList.get(j).timeStep) {
+                    end = getSharedState().anomalyList.get(j);
 
-			ArrayList<String> discription = new ArrayList<>();
+                    j++;
 
-			ArrayList<Point> time = new ArrayList<>();
+                }
 
-			int q=0;
+                if (end != null) {
+                    discription.add(end.description);
 
-			if (getSharedState().anomalyList==null)
-				return;
+                    time.add(new Point(start.timeStep, end.timeStep));
 
-			for (int i=0; i<getSharedState().anomalyList.size();i++)
-			{
-				AnomalyReport start = getSharedState().anomalyList.get(i);
 
-				AnomalyReport end = null;
+                } else {
+                    discription.add(start.description);
 
-				int j = i+1;
+                    time.add(new Point(start.timeStep, start.timeStep));
 
-				while (j<getSharedState().anomalyList.size()
-						&& start.description.equals(getSharedState().anomalyList.get(j).description)
-						&& start.timeStep + j - q == getSharedState().anomalyList.get(j).timeStep)
-				{
-					end = getSharedState().anomalyList.get(j);
+                }
 
-					j++;
+                q = j;
 
-				}
+                i = j - 1;
 
-				if (end != null)
-				{
-					discription.add(end.description);
+            }
 
-					time.add(new Point(start.timeStep, end.timeStep));
+            float FP = 0;
 
+            float TP = 0;
 
-				}
+            float TN = 0;
 
-				else
-				{
-					discription.add(start.description);
+            float FN = 0;
 
-					time.add(new Point(start.timeStep, start.timeStep));
+            float P = getSharedState().pointList.size();
 
-				}
+            boolean flag = false;
 
-				q=j;
+            List<Point> pointList = new ArrayList<>();
 
-				i = j-1;
+            for (Point p : getSharedState().pointList) {
+                for (Point k : time) {
+                    if ((p.x <= k.x && k.y <= p.y)
+                            || (p.x >= k.x && p.y >= k.y && k.y >= p.x)
+                            || (k.x <= p.x && p.y <= k.y)
+                            || (p.x <= k.x && p.y <= k.y && k.x <= p.y)) {
+                        if (!flag)
+                            TP++;
 
-			}
+                        flag = true;
 
-			float FP = 0;
+                        if (!pointList.contains(k))
+                            pointList.add(k);
+                    }
 
-			float TP = 0;
+                }
 
-			float TN = 0;
+                if (!flag)
+                    FN++;
 
-			float FN = 0;
+                flag = false;
+            }
 
-			float P = getSharedState().pointList.size();
+            FP = (time.size() - pointList.size()) / N;
 
-			boolean flag = false;
+            TP /= P;
 
-			List<Point> pointList= new ArrayList<>();
+            DecimalFormat decimalFormat = new DecimalFormat("0.0000");
 
-			for (Point p: getSharedState().pointList)
-			{
-				for (Point k:time)
-				{
-					if ((p.x <= k.x && k.y <= p.y)
-							|| (p.x >= k.x && p.y >= k.y && k.y >= p.x)
-							|| (k.x <= p.x && p.y <= k.y)
-							|| (p.x <= k.x && p.y <= k.y && k.x <= p.y))
-					{
-						if (!flag)
-							TP++;
+            String tp = decimalFormat.format(TP);
 
-						flag = true;
+            String fp = decimalFormat.format(FP);
 
-						if (!pointList.contains(k))
-							pointList.add(k);
-					}
+            tp = tp.substring(0, tp.length() - 1);
 
-				}
+            fp = fp.substring(0, fp.length() - 1);
 
-				if (!flag)
-					FN++;
+            while (tp.charAt(tp.length() - 1) == '0' && tp.length() != 3)
+                tp = tp.substring(0, tp.length() - 1);
 
-				flag = false;
-			}
+            while (fp.charAt(fp.length() - 1) == '0' && fp.length() != 3)
+                fp = fp.substring(0, fp.length() - 1);
 
-			FP = (time.size() - pointList.size()) / N;
+            dio.write("True Positive Rate: " + tp + "\n");
 
-			TP /= P;
+            dio.write("False Positive Rate: " + fp + "\n");
 
-			DecimalFormat decimalFormat = new DecimalFormat("0.0000");
+            new menuCommand().execute();
 
-			String tp = decimalFormat.format(TP);
+        }
+    }
 
-			String fp = decimalFormat.format(FP);
 
-			tp = tp.substring(0,tp.length()-1);
+    public class exitCommand extends Command {
 
-			fp = fp.substring(0,fp.length()-1);
+        public exitCommand() {
+            super("");
+        }
 
-			while (tp.charAt(tp.length()-1)=='0' && tp.length()!=3)
-				tp = tp.substring(0,tp.length()-1);
-
-			while (fp.charAt(fp.length()-1)=='0' && fp.length()!=3)
-				fp = fp.substring(0,fp.length()-1);
-
-			dio.write("True Positive Rate: " + tp + "\n");
-
-			dio.write("False Positive Rate: " + fp + "\n");
-
-			new menuCommand().execute();
-
-		}
-	}
-
-
-	public class exitCommand extends Command{
-
-		public exitCommand() {
-			super("");
-		}
-
-		@Override
-		public void execute() {
-			dio.write(description);
-		}
-	}
+        @Override
+        public void execute() {
+            dio.write(description);
+        }
+    }
 
 }
 	

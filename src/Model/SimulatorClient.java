@@ -4,23 +4,19 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class SimulatorClient
-{
+public class SimulatorClient {
     public static volatile boolean stop = false;
 
     private static PrintWriter outputStream;
 
     private static Socket socket;
 
-    public void Connect(String ip, int port)
-    {
+    public void Connect(String ip, int port) {
         try {
-            socket = new Socket(ip,port);
+            socket = new Socket(ip, port);
 
             outputStream = new PrintWriter(socket.getOutputStream());
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -28,8 +24,7 @@ public class SimulatorClient
     }
 
     public void SendData(String[] data) throws InterruptedException {
-        for (String string: data)
-        {
+        for (String string : data) {
             outputStream.println(string);
 
             outputStream.flush();
@@ -38,20 +33,15 @@ public class SimulatorClient
         }
     }
 
-    public void Stop()
-    {
-        if(outputStream == null)
+    public void Stop() {
+        if (outputStream == null)
             return;
 
         outputStream.close();
 
-        try
-        {
-          socket.close();
-        }
-
-        catch (IOException e)
-        {
+        try {
+            socket.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

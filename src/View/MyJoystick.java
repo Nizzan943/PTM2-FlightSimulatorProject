@@ -11,24 +11,23 @@ import javafx.scene.shape.StrokeType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyJoystick extends Pane
-{
+public class MyJoystick extends Pane {
     Slider aileron;
     Slider elevator;
-    public List<Node> set()
-    {
-        List <Node> ret = new ArrayList<>();
+
+    public List<Node> set() {
+        List<Node> ret = new ArrayList<>();
 
         aileron = new Slider();
         aileron.setLayoutX(620);
         aileron.setLayoutY(174);
-        aileron.setPrefSize(160,14);
+        aileron.setPrefSize(160, 14);
         ret.add(aileron);
 
         elevator = new Slider();
         elevator.setLayoutX(620);
         elevator.setLayoutY(33);
-        elevator.setPrefSize(14,139);
+        elevator.setPrefSize(14, 139);
         elevator.setOrientation(Orientation.VERTICAL);
         ret.add(elevator);
 

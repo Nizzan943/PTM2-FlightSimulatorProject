@@ -8,14 +8,12 @@ import javafx.scene.layout.Pane;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyListView extends Pane
-{
+public class MyListView extends Pane {
     ListView listView;
     Button open;
 
-    public List<Node> set()
-    {
-        List <Node> ret = new ArrayList<>();
+    public List<Node> set() {
+        List<Node> ret = new ArrayList<>();
 
         listView = new ListView();
         listView.setPrefSize(163, 362);
@@ -26,7 +24,7 @@ public class MyListView extends Pane
         open = new Button("Open");
         open.setLayoutX(25);
         open.setLayoutY(410);
-        open.setPrefSize(163,42);
+        open.setPrefSize(163, 42);
         ret.add(open);
 
         return ret;

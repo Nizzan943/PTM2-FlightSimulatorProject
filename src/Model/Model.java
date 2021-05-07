@@ -3,20 +3,23 @@ package Model;
 
 import Server.HandleXML;
 import Server.TimeSeries;
+import Server.TimeSeriesAnomalyDetector;
 import javafx.application.Platform;
 import javafx.beans.property.FloatProperty;
 
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
-public class Model extends Observable
-{
+public class Model extends Observable{
     public Map<String, Integer> CSVindexmap = new HashMap<>();
     public static HandleXML XML_settings;
     public static String CSVpath;
@@ -47,7 +50,7 @@ public class Model extends Observable
 
     private String resultLoadXML;
     private String resultOpenCSV;
-    ArrayList <String> colsNames = new ArrayList<>();
+    ArrayList<String> colsNames = new ArrayList<>();
 
     public ArrayList<String> getColsNames() {
         return colsNames;
@@ -62,8 +65,7 @@ public class Model extends Observable
     }
 
 
-    public void ModelLoadXML(String chosenPath)
-    {
+    public void ModelLoadXML(String chosenPath) {
         HandleXML handleXML = new HandleXML();
         try {
             handleXML.deserializeFromXML(chosenPath);
@@ -82,15 +84,14 @@ public class Model extends Observable
         notifyObservers("resultLoadXML");
     }
 
-    public void ModelOpenCSV(String chosenPath)
-    {
+    public void ModelOpenCSV(String chosenPath) {
         int flag1 = 0;
         TimeSeries timeSeries = new TimeSeries(chosenPath);
-        for (int i = 0; i < timeSeries.getCols().length; i++)
-        {
+        for (int i = 0; i < timeSeries.getCols().length; i++) {
             int k = 0;
             while (k != 11) {
-                if (timeSeries.getCols()[i].getName().intern() == XML_settings.PropertyList.get(k).getRealName().intern()) { ;
+                if (timeSeries.getCols()[i].getName().intern() == XML_settings.PropertyList.get(k).getRealName().intern()) {
+                    ;
                     CSVindexmap.put(XML_settings.PropertyList.get(k).getAssosicateName(), i);
                     break;
                 }
@@ -100,11 +101,9 @@ public class Model extends Observable
                 break;
         }
 
-        for (String colname : XML_settings.RealToAssosicate.keySet())
-        {
+        for (String colname : XML_settings.RealToAssosicate.keySet()) {
             int index = CSVindexmap.get(XML_settings.RealToAssosicate.get(colname));
-            for (Float num :  timeSeries.getCols()[index].getFloats())
-            {
+            for (Float num : timeSeries.getCols()[index].getFloats()) {
                 if (num < XML_settings.min.get(colname) || num > XML_settings.max.get(colname)) {
                     resultOpenCSV = "Incompatibility with XML file";
                     flag1 = 1;
@@ -118,11 +117,9 @@ public class Model extends Observable
 
         if (CSVindexmap.size() != 11)
             resultOpenCSV = "Missing Arguments";
-        if (CSVindexmap.size() == 11 && flag1 == 0)
-        {
+        if (CSVindexmap.size() == 11 && flag1 == 0) {
             resultOpenCSV = "OK";
-            for (String colName : XML_settings.RealToAssosicate.keySet())
-            {
+            for (String colName : XML_settings.RealToAssosicate.keySet()) {
                 if (colName == "slip-skid-ball_indicated-slip-skid" || colName == "pitch-deg" || colName == "roll-deg" || colName == "altimeter_indicated-altitude-ft" || colName == "indicated-heading-deg" || colName == "airspeed-kt")
                     colsNames.add(colName);
             }
@@ -145,8 +142,7 @@ public class Model extends Observable
         notifyObservers("resultOpenCSV");
     }
 
-    public void modelPlay()
-    {
+    public void modelPlay() {
         if (flag == 0) {
             simulator10Thread = new Thread(() -> {
                 simulatorLoop(1);
@@ -158,8 +154,7 @@ public class Model extends Observable
             timer10Thread.start();
 
         }
-        if (flag == 1)
-        {
+        if (flag == 1) {
             if (simulatorThread != null) {
                 simulatorThread.resume();
                 timerThread.resume();
@@ -184,17 +179,15 @@ public class Model extends Observable
         }
     }
 
-    public void changeSpeed (double speed)
-    {
+    public void changeSpeed(double speed) {
         try {
-            Thread.sleep((long)(Model.XML_settings.additionalSettings.getDataSamplingRate() / speed));
+            Thread.sleep((long) (Model.XML_settings.additionalSettings.getDataSamplingRate() / speed));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public void changeTimerSpeed (double speed)
-    {
+    public void changeTimerSpeed(double speed) {
         nowTime += 1000 * speed;
     }
 
@@ -243,10 +236,8 @@ public class Model extends Observable
     private float rollstep;
     private float yawstep;
 
-    public void simulatorLoop (double speed)
-    {
-        while (numofrow != in.getRows().size() - 1)
-        {
+    public void simulatorLoop(double speed) {
+        while (numofrow != in.getRows().size() - 1) {
             out.println(in.getRows().get(numofrow));
             out.flush();
             aileronstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("aileron"))].getFloats().get(numofrow);
@@ -285,8 +276,7 @@ public class Model extends Observable
         }
     }
 
-    public void timerLoop (double speed)
-    {
+    public void timerLoop(double speed) {
         while (true) {
             try {
                 Thread.sleep(1000); //1 second
@@ -294,7 +284,7 @@ public class Model extends Observable
                 e.printStackTrace();
             }
             changeTimerSpeed(speed);
-            if (nowTime > ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate()/10)) * 1000)
+            if (nowTime > ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate() / 10)) * 1000)
                 break;
             time = simpleDateFormat.format(nowTime - 7200000);
             setChanged();
@@ -302,8 +292,7 @@ public class Model extends Observable
         }
     }
 
-    public void modelGetChoice(String speed)
-    {
+    public void modelGetChoice(String speed) {
         if (speed.intern() == "x2.0") {
             if (simulator05Thread != null) {
                 simulator05Thread.suspend();
@@ -332,8 +321,7 @@ public class Model extends Observable
             timer20Thread.start();
         }
 
-        if (speed.intern() == "x0.5")
-        {
+        if (speed.intern() == "x0.5") {
             if (simulator20Thread != null) {
                 simulator20Thread.suspend();
                 timer20Thread.suspend();
@@ -361,8 +349,7 @@ public class Model extends Observable
             timer05Thread.start();
         }
 
-        if (speed.intern() == "x1.0")
-        {
+        if (speed.intern() == "x1.0") {
             if (simulator15Thread != null || simulator20Thread != null || simulator05Thread != null) {
                 if (simulator05Thread != null) {
                     simulator05Thread.suspend();
@@ -383,8 +370,7 @@ public class Model extends Observable
             }
         }
 
-        if (speed.intern() == "x1.5")
-        {
+        if (speed.intern() == "x1.5") {
             if (simulator05Thread != null) {
                 simulator05Thread.suspend();
                 timer05Thread.suspend();
@@ -413,62 +399,50 @@ public class Model extends Observable
         }
     }
 
-    public void modelpause()
-    {
+    public void modelpause() {
         flag = 1;
         if (simulator10Thread != null) {
             simulator10Thread.suspend();
             timer10Thread.suspend();
-        }
-        else if (simulator15Thread != null) {
+        } else if (simulator15Thread != null) {
             simulator15Thread.suspend();
             timer15Thread.suspend();
-        }
-        else if (simulator05Thread != null) {
+        } else if (simulator05Thread != null) {
             simulator05Thread.suspend();
             timer05Thread.suspend();
-        }
-        else if (simulator20Thread != null) {
+        } else if (simulator20Thread != null) {
             simulator20Thread.suspend();
             timer20Thread.suspend();
         }
     }
 
-    public void modelPlus15()
-    {
-        Plus_Minus_Time (15, "+");
+    public void modelPlus15() {
+        Plus_Minus_Time(15, "+");
     }
 
-    public void modelMinus15()
-    {
-        Plus_Minus_Time (15, "-");
+    public void modelMinus15() {
+        Plus_Minus_Time(15, "-");
     }
 
-    public void modelMinus30()
-    {
-        Plus_Minus_Time (30, "-");
+    public void modelMinus30() {
+        Plus_Minus_Time(30, "-");
     }
 
-    public void modelPlus30()
-    {
-        Plus_Minus_Time (30, "+");
+    public void modelPlus30() {
+        Plus_Minus_Time(30, "+");
     }
 
-    public void Plus_Minus_Time (int seconds, String math)
-    {
+    public void Plus_Minus_Time(int seconds, String math) {
         if (math.intern() == "+") {
             numofrow += (XML_settings.additionalSettings.getDataSamplingRate() / 10) * seconds;
             nowTime += seconds * 1000;
-        }
-        else
-        {
+        } else {
             numofrow -= (XML_settings.additionalSettings.getDataSamplingRate() / 10) * seconds;
             nowTime -= seconds * 1000;
         }
     }
 
-    public double modelSetMinAileron()
-    {
+    public double modelSetMinAileron() {
         return XML_settings.min.get("aileron");
     }
 
@@ -476,28 +450,24 @@ public class Model extends Observable
         return XML_settings.max.get("aileron");
     }
 
-    public double modelSetMinElevator()
-    {
+    public double modelSetMinElevator() {
         return XML_settings.min.get("elevator");
     }
 
-    public double modelSetMaxElevator()
-    {
+    public double modelSetMaxElevator() {
         return XML_settings.max.get("elevator");
     }
 
-    public double modelSetMaxTimeSlider()
-    {
-        return ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate()/10));
+    public double modelSetMaxTimeSlider() {
+        return ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate() / 10));
     }
 
     public void modelTimeSlider(double second) {
-        numofrow = (int) (second * (XML_settings.additionalSettings.getDataSamplingRate()/10));
-        nowTime = (long)(second * 1000);
+        numofrow = (int) (second * (XML_settings.additionalSettings.getDataSamplingRate() / 10));
+        nowTime = (long) (second * 1000);
     }
 
-    public void modelStop()
-    {
+    public void modelStop() {
         simulator10Thread = null;
         timer10Thread = null;
         simulator15Thread = null;
@@ -509,4 +479,6 @@ public class Model extends Observable
         nowTime = 0;
         numofrow = 0;
     }
+
 }
+

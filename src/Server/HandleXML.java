@@ -13,55 +13,52 @@ import java.util.Map;
 public class HandleXML {
 
     public List<UserSettings> PropertyList = new ArrayList<>();
-    public Map <String, String> RealToAssosicate = new HashMap<>();
-    public Map <String, String> AssosicateToReal = new HashMap<>();
-    public Map <String, Integer> max = new HashMap<>();
-    public Map <String, Integer> min = new HashMap<>();
+    public Map<String, String> RealToAssosicate = new HashMap<>();
+    public Map<String, String> AssosicateToReal = new HashMap<>();
+    public Map<String, Integer> max = new HashMap<>();
+    public Map<String, Integer> min = new HashMap<>();
 
     public AdditionalSettings additionalSettings = new AdditionalSettings();
     public boolean WrongFormatAlert = false;
     public boolean MissingArgumentsAlert = false;
 
 
+    /* public static void serializeToXML(UserSettings settings) throws IOException {
+         FileOutputStream fos = new FileOutputStream("settings.xml");
+         XMLEncoder encoder = new XMLEncoder(fos);
+         encoder.setExceptionListener(new ExceptionListener() {
+             public void exceptionThrown(Exception e) {
+                 System.out.println("Exception! :" + e.toString());
+             }
+         });
+         encoder.writeObject(settings);
+         encoder.close();
+         fos.close();
+     }
 
-   /* public static void serializeToXML(UserSettings settings) throws IOException {
-        FileOutputStream fos = new FileOutputStream("settings.xml");
-        XMLEncoder encoder = new XMLEncoder(fos);
-        encoder.setExceptionListener(new ExceptionListener() {
-            public void exceptionThrown(Exception e) {
-                System.out.println("Exception! :" + e.toString());
-            }
-        });
-        encoder.writeObject(settings);
-        encoder.close();
-        fos.close();
-    }
-
-*/
-    public void deserializeFromXML(String path)
-    {
+ */
+    public void deserializeFromXML(String path) {
         XMLDecoder decoder = null;
         try {
             decoder = new XMLDecoder(
                     new BufferedInputStream(new FileInputStream(path)));
-        } catch (FileNotFoundException e){ e.printStackTrace(); }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < 11; i++) {
             try {
                 UserSettings decodedSettings = (UserSettings) decoder.readObject();
                 PropertyList.add(decodedSettings);
 
-            } catch (NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 if (MissingArgumentsAlert == false)
                     WrongFormatAlert = true;
                 break;
-            }
-            catch (ArrayIndexOutOfBoundsException e){
+            } catch (ArrayIndexOutOfBoundsException e) {
                 if (MissingArgumentsAlert == false)
                     WrongFormatAlert = true;
                 break;
-            }
-            catch (ClassCastException e){
+            } catch (ClassCastException e) {
                 if (WrongFormatAlert == false)
                     MissingArgumentsAlert = true;
                 break;
@@ -70,23 +67,19 @@ public class HandleXML {
         try {
             additionalSettings = (AdditionalSettings) decoder.readObject();
 
-        } catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             if (MissingArgumentsAlert == false)
                 WrongFormatAlert = true;
-        }
-        catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             if (MissingArgumentsAlert == false)
                 WrongFormatAlert = true;
-        }
-        catch (ClassCastException e){
+        } catch (ClassCastException e) {
             if (WrongFormatAlert == false)
                 MissingArgumentsAlert = true;
         }
 
-        for (UserSettings userSettings: PropertyList)
-        {
-            if (userSettings.getRealName() == null || userSettings.getAssosicateName() == null || userSettings.getMin() == -1000000 || userSettings.getMax() == 1000000 ) {
+        for (UserSettings userSettings : PropertyList) {
+            if (userSettings.getRealName() == null || userSettings.getAssosicateName() == null || userSettings.getMin() == -1000000 || userSettings.getMax() == 1000000) {
                 if (MissingArgumentsAlert == false)
                     WrongFormatAlert = true;
                 break;
@@ -96,8 +89,7 @@ public class HandleXML {
             if (MissingArgumentsAlert == false)
                 WrongFormatAlert = true;
         }
-        for (UserSettings userSettings: PropertyList)
-        {
+        for (UserSettings userSettings : PropertyList) {
             RealToAssosicate.put(userSettings.getRealName(), userSettings.getAssosicateName());
             AssosicateToReal.put(userSettings.getAssosicateName(), userSettings.getRealName());
             max.put(userSettings.getRealName(), userSettings.getMax());

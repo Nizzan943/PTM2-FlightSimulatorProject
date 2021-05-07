@@ -17,7 +17,7 @@ public class Main extends Application {
 
     @Override
 
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
 
         Model model = new Model();
         ViewModel viewModel = new ViewModel(model);
@@ -29,7 +29,7 @@ public class Main extends Application {
         mwc.setViewModel(viewModel);
         viewModel.addObserver(mwc);
         primaryStage.setTitle("Flight Simulator");
-        primaryStage.setScene(new Scene(root, 797  , 571));
+        primaryStage.setScene(new Scene(root, 797, 571));
         primaryStage.show();
 
 
