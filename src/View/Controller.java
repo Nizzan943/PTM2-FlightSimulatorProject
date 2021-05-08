@@ -282,6 +282,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 Platform.runLater(() -> myButtons.timer.setText(time.getValue()));
+                myButtons.slider.setValue(myButtons.slider.getValue() + 1);
             }
         });
 

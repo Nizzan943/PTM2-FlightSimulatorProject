@@ -2,9 +2,6 @@ package ViewModel;
 
 import Model.Model;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;

@@ -6,8 +6,6 @@ import Server.TimeSeries;
 import Server.TimeSeriesAnomalyDetector;
 import javafx.application.Platform;
 import javafx.beans.property.FloatProperty;
-
-
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.Socket;
@@ -284,7 +282,7 @@ public class Model extends Observable{
                 e.printStackTrace();
             }
             changeTimerSpeed(speed);
-            if (nowTime > ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate() / 10)) * 1000)
+            if (nowTime >= ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate() / 10)) * 1000)
                 break;
             time = simpleDateFormat.format(nowTime - 7200000);
             setChanged();
@@ -459,7 +457,7 @@ public class Model extends Observable{
     }
 
     public double modelSetMaxTimeSlider() {
-        return ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate() / 10));
+        return ((double)(in.getCols()[0].getFloats().size() + 1) / (double)(XML_settings.additionalSettings.getDataSamplingRate() / 10));
     }
 
     public void modelTimeSlider(double second) {
