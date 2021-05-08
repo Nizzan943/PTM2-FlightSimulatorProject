@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ViewModel extends Observable implements Observer {
+public class ViewModel extends AllViewModels {
     Model model;
     StringProperty loadXMLResult;
     StringProperty openCSVResult;

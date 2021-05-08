@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
-public class Model extends Observable{
+public class Model extends AllModels {
     public Map<String, Integer> CSVindexmap = new HashMap<>();
     public static HandleXML XML_settings;
     public static String CSVpath;
