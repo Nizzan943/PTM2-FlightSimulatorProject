@@ -17,7 +17,8 @@ public class ViewModel extends AllViewModels {
     DoubleProperty maxTimeSlider;
     StringProperty chosenXMLFilePath;
     StringProperty chosenCSVFilePath;
-    public ArrayList<String> colsNames;
+
+    private ArrayList<String> colsNames;
 
     StringProperty time;
     FloatProperty aileronstep;
@@ -30,11 +31,15 @@ public class ViewModel extends AllViewModels {
     StringProperty rollstep;
     StringProperty yawstep;
 
-    public StringProperty chosenXMLFilePathProperty() {
+    public ArrayList<String> getColsNames() {
+        return colsNames;
+    }
+
+    public StringProperty getChosenXMLFilePathProperty() {
         return chosenXMLFilePath;
     }
 
-    public StringProperty chosenCSVFilePathProperty() {
+    public StringProperty getChosenCSVFilePathProperty() {
         return chosenCSVFilePath;
     }
 

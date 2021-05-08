@@ -84,16 +84,18 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     StringProperty rollstep;
     StringProperty yawstep;
 
+    String speed;
+
 
     public void setViewModel(ViewModel viewModel) {
         this.viewModel = viewModel;
         resultOpenCSV = new SimpleStringProperty();
         chosenCSVFilePath = new SimpleStringProperty();
-        viewModel.chosenCSVFilePathProperty().bind(chosenCSVFilePath);
+        viewModel.getChosenCSVFilePathProperty().bind(chosenCSVFilePath);
         resultOpenCSV.bind(viewModel.OpenCSVProperty());
         resultLoadXML = new SimpleStringProperty();
         chosenXMLFilePath = new SimpleStringProperty();
-        viewModel.chosenXMLFilePathProperty().bind(chosenXMLFilePath);
+        viewModel.getChosenXMLFilePathProperty().bind(chosenXMLFilePath);
         resultLoadXML.bind(viewModel.loadXMLProperty());
         minAileron = new SimpleDoubleProperty();
         minAileron.bind(viewModel.getMinAileron());
@@ -282,7 +284,14 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 Platform.runLater(() -> myButtons.timer.setText(time.getValue()));
-                myButtons.slider.setValue(myButtons.slider.getValue() + 1);
+                if (speed.intern() == "x1.0")
+                    myButtons.slider.setValue(myButtons.slider.getValue() + 1);
+                if (speed.intern() == "x2.0")
+                    myButtons.slider.setValue(myButtons.slider.getValue() + 2);
+                if (speed.intern() == "x1.5")
+                    myButtons.slider.setValue(myButtons.slider.getValue() + 1.5);
+                if (speed.intern() == "x0.5")
+                    myButtons.slider.setValue(myButtons.slider.getValue() + 0.5);
             }
         });
 
@@ -309,7 +318,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     }
 
     public void GetChoice() {
-        String speed = (String) myButtons.playSpeedDropDown.getValue();
+        speed = (String) myButtons.playSpeedDropDown.getValue();
         viewModel.VMGetChoice(speed);
     }
 
@@ -342,7 +351,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     public void update(Observable o, Object arg) {
         String p = (String) arg;
         if (p.intern() == "colNames") {
-            for (String name : viewModel.colsNames) {
+            for (String name : viewModel.getColsNames()) {
                 colsNames.add(name);
             }
         }
