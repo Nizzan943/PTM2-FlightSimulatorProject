@@ -173,6 +173,8 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
                 myClocksPannel.pitch.setText("pitch: 0.0");
                 myClocksPannel.roll.setText("roll: 0.0");
                 myClocksPannel.yaw.setText("yaw: 0.0");
+
+
             }
         }
     }
@@ -204,6 +206,99 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
                 myJoystick.throttle.setMin(minThrottle.getValue());
                 viewModel.VMsetMaxThrottle();
                 myJoystick.throttle.setMax(maxThrottle.getValue());
+
+                aileronstep.addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        myJoystick.innerCircle.setCenterX(aileronstep.getValue() * 100);
+                    }
+                });
+
+                elevatorstep.addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        myJoystick.innerCircle.setCenterY(elevatorstep.getValue() * 100);
+                    }
+                });
+
+                myButtons.slider.valueProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        if (((double)oldValue + 1 != (double)newValue) && (((double)oldValue + 0.5) != (double)newValue) && (((double)oldValue + 1.5) != (double)newValue) && (((double)oldValue + 2) != (double)newValue))
+                            viewModel.VMtimeslider(myButtons.slider.getValue());
+                    }
+                });
+
+                altimeterstep.addListener(new ChangeListener<String>() {
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                        Platform.runLater(() -> myClocksPannel.altimeter.setText("altimeter: " + altimeterstep.getValue()));
+                    }
+                });
+
+                airspeedstep.addListener(new ChangeListener<String>() {
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                        Platform.runLater(() -> myClocksPannel.airspeed.setText("airspeed: " + airspeedstep.getValue()));
+                    }
+                });
+
+                directionstep.addListener(new ChangeListener<String>() {
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                        Platform.runLater(() -> myClocksPannel.direction.setText("direction: " + directionstep.getValue()));
+                    }
+                });
+
+                pitchstep.addListener(new ChangeListener<String>() {
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                        Platform.runLater(() -> myClocksPannel.pitch.setText("pitch: " + pitchstep.getValue()));
+                    }
+                });
+
+                rollstep.addListener(new ChangeListener<String>() {
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                        Platform.runLater(() -> myClocksPannel.roll.setText("roll: " + rollstep.getValue()));
+                    }
+                });
+
+                yawstep.addListener(new ChangeListener<String>() {
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                        Platform.runLater(() -> myClocksPannel.yaw.setText("yaw: " + yawstep.getValue()));
+                    }
+                });
+
+                time.addListener(new ChangeListener<String>() {
+                    @Override
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                        Platform.runLater(() -> myButtons.timer.setText(time.getValue()));
+                        if (speed.intern() == "x1.0")
+                            myButtons.slider.setValue(myButtons.slider.getValue() + 1);
+                        if (speed.intern() == "x2.0")
+                            myButtons.slider.setValue(myButtons.slider.getValue() + 2);
+                        if (speed.intern() == "x1.5")
+                            myButtons.slider.setValue(myButtons.slider.getValue() + 1.5);
+                        if (speed.intern() == "x0.5")
+                            myButtons.slider.setValue(myButtons.slider.getValue() + 0.5);
+                    }
+                });
+
+                rudderstep.addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        myJoystick.rudder.setValue(rudderstep.getValue());
+                    }
+                });
+
+                throttlestep.addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        myJoystick.throttle.setValue(throttlestep.getValue());
+                    }
+                });
             }
         }
     }
@@ -238,105 +333,11 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     int flag = 0;
 
     public void Play() {
-        aileronstep.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                myJoystick.innerCircle.setCenterX(aileronstep.getValue() * 100);
-            }
-        });
-
-        elevatorstep.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                myJoystick.innerCircle.setCenterY(elevatorstep.getValue() * 100);
-            }
-        });
-
-        myButtons.slider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                 if (((double)oldValue + 1 != (double)newValue) && (((double)oldValue + 0.5) != (double)newValue) && (((double)oldValue + 1.5) != (double)newValue) && (((double)oldValue + 2) != (double)newValue))
-                     viewModel.VMtimeslider(myButtons.slider.getValue());
-            }
-        });
-
-        altimeterstep.addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(() -> myClocksPannel.altimeter.setText("altimeter: " + altimeterstep.getValue()));
-            }
-        });
-
-        airspeedstep.addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(() -> myClocksPannel.airspeed.setText("airspeed: " + airspeedstep.getValue()));
-            }
-        });
-
-        directionstep.addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(() -> myClocksPannel.direction.setText("direction: " + directionstep.getValue()));
-            }
-        });
-
-        pitchstep.addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(() -> myClocksPannel.pitch.setText("pitch: " + pitchstep.getValue()));
-            }
-        });
-
-        rollstep.addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(() -> myClocksPannel.roll.setText("roll: " + rollstep.getValue()));
-            }
-        });
-
-        yawstep.addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(() -> myClocksPannel.yaw.setText("yaw: " + yawstep.getValue()));
-            }
-        });
-
-        time.addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(() -> myButtons.timer.setText(time.getValue()));
-                if (speed.intern() == "x1.0")
-                    myButtons.slider.setValue(myButtons.slider.getValue() + 1);
-                if (speed.intern() == "x2.0")
-                    myButtons.slider.setValue(myButtons.slider.getValue() + 2);
-                if (speed.intern() == "x1.5")
-                    myButtons.slider.setValue(myButtons.slider.getValue() + 1.5);
-                if (speed.intern() == "x0.5")
-                    myButtons.slider.setValue(myButtons.slider.getValue() + 0.5);
-            }
-        });
-
-        rudderstep.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                myJoystick.rudder.setValue(rudderstep.getValue());
-            }
-        });
-
-        throttlestep.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                myJoystick.throttle.setValue(throttlestep.getValue());
-            }
-        });
-
         if (flag == 0) {
             myButtons.playSpeedDropDown.setValue("x1.0");
             flag = 1;
         }
         viewModel.VMplay();
-
     }
 
     public void GetChoice() {
@@ -344,9 +345,20 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         viewModel.VMGetChoice(speed);
     }
 
-    public void Stop() {
-        myButtons.slider.setValue(0);
+    public void Stop()
+    {
         myButtons.timer.setText("00:00:00.000");
+        myClocksPannel.altimeter.setText("altimeter: 0.0");
+        myClocksPannel.airspeed.setText("airspeed: 0.0");
+        myClocksPannel.direction.setText("direction: 0.0");
+        myClocksPannel.pitch.setText("pitch: 0.0");
+        myClocksPannel.roll.setText("roll: 0.0");
+        myClocksPannel.yaw.setText("yaw: 0.0");
+        myButtons.slider.setValue(0);
+        myJoystick.innerCircle.setCenterX(0);
+        myJoystick.innerCircle.setCenterY(0);
+        myJoystick.throttle.setValue(0);
+        myJoystick.rudder.setValue(0);
         viewModel.VMstop();
     }
 

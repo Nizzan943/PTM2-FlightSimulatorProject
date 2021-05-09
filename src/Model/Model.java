@@ -149,27 +149,32 @@ public class Model extends AllModels {
                 timerLoop(1);
             });
             timer10Thread.start();
-
         }
-        if (flag == 1) {
-            if (simulator20Thread != null) {
-                simulator20Thread.resume();
-                timer20Thread.resume();
-            }
-            if (simulator05Thread != null) {
-                simulator05Thread.resume();
-                timer05Thread.resume();
-            }
-            if (simulator15Thread != null) {
-                simulator15Thread.resume();
-                timer15Thread.resume();
-            }
-            if (simulator10Thread != null) {
+        if (flag == 1)
+        {
+            if (simulator10Thread != null)
+            {
                 simulator10Thread.resume();
                 timer10Thread.resume();
             }
+            else if (simulator20Thread != null)
+            {
+                simulator20Thread.resume();
+                timer20Thread.resume();
+            }
+            else if (simulator15Thread != null)
+            {
+                simulator15Thread.resume();
+                timer15Thread.resume();
+            }
+            else if (simulator05Thread != null)
+            {
+                simulator05Thread.resume();
+                timer05Thread.resume();
+            }
             flag = 0;
         }
+
     }
 
     public void changeSpeed(double speed) {
@@ -408,21 +413,29 @@ public class Model extends AllModels {
         }
     }
 
-    public void modelpause() {
-        flag = 1;
-        if (simulator10Thread != null) {
+    public void modelpause()
+    {
+        if (simulator10Thread != null)
+        {
             simulator10Thread.suspend();
             timer10Thread.suspend();
-        } else if (simulator15Thread != null) {
+        }
+        else if (simulator15Thread != null)
+        {
             simulator15Thread.suspend();
             timer15Thread.suspend();
-        } else if (simulator05Thread != null) {
-            simulator05Thread.suspend();
-            timer05Thread.suspend();
-        } else if (simulator20Thread != null) {
+        }
+        else if (simulator20Thread != null)
+        {
             simulator20Thread.suspend();
             timer20Thread.suspend();
         }
+        else if (simulator05Thread != null)
+        {
+            simulator05Thread.suspend();
+            timer05Thread.suspend();
+        }
+        flag = 1;
     }
 
     public void modelPlus15() {
@@ -477,10 +490,16 @@ public class Model extends AllModels {
     }
 
     //change
-    public void modelStop() {
+    public void modelStop()
+    {
         numofrow = 0;
         nowTime = 0;
         modelpause();
+        simulator10Thread = null;
+        simulator05Thread = null;
+        simulator15Thread = null;
+        simulator20Thread = null;
+        flag = 0;
     }
 
 }
