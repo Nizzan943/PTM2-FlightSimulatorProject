@@ -160,12 +160,12 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
                 myButtons.timer.setText("00:00:00.000");
                 viewModel.setMaxTimeSlider();
                 myButtons.slider.setMax(maxtimeSlider.getValue());
-                myClocksPannel.altimeter.setText("altimeter: 0");
-                myClocksPannel.airspeed.setText("airspeed: 0");
-                myClocksPannel.direction.setText("direction: 0");
-                myClocksPannel.pitch.setText("pitch: 0");
-                myClocksPannel.roll.setText("roll: 0");
-                myClocksPannel.yaw.setText("yaw: 0");
+                myClocksPannel.altimeter.setText("altimeter: 0.0");
+                myClocksPannel.airspeed.setText("airspeed: 0.0");
+                myClocksPannel.direction.setText("direction: 0.0");
+                myClocksPannel.pitch.setText("pitch: 0.0");
+                myClocksPannel.roll.setText("roll: 0.0");
+                myClocksPannel.yaw.setText("yaw: 0.0");
             }
         }
     }
@@ -324,6 +324,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
 
     public void Stop() {
         myButtons.slider.setValue(0);
+        myButtons.timer.setText("00:00:00.000");
         viewModel.VMstop();
     }
 
@@ -333,18 +334,22 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
 
     public void Plus15() {
         viewModel.VMplus15();
+        myButtons.slider.setValue(myButtons.slider.getValue() + 15);
     }
 
     public void Minus15() {
         viewModel.VMminus15();
+        myButtons.slider.setValue(myButtons.slider.getValue() - 15);
     }
 
     public void Minus30() {
         viewModel.VMminus30();
+        myButtons.slider.setValue(myButtons.slider.getValue() - 30);
     }
 
     public void Plus30() {
         viewModel.VMplus30();
+        myButtons.slider.setValue(myButtons.slider.getValue() + 30);
     }
 
     @Override
