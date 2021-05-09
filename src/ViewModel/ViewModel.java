@@ -38,11 +38,11 @@ public class ViewModel extends AllViewModels {
         return colsNames;
     }
 
-    public StringProperty getChosenXMLFilePathProperty() {
+    public StringProperty getChosenXMLFilePath() {
         return chosenXMLFilePath;
     }
 
-    public StringProperty getChosenCSVFilePathProperty() {
+    public StringProperty getChosenCSVFilePath() {
         return chosenCSVFilePath;
     }
 
@@ -136,12 +136,12 @@ public class ViewModel extends AllViewModels {
         elevatorstep = new SimpleFloatProperty();
     }
 
-    public StringProperty loadXMLProperty() {
+    public StringProperty getLoadXMLResult() {
         return loadXMLResult;
     }
 
 
-    public StringProperty OpenCSVProperty() {
+    public StringProperty getOpenCSVResult() {
         return openCSVResult;
     }
 

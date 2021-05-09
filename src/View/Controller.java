@@ -94,12 +94,12 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         this.viewModel = viewModel;
         resultOpenCSV = new SimpleStringProperty();
         chosenCSVFilePath = new SimpleStringProperty();
-        viewModel.getChosenCSVFilePathProperty().bind(chosenCSVFilePath);
-        resultOpenCSV.bind(viewModel.OpenCSVProperty());
+        viewModel.getChosenCSVFilePath().bind(chosenCSVFilePath);
+        resultOpenCSV.bind(viewModel.getOpenCSVResult());
         resultLoadXML = new SimpleStringProperty();
         chosenXMLFilePath = new SimpleStringProperty();
-        viewModel.getChosenXMLFilePathProperty().bind(chosenXMLFilePath);
-        resultLoadXML.bind(viewModel.loadXMLProperty());
+        viewModel.getChosenXMLFilePath().bind(chosenXMLFilePath);
+        resultLoadXML.bind(viewModel.getLoadXMLResult());
         minRudder = new SimpleDoubleProperty();
         minRudder.bind(viewModel.getMinRudder());
         maxRudder = new SimpleDoubleProperty();
