@@ -87,15 +87,15 @@ public class Model extends AllModels {
         TimeSeries timeSeries = new TimeSeries(chosenPath);
         for (int i = 0; i < timeSeries.getCols().length; i++) {
             int k = 0;
-            while (k != 11) {
+            while (k != 10) {
                 if (timeSeries.getCols()[i].getName().intern() == XML_settings.PropertyList.get(k).getRealName().intern()) {
-                    ;
-                    CSVindexmap.put(XML_settings.PropertyList.get(k).getAssosicateName(), i);
+                    if (CSVindexmap.get(XML_settings.PropertyList.get(k).getAssosicateName()) == null)
+                        CSVindexmap.put(XML_settings.PropertyList.get(k).getAssosicateName(), i);
                     break;
                 }
                 k++;
             }
-            if (CSVindexmap.size() == 11)
+            if (CSVindexmap.size() == 10)
                 break;
         }
 
@@ -113,13 +113,12 @@ public class Model extends AllModels {
                 break;
         }
 
-        if (CSVindexmap.size() != 11)
+        if (CSVindexmap.size() != 10)
             resultOpenCSV = "Missing Arguments";
-        if (CSVindexmap.size() == 11 && flag1 == 0) {
+        if (CSVindexmap.size() == 10 && flag1 == 0) {
             resultOpenCSV = "OK";
-            for (String colName : XML_settings.RealToAssosicate.keySet()) {
-                if (colName == "slip-skid-ball_indicated-slip-skid" || colName == "pitch-deg" || colName == "roll-deg" || colName == "altimeter_indicated-altitude-ft" || colName == "indicated-heading-deg" || colName == "airspeed-kt")
-                    colsNames.add(colName);
+            for (TimeSeries.col col : timeSeries.getCols()) {
+                colsNames.add(col.getName());
             }
             CSVpath = chosenPath;
             try {
@@ -191,16 +190,16 @@ public class Model extends AllModels {
 
     int numofrow = 0;
 
-    public float getAileronstep() {
-        return aileronstep;
+    public float getRudderstep() {
+        return rudderstep;
     }
 
-    public float getElevatorstep() {
-        return elevatorstep;
+    public float getThrottlestep() {
+        return throttlestep;
     }
 
-    private float aileronstep;
-    private float elevatorstep;
+    private float rudderstep;
+    private float throttlestep;
 
     private float altimeterstep;
     private float airspeedstep;
@@ -238,29 +237,29 @@ public class Model extends AllModels {
         while (numofrow != in.getRows().size() - 1) {
             out.println(in.getRows().get(numofrow));
             out.flush();
-            aileronstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("aileron"))].getFloats().get(numofrow);
+            rudderstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("rudder"))].getFloats().get(numofrow);
             setChanged();
-            notifyObservers("aileron");
-            elevatorstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("elevator"))].getFloats().get(numofrow);
+            notifyObservers("rudder");
+            throttlestep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("throttle"))].getFloats().get(numofrow);
             setChanged();
-            notifyObservers("elevator");
+            notifyObservers("throttle");
 
             altimeterstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("altimeter_indicated-altitude-ft"))].getFloats().get(numofrow);
             setChanged();
             notifyObservers("altimeter");
-            airspeedstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("airspeed-kt"))].getFloats().get(numofrow);
+            airspeedstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("airspeed-indicator_indicated-speed-kt"))].getFloats().get(numofrow);
             setChanged();
             notifyObservers("airspeed");
             directionstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("indicated-heading-deg"))].getFloats().get(numofrow);
             setChanged();
             notifyObservers("direction");
-            pitchstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("pitch-deg"))].getFloats().get(numofrow);
+            pitchstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("attitude-indicator_internal-pitch-deg"))].getFloats().get(numofrow);
             setChanged();
             notifyObservers("pitch");
-            rollstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("roll-deg"))].getFloats().get(numofrow);
+            rollstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("attitude-indicator_indicated-roll-deg"))].getFloats().get(numofrow);
             setChanged();
             notifyObservers("roll");
-            yawstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("slip-skid-ball_indicated-slip-skid"))].getFloats().get(numofrow);
+            yawstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("side-slip-deg"))].getFloats().get(numofrow);
             setChanged();
             notifyObservers("yaw");
             changeSpeed(speed);
@@ -440,20 +439,20 @@ public class Model extends AllModels {
         }
     }
 
-    public double modelSetMinAileron() {
-        return XML_settings.min.get("aileron");
+    public double modelSetMinRudder() {
+        return XML_settings.min.get("rudder");
     }
 
-    public double modelSetMaxAileron() {
-        return XML_settings.max.get("aileron");
+    public double modelSetMaxRudder() {
+        return XML_settings.max.get("rudder");
     }
 
-    public double modelSetMinElevator() {
-        return XML_settings.min.get("elevator");
+    public double modelSetMinThrottle() {
+        return XML_settings.min.get("throttle");
     }
 
-    public double modelSetMaxElevator() {
-        return XML_settings.max.get("elevator");
+    public double modelSetMaxThrottle() {
+        return XML_settings.max.get("throttle");
     }
 
     public double modelSetMaxTimeSlider() {

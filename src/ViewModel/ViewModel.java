@@ -10,10 +10,10 @@ public class ViewModel extends AllViewModels {
     Model model;
     StringProperty loadXMLResult;
     StringProperty openCSVResult;
-    DoubleProperty minAileron;
-    DoubleProperty maxAileron;
-    DoubleProperty minElevator;
-    DoubleProperty maxElevator;
+    DoubleProperty minRudder;
+    DoubleProperty maxRudder;
+    DoubleProperty minThrottle;
+    DoubleProperty maxThrottle;
     DoubleProperty maxTimeSlider;
     StringProperty chosenXMLFilePath;
     StringProperty chosenCSVFilePath;
@@ -21,8 +21,8 @@ public class ViewModel extends AllViewModels {
     private ArrayList<String> colsNames;
 
     StringProperty time;
-    FloatProperty aileronstep;
-    FloatProperty elevatorstep;
+    FloatProperty rudderstep;
+    FloatProperty throttlestep;
 
     StringProperty altimeterstep;
     StringProperty airspeedstep;
@@ -43,20 +43,20 @@ public class ViewModel extends AllViewModels {
         return chosenCSVFilePath;
     }
 
-    public DoubleProperty getMinAileron() {
-        return minAileron;
+    public DoubleProperty getMinRudder() {
+        return minRudder;
     }
 
-    public DoubleProperty getMaxAileron() {
-        return maxAileron;
+    public DoubleProperty getMaxRudder() {
+        return maxRudder;
     }
 
-    public DoubleProperty getMinElevator() {
-        return minElevator;
+    public DoubleProperty getMinThrottle() {
+        return minThrottle;
     }
 
-    public DoubleProperty getMaxElevator() {
-        return maxElevator;
+    public DoubleProperty getMaxThrottle() {
+        return maxThrottle;
     }
 
     public DoubleProperty getMaxTimeSlider() {
@@ -68,12 +68,12 @@ public class ViewModel extends AllViewModels {
         return time;
     }
 
-    public FloatProperty getAileronstep() {
-        return aileronstep;
+    public FloatProperty getRudderstep() {
+        return rudderstep;
     }
 
-    public FloatProperty getElevatorstep() {
-        return elevatorstep;
+    public FloatProperty getThrottlestep() {
+        return throttlestep;
     }
 
     public StringProperty getAltimeterstep() {
@@ -106,15 +106,15 @@ public class ViewModel extends AllViewModels {
         openCSVResult = new SimpleStringProperty();
         chosenXMLFilePath = new SimpleStringProperty();
         chosenCSVFilePath = new SimpleStringProperty();
-        minAileron = new SimpleDoubleProperty();
-        maxAileron = new SimpleDoubleProperty();
-        minElevator = new SimpleDoubleProperty();
-        maxElevator = new SimpleDoubleProperty();
+        minRudder = new SimpleDoubleProperty();
+        maxRudder = new SimpleDoubleProperty();
+        minThrottle = new SimpleDoubleProperty();
+        maxThrottle = new SimpleDoubleProperty();
         maxTimeSlider = new SimpleDoubleProperty();
         colsNames = new ArrayList<>();
         time = new SimpleStringProperty();
-        aileronstep = new SimpleFloatProperty();
-        elevatorstep = new SimpleFloatProperty();
+        rudderstep = new SimpleFloatProperty();
+        throttlestep = new SimpleFloatProperty();
         altimeterstep = new SimpleStringProperty();
         airspeedstep = new SimpleStringProperty();
         directionstep = new SimpleStringProperty();
@@ -167,10 +167,10 @@ public class ViewModel extends AllViewModels {
         }
         if (p.intern() == "time")
             time.set(model.gettime());
-        if (p.intern() == "aileron")
-            aileronstep.set(model.getAileronstep());
-        if (p.intern() == "elevator")
-            elevatorstep.set(model.getElevatorstep());
+        if (p.intern() == "rudder")
+            rudderstep.set(model.getRudderstep());
+        if (p.intern() == "throttle")
+            throttlestep.set(model.getThrottlestep());
         if (p.intern() == "altimeter")
             altimeterstep.set(model.getAltimeterstep() + "");
         if (p.intern() == "airspeed")
@@ -213,20 +213,20 @@ public class ViewModel extends AllViewModels {
         model.modelPlus30();
     }
 
-    public void VMsetMinAileron() {
-        minAileron.setValue(model.modelSetMinAileron());
+    public void VMsetMinRudder() {
+        minRudder.setValue(model.modelSetMinRudder());
     }
 
-    public void VMsetMaxAileron() {
-        maxAileron.setValue(model.modelSetMaxAileron());
+    public void VMsetMaxRudder() {
+        maxRudder.setValue(model.modelSetMaxRudder());
     }
 
-    public void VMsetMinElevator() {
-        minElevator.setValue(model.modelSetMinElevator());
+    public void VMsetMinThrottle() {
+        minThrottle.setValue(model.modelSetMinThrottle());
     }
 
-    public void VMsetMaxElevator() {
-        maxElevator.setValue(model.modelSetMaxElevator());
+    public void VMsetMaxThrottle() {
+        maxThrottle.setValue(model.modelSetMaxThrottle());
     }
 
     public void setMaxTimeSlider() {

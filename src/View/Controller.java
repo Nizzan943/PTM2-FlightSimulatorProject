@@ -65,17 +65,17 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
 
     StringProperty resultOpenCSV;
     StringProperty chosenCSVFilePath;
-    DoubleProperty minAileron;
-    DoubleProperty maxAileron;
-    DoubleProperty minElevator;
-    DoubleProperty maxElevator;
+    DoubleProperty minRudder;
+    DoubleProperty maxRudder;
+    DoubleProperty minThrottle;
+    DoubleProperty maxThrottle;
     DoubleProperty maxtimeSlider;
     ArrayList<String> colsNames = new ArrayList<>();
     ViewModel viewModel;
 
     StringProperty time;
-    FloatProperty aileronstep;
-    FloatProperty elevatorstep;
+    FloatProperty rudderstep;
+    FloatProperty throttlestep;
 
     StringProperty altimeterstep;
     StringProperty airspeedstep;
@@ -97,24 +97,24 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         chosenXMLFilePath = new SimpleStringProperty();
         viewModel.getChosenXMLFilePathProperty().bind(chosenXMLFilePath);
         resultLoadXML.bind(viewModel.loadXMLProperty());
-        minAileron = new SimpleDoubleProperty();
-        minAileron.bind(viewModel.getMinAileron());
-        maxAileron = new SimpleDoubleProperty();
-        maxAileron.bind(viewModel.getMaxAileron());
-        minElevator = new SimpleDoubleProperty();
-        minElevator.bind(viewModel.getMinElevator());
-        maxElevator = new SimpleDoubleProperty();
-        maxElevator.bind(viewModel.getMaxElevator());
+        minRudder = new SimpleDoubleProperty();
+        minRudder.bind(viewModel.getMinRudder());
+        maxRudder = new SimpleDoubleProperty();
+        maxRudder.bind(viewModel.getMaxRudder());
+        minThrottle = new SimpleDoubleProperty();
+        minThrottle.bind(viewModel.getMinThrottle());
+        maxThrottle = new SimpleDoubleProperty();
+        maxThrottle.bind(viewModel.getMaxThrottle());
         maxtimeSlider = new SimpleDoubleProperty();
         maxtimeSlider.bind(viewModel.getMaxTimeSlider());
 
         time = new SimpleStringProperty();
         time.bind(viewModel.getTime());
 
-        aileronstep = new SimpleFloatProperty();
-        aileronstep.bind(viewModel.getAileronstep());
-        elevatorstep = new SimpleFloatProperty();
-        elevatorstep.bind(viewModel.getElevatorstep());
+        rudderstep = new SimpleFloatProperty();
+        rudderstep.bind(viewModel.getRudderstep());
+        throttlestep = new SimpleFloatProperty();
+        throttlestep.bind(viewModel.getThrottlestep());
 
         altimeterstep = new SimpleStringProperty();
         altimeterstep.bind(viewModel.getAltimeterstep());
@@ -189,14 +189,14 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
                 MissingArgumentAlert();
             else {
                 SuccessAlert();
-                viewModel.VMsetMinAileron();
-                myJoystick.aileron.setMin(minAileron.getValue());
-                viewModel.VMsetMaxAileron();
-                myJoystick.aileron.setMax(maxAileron.getValue());
-                viewModel.VMsetMinElevator();
-                myJoystick.elevator.setMin(minElevator.getValue());
-                viewModel.VMsetMaxElevator();
-                myJoystick.elevator.setMax(maxElevator.getValue());
+                viewModel.VMsetMinRudder();
+                myJoystick.rudder.setMin(minRudder.getValue());
+                viewModel.VMsetMaxRudder();
+                myJoystick.rudder.setMax(maxRudder.getValue());
+                viewModel.VMsetMinThrottle();
+                myJoystick.throttle.setMin(minThrottle.getValue());
+                viewModel.VMsetMaxThrottle();
+                myJoystick.throttle.setMax(maxThrottle.getValue());
             }
         }
     }
@@ -295,17 +295,17 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
             }
         });
 
-        aileronstep.addListener(new ChangeListener<Number>() {
+        rudderstep.addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                myJoystick.aileron.setValue(aileronstep.getValue());
+                myJoystick.rudder.setValue(rudderstep.getValue());
             }
         });
 
-        elevatorstep.addListener(new ChangeListener<Number>() {
+        throttlestep.addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                myJoystick.elevator.setValue(elevatorstep.getValue());
+                myJoystick.throttle.setValue(throttlestep.getValue());
             }
         });
 

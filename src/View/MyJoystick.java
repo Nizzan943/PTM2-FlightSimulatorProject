@@ -12,24 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyJoystick extends Pane {
-    Slider aileron;
-    Slider elevator;
+    Slider rudder;
+    Slider throttle;
 
     public List<Node> set() {
         List<Node> ret = new ArrayList<>();
 
-        aileron = new Slider();
-        aileron.setLayoutX(620);
-        aileron.setLayoutY(174);
-        aileron.setPrefSize(160, 14);
-        ret.add(aileron);
+        rudder = new Slider();
+        rudder.setLayoutX(620);
+        rudder.setLayoutY(174);
+        rudder.setPrefSize(160, 14);
+        ret.add(rudder);
 
-        elevator = new Slider();
-        elevator.setLayoutX(620);
-        elevator.setLayoutY(33);
-        elevator.setPrefSize(14, 139);
-        elevator.setOrientation(Orientation.VERTICAL);
-        ret.add(elevator);
+        throttle = new Slider();
+        throttle.setLayoutX(620);
+        throttle.setLayoutY(33);
+        throttle.setPrefSize(14, 139);
+        throttle.setOrientation(Orientation.VERTICAL);
+        ret.add(throttle);
 
 
         Circle outerCircle = new Circle();

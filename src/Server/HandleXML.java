@@ -45,7 +45,7 @@ public class HandleXML {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < 10; i++) {
             try {
                 UserSettings decodedSettings = (UserSettings) decoder.readObject();
                 PropertyList.add(decodedSettings);
