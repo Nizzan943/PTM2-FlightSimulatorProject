@@ -24,12 +24,12 @@ public class ViewModel extends AllViewModels {
     FloatProperty rudderstep;
     FloatProperty throttlestep;
 
-    StringProperty altimeterstep;
-    StringProperty airspeedstep;
-    StringProperty directionstep;
-    StringProperty pitchstep;
-    StringProperty rollstep;
-    StringProperty yawstep;
+    FloatProperty altimeterstep;
+    FloatProperty airspeedstep;
+    FloatProperty directionstep;
+    FloatProperty pitchstep;
+    FloatProperty rollstep;
+    FloatProperty yawstep;
 
     FloatProperty aileronstep;
     FloatProperty elevatorstep;
@@ -79,27 +79,27 @@ public class ViewModel extends AllViewModels {
         return throttlestep;
     }
 
-    public StringProperty getAltimeterstep() {
+    public FloatProperty getAltimeterstep() {
         return altimeterstep;
     }
 
-    public StringProperty getAirspeedstep() {
+    public FloatProperty getAirspeedstep() {
         return airspeedstep;
     }
 
-    public StringProperty getDirectionstep() {
+    public FloatProperty getDirectionstep() {
         return directionstep;
     }
 
-    public StringProperty getPitchstep() {
+    public FloatProperty getPitchstep() {
         return pitchstep;
     }
 
-    public StringProperty getRollstep() {
+    public FloatProperty getRollstep() {
         return rollstep;
     }
 
-    public StringProperty getYawstep() {
+    public FloatProperty getYawstep() {
         return yawstep;
     }
 
@@ -126,12 +126,12 @@ public class ViewModel extends AllViewModels {
         time = new SimpleStringProperty();
         rudderstep = new SimpleFloatProperty();
         throttlestep = new SimpleFloatProperty();
-        altimeterstep = new SimpleStringProperty();
-        airspeedstep = new SimpleStringProperty();
-        directionstep = new SimpleStringProperty();
-        pitchstep = new SimpleStringProperty();
-        rollstep = new SimpleStringProperty();
-        yawstep = new SimpleStringProperty();
+        altimeterstep = new SimpleFloatProperty();
+        airspeedstep = new SimpleFloatProperty();
+        directionstep = new SimpleFloatProperty();
+        pitchstep = new SimpleFloatProperty();
+        rollstep = new SimpleFloatProperty();
+        yawstep = new SimpleFloatProperty();
         aileronstep = new SimpleFloatProperty();
         elevatorstep = new SimpleFloatProperty();
     }
@@ -185,17 +185,17 @@ public class ViewModel extends AllViewModels {
         if (p.intern() == "throttle")
             throttlestep.set(model.getThrottlestep());
         if (p.intern() == "altimeter")
-            altimeterstep.set(model.getAltimeterstep() + "");
+            altimeterstep.set(model.getAltimeterstep());
         if (p.intern() == "airspeed")
-            airspeedstep.set(model.getAirspeedstep() + "");
+            airspeedstep.set(model.getAirspeedstep());
         if (p.intern() == "direction")
-            directionstep.set(model.getDirectionstep() + "");
+            directionstep.set(model.getDirectionstep());
         if (p.intern() == "pitch")
-            pitchstep.set(model.getPitchstep() + "");
+            pitchstep.set(model.getPitchstep());
         if (p.intern() == "roll")
-            rollstep.set(model.getRollstep() + "");
+            rollstep.set(model.getRollstep());
         if (p.intern() == "yaw")
-            yawstep.set(model.getYawstep() + "");
+            yawstep.set(model.getYawstep());
         if (p.intern() == "aileron")
             aileronstep.set(model.getAileronstep());
         if (p.intern() == "elevator")

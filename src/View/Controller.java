@@ -80,12 +80,12 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     FloatProperty aileronstep;
     FloatProperty elevatorstep;
 
-    StringProperty altimeterstep;
-    StringProperty airspeedstep;
-    StringProperty directionstep;
-    StringProperty pitchstep;
-    StringProperty rollstep;
-    StringProperty yawstep;
+    FloatProperty altimeterstep;
+    FloatProperty airspeedstep;
+    FloatProperty directionstep;
+    FloatProperty pitchstep;
+    FloatProperty rollstep;
+    FloatProperty yawstep;
 
     String speed;
 
@@ -119,17 +119,17 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         throttlestep = new SimpleFloatProperty();
         throttlestep.bind(viewModel.getThrottlestep());
 
-        altimeterstep = new SimpleStringProperty();
+        altimeterstep = new SimpleFloatProperty();
         altimeterstep.bind(viewModel.getAltimeterstep());
-        airspeedstep = new SimpleStringProperty();
+        airspeedstep = new SimpleFloatProperty();
         airspeedstep.bind(viewModel.getAirspeedstep());
-        directionstep = new SimpleStringProperty();
+        directionstep = new SimpleFloatProperty();
         directionstep.bind(viewModel.getDirectionstep());
-        pitchstep = new SimpleStringProperty();
+        pitchstep = new SimpleFloatProperty();
         pitchstep.bind(viewModel.getPitchstep());
-        rollstep = new SimpleStringProperty();
+        rollstep = new SimpleFloatProperty();
         rollstep.bind(viewModel.getRollstep());
-        yawstep = new SimpleStringProperty();
+        yawstep = new SimpleFloatProperty();
         yawstep.bind(viewModel.getYawstep());
 
         aileronstep = new SimpleFloatProperty();
@@ -229,44 +229,44 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
                     }
                 });
 
-                altimeterstep.addListener(new ChangeListener<String>() {
+                altimeterstep.addListener(new ChangeListener<Number>() {
                     @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                         Platform.runLater(() -> myClocksPannel.altimeter.setText("altimeter: " + altimeterstep.getValue()));
                     }
                 });
 
-                airspeedstep.addListener(new ChangeListener<String>() {
+                airspeedstep.addListener(new ChangeListener<Number>() {
                     @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                         Platform.runLater(() -> myClocksPannel.airspeed.setText("airspeed: " + airspeedstep.getValue()));
                     }
                 });
 
-                directionstep.addListener(new ChangeListener<String>() {
+                directionstep.addListener(new ChangeListener<Number>() {
                     @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                         Platform.runLater(() -> myClocksPannel.direction.setText("direction: " + directionstep.getValue()));
                     }
                 });
 
-                pitchstep.addListener(new ChangeListener<String>() {
+                pitchstep.addListener(new ChangeListener<Number>() {
                     @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                         Platform.runLater(() -> myClocksPannel.pitch.setText("pitch: " + pitchstep.getValue()));
                     }
                 });
 
-                rollstep.addListener(new ChangeListener<String>() {
+                rollstep.addListener(new ChangeListener<Number>() {
                     @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                         Platform.runLater(() -> myClocksPannel.roll.setText("roll: " + rollstep.getValue()));
                     }
                 });
 
-                yawstep.addListener(new ChangeListener<String>() {
+                yawstep.addListener(new ChangeListener<Number>() {
                     @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                         Platform.runLater(() -> myClocksPannel.yaw.setText("yaw: " + yawstep.getValue()));
                     }
                 });
