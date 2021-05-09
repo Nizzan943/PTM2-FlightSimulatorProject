@@ -234,7 +234,8 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         myButtons.slider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                viewModel.VMtimeslider(myButtons.slider.getValue());
+                if (observable.equals(onMouseDraggedProperty()))
+                    viewModel.VMtimeslider(myButtons.slider.getValue());
             }
         });
 
@@ -284,6 +285,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 Platform.runLater(() -> myButtons.timer.setText(time.getValue()));
+
                 if (speed.intern() == "x1.0")
                     myButtons.slider.setValue(myButtons.slider.getValue() + 1);
                 if (speed.intern() == "x2.0")

@@ -152,10 +152,6 @@ public class Model extends AllModels {
 
         }
         if (flag == 1) {
-            if (simulatorThread != null) {
-                simulatorThread.resume();
-                timerThread.resume();
-            }
             if (simulator20Thread != null) {
                 simulator20Thread.resume();
                 timer20Thread.resume();
