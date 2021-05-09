@@ -202,6 +202,16 @@ public class Model extends AllModels {
     private float directionstep;
     private float pitchstep;
 
+    private float aileronstep;
+    private float elevatorstep;
+
+    public float getAileronstep() {
+        return aileronstep;
+    }
+    public float getElevatorstep() {
+        return elevatorstep;
+    }
+
     public float getAltimeterstep() {
         return altimeterstep;
     }
@@ -258,6 +268,12 @@ public class Model extends AllModels {
             yawstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("side-slip-deg"))].getFloats().get(numofrow);
             setChanged();
             notifyObservers("yaw");
+            aileronstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("aileron"))].getFloats().get(numofrow);
+            setChanged();
+            notifyObservers("aileron");
+            elevatorstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("elevator"))].getFloats().get(numofrow);
+            setChanged();
+            notifyObservers("elevator");
             changeSpeed(speed);
             numofrow++;
         }

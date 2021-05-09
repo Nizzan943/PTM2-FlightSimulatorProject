@@ -14,6 +14,7 @@ import java.util.List;
 public class MyJoystick extends Pane {
     Slider rudder;
     Slider throttle;
+    Circle innerCircle;
 
     public List<Node> set() {
         List<Node> ret = new ArrayList<>();
@@ -41,7 +42,7 @@ public class MyJoystick extends Pane {
         outerCircle.setStrokeType(StrokeType.INSIDE);
         ret.add(outerCircle);
 
-        Circle innerCircle = new Circle();
+        innerCircle = new Circle();
         innerCircle.setRadius(35);
         innerCircle.setLayoutX(710);
         innerCircle.setLayoutY(103);

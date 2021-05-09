@@ -31,6 +31,9 @@ public class ViewModel extends AllViewModels {
     StringProperty rollstep;
     StringProperty yawstep;
 
+    FloatProperty aileronstep;
+    FloatProperty elevatorstep;
+
     public ArrayList<String> getColsNames() {
         return colsNames;
     }
@@ -100,6 +103,14 @@ public class ViewModel extends AllViewModels {
         return yawstep;
     }
 
+    public FloatProperty getAileronstep() {
+        return aileronstep;
+    }
+
+    public FloatProperty getElevatorstep() {
+        return elevatorstep;
+    }
+
     public ViewModel(Model model) {
         this.model = model;
         loadXMLResult = new SimpleStringProperty();
@@ -121,6 +132,8 @@ public class ViewModel extends AllViewModels {
         pitchstep = new SimpleStringProperty();
         rollstep = new SimpleStringProperty();
         yawstep = new SimpleStringProperty();
+        aileronstep = new SimpleFloatProperty();
+        elevatorstep = new SimpleFloatProperty();
     }
 
     public StringProperty loadXMLProperty() {
@@ -183,6 +196,10 @@ public class ViewModel extends AllViewModels {
             rollstep.set(model.getRollstep() + "");
         if (p.intern() == "yaw")
             yawstep.set(model.getYawstep() + "");
+        if (p.intern() == "aileron")
+            aileronstep.set(model.getAileronstep());
+        if (p.intern() == "elevator")
+            elevatorstep.set(model.getElevatorstep());
     }
 
     public void VMplay() {

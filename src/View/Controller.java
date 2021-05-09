@@ -77,6 +77,9 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     FloatProperty rudderstep;
     FloatProperty throttlestep;
 
+    FloatProperty aileronstep;
+    FloatProperty elevatorstep;
+
     StringProperty altimeterstep;
     StringProperty airspeedstep;
     StringProperty directionstep;
@@ -129,6 +132,10 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         yawstep = new SimpleStringProperty();
         yawstep.bind(viewModel.getYawstep());
 
+        aileronstep = new SimpleFloatProperty();
+        aileronstep.bind(viewModel.getAileronstep());
+        elevatorstep = new SimpleFloatProperty();
+        elevatorstep.bind(viewModel.getElevatorstep());
     }
 
     public void openCSV() {
@@ -231,11 +238,25 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     int flag = 0;
 
     public void Play() {
+        aileronstep.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                myJoystick.innerCircle.setCenterX(aileronstep.getValue() * 100);
+            }
+        });
+
+        elevatorstep.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                myJoystick.innerCircle.setCenterY(elevatorstep.getValue() * 100);
+            }
+        });
+
         myButtons.slider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (observable.equals(onMouseDraggedProperty()))
-                    viewModel.VMtimeslider(myButtons.slider.getValue());
+                 if (((double)oldValue + 1 != (double)newValue) && (((double)oldValue + 0.5) != (double)newValue) && (((double)oldValue + 1.5) != (double)newValue) && (((double)oldValue + 2) != (double)newValue))
+                     viewModel.VMtimeslider(myButtons.slider.getValue());
             }
         });
 
@@ -285,7 +306,6 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 Platform.runLater(() -> myButtons.timer.setText(time.getValue()));
-
                 if (speed.intern() == "x1.0")
                     myButtons.slider.setValue(myButtons.slider.getValue() + 1);
                 if (speed.intern() == "x2.0")
