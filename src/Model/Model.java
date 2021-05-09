@@ -464,17 +464,11 @@ public class Model extends AllModels {
         nowTime = (long) (second * 1000);
     }
 
+    //change
     public void modelStop() {
-        simulator10Thread = null;
-        timer10Thread = null;
-        simulator15Thread = null;
-        timer15Thread = null;
-        simulator05Thread = null;
-        timer05Thread = null;
-        simulator20Thread = null;
-        timer20Thread = null;
-        nowTime = 0;
         numofrow = 0;
+        nowTime = 0;
+        modelpause();
     }
 
 }
