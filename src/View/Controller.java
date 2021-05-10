@@ -1,6 +1,7 @@
 package View;
 
 import Server.PluginLoader;
+import Server.Point;
 import Server.TimeSeriesAnomalyDetector;
 import ViewModel.ViewModel;
 import javafx.application.Platform;
@@ -9,6 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -44,12 +46,16 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     @FXML
     MyClocksPannel myClocksPannel;
 
+    @FXML
+    MyGraphs myGraphs;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         board.getChildren().add(myMenu.set());
         myMenu.loadXML.setOnAction((e) -> LoadXML()); //load XML func
         board.getChildren().addAll(myListView.set());
         myListView.open.setOnAction((e) -> openCSV()); //open CSV func
+        myListView.listView.setOnMouseClicked((e) -> setLineChart((String)myListView.listView.getSelectionModel().getSelectedItem()));
         board.getChildren().addAll(myButtons.set());
         myButtons.play.setOnAction((e) -> Play());
         myButtons.pause.setOnAction((e) -> Pause());
@@ -61,6 +67,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         myButtons.playSpeedDropDown.setOnAction((e) -> GetChoice()); //GetChoice func
         board.getChildren().addAll(myJoystick.set());
         board.getChildren().addAll(myClocksPannel.set());
+        board.getChildren().addAll(myGraphs.set());
     }
 
     StringProperty resultOpenCSV;
@@ -86,6 +93,8 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     FloatProperty pitchstep;
     FloatProperty rollstep;
     FloatProperty yawstep;
+
+    FloatProperty colValues;
 
     String speed;
 
@@ -136,6 +145,9 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         aileronstep.bind(viewModel.getAileronstep());
         elevatorstep = new SimpleFloatProperty();
         elevatorstep.bind(viewModel.getElevatorstep());
+
+        colValues = new SimpleFloatProperty();
+        colValues.bind(viewModel.getColValues());
     }
 
     public void openCSV() {
@@ -162,8 +174,9 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
                 alert.showAndWait();
             }
             if (resultOpenCSV.getValue().intern() == "OK") {
-                for (String names : colsNames)
+                for (String names : colsNames) {
                     myListView.listView.getItems().add(names);
+                }
                 myButtons.timer.setText("00:00:00.000");
                 viewModel.setMaxTimeSlider();
                 myButtons.slider.setMax(maxtimeSlider.getValue());
@@ -182,6 +195,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     StringProperty resultLoadXML;
     StringProperty chosenXMLFilePath;
 
+    int numOfRow = 0;
 
     public void LoadXML() {
         FileChooser fc = new FileChooser();
@@ -206,6 +220,15 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
                 myJoystick.throttle.setMin(minThrottle.getValue());
                 viewModel.VMsetMaxThrottle();
                 myJoystick.throttle.setMax(maxThrottle.getValue());
+
+                colValues.addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        Platform.runLater(() -> myGraphs.series.getData().add((new XYChart.Data(numOfRow, colValues.getValue()))));
+                       // Platform.runLater(() -> myGraphs.lineChart.getData().add(myGraphs.series));
+                        numOfRow++;
+                    }
+                });
 
                 aileronstep.addListener(new ChangeListener<Number>() {
                     @Override
@@ -440,6 +463,11 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
             aClass.newInstance();
         } catch (IllegalAccessException | InstantiationException e) {
         }
+    }
+
+    public void setLineChart(String colName)
+    {
+        viewModel.VMsetLineChart(colName);
     }
 
 }

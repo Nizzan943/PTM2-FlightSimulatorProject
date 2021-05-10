@@ -1,6 +1,7 @@
 package ViewModel;
 
 import Model.Model;
+import Server.Point;
 import javafx.beans.property.*;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -33,6 +34,8 @@ public class ViewModel extends AllViewModels {
 
     FloatProperty aileronstep;
     FloatProperty elevatorstep;
+
+    FloatProperty colValues;
 
     public ArrayList<String> getColsNames() {
         return colsNames;
@@ -111,6 +114,10 @@ public class ViewModel extends AllViewModels {
         return elevatorstep;
     }
 
+    public FloatProperty getColValues() {
+        return colValues;
+    }
+
     public ViewModel(Model model) {
         this.model = model;
         loadXMLResult = new SimpleStringProperty();
@@ -134,12 +141,12 @@ public class ViewModel extends AllViewModels {
         yawstep = new SimpleFloatProperty();
         aileronstep = new SimpleFloatProperty();
         elevatorstep = new SimpleFloatProperty();
+        colValues = new SimpleFloatProperty();
     }
 
     public StringProperty getLoadXMLResult() {
         return loadXMLResult;
     }
-
 
     public StringProperty getOpenCSVResult() {
         return openCSVResult;
@@ -200,6 +207,8 @@ public class ViewModel extends AllViewModels {
             aileronstep.set(model.getAileronstep());
         if (p.intern() == "elevator")
             elevatorstep.set(model.getElevatorstep());
+        if (p.intern() == "colValues")
+            colValues.set(model.getColValues());
     }
 
     public void VMplay() {
@@ -256,5 +265,10 @@ public class ViewModel extends AllViewModels {
 
     public void VMstop() {
         model.modelStop();
+    }
+
+    public void VMsetLineChart(String colName)
+    {
+        model.modelSetLineChart(colName);
     }
 }

@@ -2,6 +2,7 @@
 package Model;
 
 import Server.HandleXML;
+import Server.Point;
 import Server.TimeSeries;
 import Server.TimeSeriesAnomalyDetector;
 import javafx.application.Platform;
@@ -244,6 +245,12 @@ public class Model extends AllModels {
     private float rollstep;
     private float yawstep;
 
+    public float getColValues() {
+        return colValues;
+    }
+
+    private float colValues;
+
     public void simulatorLoop(double speed) {
         while (numofrow != in.getRows().size() - 1) {
             out.println(in.getRows().get(numofrow));
@@ -279,6 +286,11 @@ public class Model extends AllModels {
             elevatorstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("elevator"))].getFloats().get(numofrow);
             setChanged();
             notifyObservers("elevator");
+
+            colValues = in.getCols()[in.getColIndex(nameOfCol)].getFloats().get(numofrow);
+            setChanged();
+            notifyObservers("colValues");
+
             changeSpeed(speed);
             numofrow++;
         }
@@ -489,7 +501,6 @@ public class Model extends AllModels {
         nowTime = (long) (second * 1000);
     }
 
-    //change
     public void modelStop()
     {
         numofrow = 0;
@@ -502,5 +513,11 @@ public class Model extends AllModels {
         flag = 0;
     }
 
+    String nameOfCol;
+
+    public void modelSetLineChart(String colName)
+    {
+        nameOfCol = colName;
+    }
 }
 

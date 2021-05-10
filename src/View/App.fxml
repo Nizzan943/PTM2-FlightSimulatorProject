@@ -7,6 +7,7 @@
 <?import View.MyButtons?>
 <?import View.MyJoystick?>
 <?import View.MyClocksPannel?>
+<?import View.MyGraphs?>
 <GridPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
     <Pane fx:id="board">
         <children>
@@ -15,6 +16,7 @@
             <MyButtons fx:id="myButtons"/>
             <MyJoystick fx:id="myJoystick"/>
             <MyClocksPannel fx:id="myClocksPannel"/>
+            <MyGraphs fx:id="myGraphs"/>
         </children>
     </Pane>
 </GridPane>

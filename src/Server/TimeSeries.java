@@ -134,5 +134,15 @@ public class TimeSeries {
 
     }
 
+    public int getColIndex (String colName)
+    {
+        for (int i = 0; i < cols.length; i++)
+        {
+            if (cols[i].name.intern() == colName.intern())
+                return i;
+        }
+        return -1;
+    }
+
 
 }
