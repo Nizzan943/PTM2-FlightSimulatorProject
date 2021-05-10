@@ -24,6 +24,7 @@ public class MyGraphs extends Pane
         lineChart.setPrefSize(220,190);
         lineChart.setCreateSymbols(false);
         lineChart.getData().add(series);
+        series.setName("parameter values");
         ret.add(lineChart);
         return ret;
     }

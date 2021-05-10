@@ -225,7 +225,6 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
                     @Override
                     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                         Platform.runLater(() -> myGraphs.series.getData().add((new XYChart.Data(numOfRow, colValues.getValue()))));
-                       // Platform.runLater(() -> myGraphs.lineChart.getData().add(myGraphs.series));
                         numOfRow++;
                     }
                 });
