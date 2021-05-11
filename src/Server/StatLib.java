@@ -55,6 +55,9 @@ public class StatLib {
 
         float covar = cov(x, y);
 
+        if (sqrtX == 0 || sqrtY == 0)
+            return 0;
+
         return covar / (sqrtX * sqrtY);
     }
 

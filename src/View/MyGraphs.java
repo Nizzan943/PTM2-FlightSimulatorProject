@@ -11,23 +11,39 @@ import java.util.List;
 
 public class MyGraphs extends Pane
 {
-    XYChart.Series series = new XYChart.Series();
-    final NumberAxis xAxis = new NumberAxis();
-    final NumberAxis yAxis = new NumberAxis();
-    //creating the chart
-    final LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
+    XYChart.Series leftSeries = new XYChart.Series();
+    final NumberAxis leftxAxis = new NumberAxis();
+    final NumberAxis leftyAxis = new NumberAxis();
+    final LineChart<Number,Number> leftLineChart = new LineChart<Number,Number>(leftxAxis, leftyAxis);
+
+    XYChart.Series rightSeries = new XYChart.Series();
+    final NumberAxis rightxAxis = new NumberAxis();
+    final NumberAxis rightyAxis = new NumberAxis();
+    final LineChart<Number,Number> rightLineChart = new LineChart<Number,Number>(rightxAxis, rightyAxis);
 
     public List<Node> set() {
         List<Node> ret = new ArrayList<>();
-        lineChart.setLayoutX(180);
-        lineChart.setLayoutY(27);
-        lineChart.setPrefSize(220,190);
-        lineChart.setCreateSymbols(false);
-        lineChart.getData().add(series);
-        xAxis.setTickLabelsVisible(false);
-        yAxis.setTickLabelsVisible(false);
-        series.setName("parameter values");
-        ret.add(lineChart);
+
+        leftLineChart.setLayoutX(180);
+        leftLineChart.setLayoutY(27);
+        leftLineChart.setPrefSize(220,190);
+        leftLineChart.setCreateSymbols(false);
+        leftLineChart.getData().add(leftSeries);
+        leftxAxis.setTickLabelsVisible(false);
+        leftyAxis.setTickLabelsVisible(false);
+        leftSeries.setName("parameter values");
+        ret.add(leftLineChart);
+
+        rightLineChart.setLayoutX(380);
+        rightLineChart.setLayoutY(27);
+        rightLineChart.setPrefSize(220,190);
+        rightLineChart.setCreateSymbols(false);
+        rightLineChart.getData().add(rightSeries);
+        rightxAxis.setTickLabelsVisible(false);
+        rightyAxis.setTickLabelsVisible(false);
+        rightSeries.setName("correlated parameter values");
+        ret.add(rightLineChart);
+
         return ret;
     }
 }

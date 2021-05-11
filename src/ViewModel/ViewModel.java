@@ -36,6 +36,7 @@ public class ViewModel extends AllViewModels {
     FloatProperty elevatorstep;
 
     FloatProperty colValues;
+    FloatProperty coralatedColValue;
 
     public ArrayList<String> getColsNames() {
         return colsNames;
@@ -118,6 +119,11 @@ public class ViewModel extends AllViewModels {
         return colValues;
     }
 
+    public FloatProperty getCoralatedColValue()
+    {
+        return coralatedColValue;
+    }
+
     public ViewModel(Model model) {
         this.model = model;
         loadXMLResult = new SimpleStringProperty();
@@ -142,6 +148,7 @@ public class ViewModel extends AllViewModels {
         aileronstep = new SimpleFloatProperty();
         elevatorstep = new SimpleFloatProperty();
         colValues = new SimpleFloatProperty();
+        coralatedColValue = new SimpleFloatProperty();
     }
 
     public StringProperty getLoadXMLResult() {
@@ -181,8 +188,6 @@ public class ViewModel extends AllViewModels {
                 for (String name : model.getColsNames()) {
                     colsNames.add(name);
                 }
-                setChanged();
-                notifyObservers("colNames");
             }
         }
         if (p.intern() == "time")
@@ -209,6 +214,8 @@ public class ViewModel extends AllViewModels {
             elevatorstep.set(model.getElevatorstep());
         if (p.intern() == "colValues")
             colValues.set(model.getColValues());
+        if (p.intern() == "coralatedColValue")
+            coralatedColValue.set(model.getCoralatedColValues());
     }
 
     public void VMplay() {
@@ -267,8 +274,13 @@ public class ViewModel extends AllViewModels {
         model.modelStop();
     }
 
-    public void VMsetLineChart(String colName)
+    public void VMsetLeftLineChart(String colName)
     {
-        model.modelSetLineChart(colName);
+        model.modelSetLeftLineChart(colName);
+    }
+
+    public void VMsetRightLineChart(String colName)
+    {
+        model.modelSetRightLineChart(colName);
     }
 }

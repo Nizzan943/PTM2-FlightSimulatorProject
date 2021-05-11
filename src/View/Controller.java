@@ -55,7 +55,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         myMenu.loadXML.setOnAction((e) -> LoadXML()); //load XML func
         board.getChildren().addAll(myListView.set());
         myListView.open.setOnAction((e) -> openCSV()); //open CSV func
-        myListView.listView.setOnMouseClicked((e) -> setLineChart((String)myListView.listView.getSelectionModel().getSelectedItem()));
+      //  myListView.listView.setOnMouseClicked((e) -> setLineCharts((String)myListView.listView.getSelectionModel().getSelectedItem()));
         board.getChildren().addAll(myButtons.set());
         myButtons.play.setOnAction((e) -> Play());
         myButtons.pause.setOnAction((e) -> Pause());
@@ -95,6 +95,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     FloatProperty yawstep;
 
     FloatProperty colValues;
+    FloatProperty coralatedColValue;
 
     String speed;
 
@@ -148,6 +149,9 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
 
         colValues = new SimpleFloatProperty();
         colValues.bind(viewModel.getColValues());
+
+        coralatedColValue = new SimpleFloatProperty();
+        coralatedColValue.bind(viewModel.getCoralatedColValue());
     }
 
     public void openCSV() {
@@ -174,7 +178,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
                 alert.showAndWait();
             }
             if (resultOpenCSV.getValue().intern() == "OK") {
-                for (String names : colsNames) {
+                for (String names : viewModel.getColsNames()) {
                     myListView.listView.getItems().add(names);
                 }
                 myButtons.timer.setText("00:00:00.000");
@@ -221,14 +225,26 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
                 viewModel.VMsetMaxThrottle();
                 myJoystick.throttle.setMax(maxThrottle.getValue());
 
+
                 colValues.addListener(new ChangeListener<Number>() {
                     @Override
                     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        Platform.runLater(() -> myGraphs.series.getData().add((new XYChart.Data(numOfRow, colValues.getValue()))));
+                        Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numOfRow, colValues.getValue()))));
                         numOfRow++;
                     }
                 });
 
+                /*
+                coralatedColValue.addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numOfRow, coralatedColValue.getValue()))));
+                        numOfRow++;
+                    }
+                });
+
+
+                 */
                 aileronstep.addListener(new ChangeListener<Number>() {
                     @Override
                     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -409,16 +425,6 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        String p = (String) arg;
-        if (p.intern() == "colNames") {
-            for (String name : viewModel.getColsNames()) {
-                colsNames.add(name);
-            }
-        }
-    }
-
-    @Override
     public void LoadClass(String path, String className) {
 
         File file = new File(path);
@@ -464,9 +470,24 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         }
     }
 
-    public void setLineChart(String colName)
+    public void setLineCharts (String colName)
     {
-        viewModel.VMsetLineChart(colName);
+        setLeftLineChart(colName);
+        setRightLineChart(colName);
     }
 
+    public void setLeftLineChart(String colName)
+    {
+        viewModel.VMsetLeftLineChart(colName);
+    }
+
+    public void setRightLineChart(String colName)
+    {
+        viewModel.VMsetRightLineChart(colName);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+    }
 }

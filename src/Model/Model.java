@@ -1,10 +1,8 @@
 
 package Model;
 
-import Server.HandleXML;
-import Server.Point;
-import Server.TimeSeries;
-import Server.TimeSeriesAnomalyDetector;
+import Algorithms.LinearRegression;
+import Server.*;
 import javafx.application.Platform;
 import javafx.beans.property.FloatProperty;
 import java.io.*;
@@ -13,10 +11,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Observable;
+import java.util.*;
 
 public class Model extends AllModels {
     public Map<String, Integer> CSVindexmap = new HashMap<>();
@@ -81,6 +76,9 @@ public class Model extends AllModels {
         }
         setChanged();
         notifyObservers("resultLoadXML");
+       // timeSeries = new TimeSeries(XML_settings.additionalSettings.getProperFlightFile());
+       // timeSeries.setCorrelationTresh(0);
+       // linearRegression.learnNormal(timeSeries);
     }
 
     public void ModelOpenCSV(String chosenPath) {
@@ -251,6 +249,12 @@ public class Model extends AllModels {
 
     private float colValues;
 
+    public float getCoralatedColValues() {
+        return coralatedColValues;
+    }
+
+    private float coralatedColValues;
+
     public void simulatorLoop(double speed) {
         while (numofrow != in.getRows().size() - 1) {
             out.println(in.getRows().get(numofrow));
@@ -286,11 +290,17 @@ public class Model extends AllModels {
             elevatorstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("elevator"))].getFloats().get(numofrow);
             setChanged();
             notifyObservers("elevator");
-
+/*
             colValues = in.getCols()[in.getColIndex(nameOfCol)].getFloats().get(numofrow);
             setChanged();
             notifyObservers("colValues");
 
+            colValues = in.getCols()[in.getColIndex(nameOfCoralatedCol)].getFloats().get(numofrow);
+            setChanged();
+            notifyObservers("coralatedColValue");
+
+
+             */
             changeSpeed(speed);
             numofrow++;
         }
@@ -514,10 +524,28 @@ public class Model extends AllModels {
     }
 
     String nameOfCol;
+    String nameOfCoralatedCol;
 
-    public void modelSetLineChart(String colName)
+    TimeSeries timeSeries;
+    LinearRegression linearRegression = new LinearRegression();
+
+    public void modelSetLeftLineChart(String colName)
     {
         nameOfCol = colName;
+    }
+
+    public void modelSetRightLineChart(String colName)
+    {
+        //Thread a = new Thread( () ->
+        {
+            List<CorrelatedFeatures> list = linearRegression.getNormalModel();
+            for (CorrelatedFeatures features : list) {
+                if (features.feature1.intern() == colName.intern())
+                    nameOfCoralatedCol = features.feature2;
+            }
+        }
+       // });
+       // a.start();
     }
 }
 

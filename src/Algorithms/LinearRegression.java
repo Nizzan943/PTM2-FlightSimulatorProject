@@ -27,7 +27,7 @@ public class LinearRegression implements TimeSeriesAnomalyDetector {
 
             float[] tempArr = ts.ArrListToArr(temp);
 
-            for (int j = i + 1; j < str.length; j++) {
+            for (int j = 0; j < str.length; j++) {
 
                 if (str[i] != str[j]) {
                     ArrayList<Float> temp2 = ts.getCols()[j].getFloats();
@@ -45,7 +45,7 @@ public class LinearRegression implements TimeSeriesAnomalyDetector {
 
             }
 
-            if (maxPearson > 0) {
+            if (maxPearson >= 0) {
 
                 Point[] arrp = ts.ArrToPoint(tempArr, ts.ArrListToArr(ts.getCols()[index].getFloats()));
 
