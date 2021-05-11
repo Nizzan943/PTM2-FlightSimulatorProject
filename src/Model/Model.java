@@ -3,10 +3,7 @@ package Model;
 
 import Algorithms.LinearRegression;
 import Server.*;
-import javafx.application.Platform;
-import javafx.beans.property.FloatProperty;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -207,6 +204,15 @@ public class Model extends AllModels {
         notifyObservers("resultOpenCSV");
     }
 
+    public void resume(Thread simulatorThread, Thread timerThread)
+    {
+        if (simulatorThread != null)
+        {
+            simulatorThread.resume();
+            timerThread.resume();
+        }
+    }
+
     public void modelPlay() {
         if (playFlag == 0) {
             simulator10Thread = new Thread(() -> {
@@ -220,29 +226,13 @@ public class Model extends AllModels {
         }
         if (playFlag == 1)
         {
-            if (simulator10Thread != null)
-            {
-                simulator10Thread.resume();
-                timer10Thread.resume();
-            }
-            else if (simulator20Thread != null)
-            {
-                simulator20Thread.resume();
-                timer20Thread.resume();
-            }
-            else if (simulator15Thread != null)
-            {
-                simulator15Thread.resume();
-                timer15Thread.resume();
-            }
-            else if (simulator05Thread != null)
-            {
-                simulator05Thread.resume();
-                timer05Thread.resume();
-            }
+            resume(simulator10Thread, timer10Thread);
+            resume(simulator20Thread, timer20Thread);
+            resume(simulator15Thread, timer15Thread);
+            resume(simulator05Thread, timer05Thread);
+
             playFlag = 0;
         }
-
     }
 
     public void changeSpeed(double speed) {
@@ -316,7 +306,7 @@ public class Model extends AllModels {
             out.println(in.getRows().get(numofrow));
             out.flush();
 
-            setChanged();
+            allChanges();
 
             changeSpeed(speed);
             numofrow++;

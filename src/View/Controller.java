@@ -1,20 +1,16 @@
 package View;
 
 import Server.PluginLoader;
-import Server.Point;
 import Server.TimeSeriesAnomalyDetector;
 import ViewModel.ViewModel;
 import javafx.application.Platform;
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

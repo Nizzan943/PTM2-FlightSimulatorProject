@@ -1,11 +1,9 @@
 package ViewModel;
 
 import Model.Model;
-import Server.Point;
 import javafx.beans.property.*;
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Observer;
 
 public class ViewModel extends AllViewModels {
 

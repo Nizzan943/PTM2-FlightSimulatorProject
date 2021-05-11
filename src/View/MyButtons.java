@@ -1,6 +1,5 @@
 package View;
 
-import View.Controller;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
