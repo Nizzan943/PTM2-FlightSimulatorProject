@@ -14,7 +14,9 @@ import java.util.List;
 
 public class MyButtons extends Pane {
     ChoiceBox playSpeedDropDown;
+
     Label timer;
+
     Button play;
     Button pause;
     Button stop;
@@ -96,6 +98,5 @@ public class MyButtons extends Pane {
         ret.add(timer);
 
         return ret;
-
     }
 }

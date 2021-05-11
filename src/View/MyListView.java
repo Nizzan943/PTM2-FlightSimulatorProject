@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyListView extends Pane {
+
     ListView listView;
+
     Button open;
 
     public List<Node> set() {

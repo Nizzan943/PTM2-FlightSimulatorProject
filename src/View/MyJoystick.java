@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyJoystick extends Pane {
+
     Slider rudder;
     Slider throttle;
+
     Circle innerCircle;
 
     public List<Node> set() {

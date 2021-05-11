@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyClocksPannel extends Pane {
+
     Label altimeter;
     Label airspeed;
     Label direction;

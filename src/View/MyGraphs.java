@@ -12,17 +12,15 @@ import java.util.List;
 public class MyGraphs extends Pane
 {
     XYChart.Series leftSeries = new XYChart.Series();
-    final NumberAxis leftxAxis = new NumberAxis();
-    final NumberAxis leftyAxis = new NumberAxis();
-    final LineChart<Number,Number> leftLineChart = new LineChart<Number,Number>(leftxAxis, leftyAxis);
 
     XYChart.Series rightSeries = new XYChart.Series();
-    final NumberAxis rightxAxis = new NumberAxis();
-    final NumberAxis rightyAxis = new NumberAxis();
-    final LineChart<Number,Number> rightLineChart = new LineChart<Number,Number>(rightxAxis, rightyAxis);
 
     public List<Node> set() {
         List<Node> ret = new ArrayList<>();
+
+        final NumberAxis leftxAxis = new NumberAxis();
+        final NumberAxis leftyAxis = new NumberAxis();
+        final LineChart<Number,Number> leftLineChart = new LineChart<Number,Number>(leftxAxis, leftyAxis);
 
         leftLineChart.setLayoutX(180);
         leftLineChart.setLayoutY(27);
@@ -33,6 +31,10 @@ public class MyGraphs extends Pane
         leftyAxis.setTickLabelsVisible(false);
         leftSeries.setName("parameter values");
         ret.add(leftLineChart);
+
+        final NumberAxis rightxAxis = new NumberAxis();
+        final NumberAxis rightyAxis = new NumberAxis();
+        final LineChart<Number,Number> rightLineChart = new LineChart<Number,Number>(rightxAxis, rightyAxis);
 
         rightLineChart.setLayoutX(380);
         rightLineChart.setLayoutY(27);

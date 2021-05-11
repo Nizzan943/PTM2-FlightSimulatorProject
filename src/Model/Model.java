@@ -14,13 +14,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Model extends AllModels {
-    public Map<String, Integer> CSVindexmap = new HashMap<>();
-    public static HandleXML XML_settings;
-    public static String CSVpath;
 
-    Thread simulatorThread = null;
+    static HandleXML XML_settings;
+    static String CSVpath;
+
     Thread simulator20Thread = null;
-    Thread timerThread = null;
     Thread timer20Thread = null;
     Thread simulator05Thread = null;
     Thread timer05Thread = null;
@@ -30,24 +28,43 @@ public class Model extends AllModels {
     Thread timer15Thread = null;
 
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.S");
-    int flag = 0;
+
+    int playFlag = 0;
+    int numofrow = 0;
     long nowTime = 0;
 
     Socket fg = null;
     TimeSeries in = null;
     PrintWriter out = null;
-    private String time;
 
-    public String gettime() {
-        return time;
-    }
+    private String time;
 
     private String resultLoadXML;
     private String resultOpenCSV;
-    ArrayList<String> colsNames = new ArrayList<>();
+    String nameOfCol;
+    String nameOfCoralatedCol;
 
-    public ArrayList<String> getColsNames() {
-        return colsNames;
+    private float rudderstep;
+    private float throttlestep;
+    private float altimeterstep;
+    private float airspeedstep;
+    private float directionstep;
+    private float pitchstep;
+    private float aileronstep;
+    private float elevatorstep;
+    private float rollstep;
+    private float yawstep;
+    private float colValues;
+    private float coralatedColValues;
+
+    ArrayList<String> colsNames = new ArrayList<>();
+    Map<String, Integer> CSVindexmap = new HashMap<>();
+
+    TimeSeries timeSeries;
+    LinearRegression linearRegression = new LinearRegression();
+
+    public String gettime() {
+        return time;
     }
 
     public String getResultOpenCSV() {
@@ -58,137 +75,9 @@ public class Model extends AllModels {
         return resultLoadXML;
     }
 
-
-    public void ModelLoadXML(String chosenPath) {
-        HandleXML handleXML = new HandleXML();
-        try {
-            handleXML.deserializeFromXML(chosenPath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (handleXML.WrongFormatAlert == true)
-            resultLoadXML = "WrongFormatAlert";
-        else if (handleXML.MissingArgumentsAlert == true)
-            resultLoadXML = "MissingArgumentAlert";
-        else {
-            XML_settings = handleXML;
-            resultLoadXML = "SuccessAlert";
-        }
-        setChanged();
-        notifyObservers("resultLoadXML");
-       // timeSeries = new TimeSeries(XML_settings.additionalSettings.getProperFlightFile());
-       // timeSeries.setCorrelationTresh(0);
-       // linearRegression.learnNormal(timeSeries);
+    public ArrayList<String> getColsNames() {
+        return colsNames;
     }
-
-    public void ModelOpenCSV(String chosenPath) {
-        int flag1 = 0;
-        TimeSeries timeSeries = new TimeSeries(chosenPath);
-        for (int i = 0; i < timeSeries.getCols().length; i++) {
-            int k = 0;
-            while (k != 10) {
-                if (timeSeries.getCols()[i].getName().intern() == XML_settings.PropertyList.get(k).getRealName().intern()) {
-                    if (CSVindexmap.get(XML_settings.PropertyList.get(k).getAssosicateName()) == null)
-                        CSVindexmap.put(XML_settings.PropertyList.get(k).getAssosicateName(), i);
-                    break;
-                }
-                k++;
-            }
-            if (CSVindexmap.size() == 10)
-                break;
-        }
-
-        for (String colname : XML_settings.RealToAssosicate.keySet()) {
-            int index = CSVindexmap.get(XML_settings.RealToAssosicate.get(colname));
-            for (Float num : timeSeries.getCols()[index].getFloats()) {
-                if (num < XML_settings.min.get(colname) || num > XML_settings.max.get(colname)) {
-                    resultOpenCSV = "Incompatibility with XML file";
-                    flag1 = 1;
-                }
-                if (flag1 == 1)
-                    break;
-            }
-            if (flag1 == 1)
-                break;
-        }
-
-        if (CSVindexmap.size() != 10)
-            resultOpenCSV = "Missing Arguments";
-        if (CSVindexmap.size() == 10 && flag1 == 0) {
-            resultOpenCSV = "OK";
-            for (TimeSeries.col col : timeSeries.getCols()) {
-                colsNames.add(col.getName());
-            }
-            CSVpath = chosenPath;
-            try {
-                fg = new Socket("localhost", 5400);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            in = new TimeSeries(Model.CSVpath);
-
-            try {
-                out = new PrintWriter(fg.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        setChanged();
-        notifyObservers("resultOpenCSV");
-    }
-
-    public void modelPlay() {
-        if (flag == 0) {
-            simulator10Thread = new Thread(() -> {
-                simulatorLoop(1);
-            });
-            simulator10Thread.start();
-            timer10Thread = new Thread(() -> {
-                timerLoop(1);
-            });
-            timer10Thread.start();
-        }
-        if (flag == 1)
-        {
-            if (simulator10Thread != null)
-            {
-                simulator10Thread.resume();
-                timer10Thread.resume();
-            }
-            else if (simulator20Thread != null)
-            {
-                simulator20Thread.resume();
-                timer20Thread.resume();
-            }
-            else if (simulator15Thread != null)
-            {
-                simulator15Thread.resume();
-                timer15Thread.resume();
-            }
-            else if (simulator05Thread != null)
-            {
-                simulator05Thread.resume();
-                timer05Thread.resume();
-            }
-            flag = 0;
-        }
-
-    }
-
-    public void changeSpeed(double speed) {
-        try {
-            Thread.sleep((long) (Model.XML_settings.additionalSettings.getDataSamplingRate() / speed));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void changeTimerSpeed(double speed) {
-        nowTime += 1000 * speed;
-    }
-
-    int numofrow = 0;
 
     public float getRudderstep() {
         return rudderstep;
@@ -198,20 +87,10 @@ public class Model extends AllModels {
         return throttlestep;
     }
 
-    private float rudderstep;
-    private float throttlestep;
-
-    private float altimeterstep;
-    private float airspeedstep;
-    private float directionstep;
-    private float pitchstep;
-
-    private float aileronstep;
-    private float elevatorstep;
-
     public float getAileronstep() {
         return aileronstep;
     }
+
     public float getElevatorstep() {
         return elevatorstep;
     }
@@ -240,56 +119,185 @@ public class Model extends AllModels {
         return yawstep;
     }
 
-    private float rollstep;
-    private float yawstep;
-
     public float getColValues() {
         return colValues;
     }
-
-    private float colValues;
 
     public float getCoralatedColValues() {
         return coralatedColValues;
     }
 
-    private float coralatedColValues;
 
-    public void simulatorLoop(double speed) {
-        while (numofrow != in.getRows().size() - 1) {
-            out.println(in.getRows().get(numofrow));
-            out.flush();
-            rudderstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("rudder"))].getFloats().get(numofrow);
-            setChanged();
-            notifyObservers("rudder");
-            throttlestep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("throttle"))].getFloats().get(numofrow);
-            setChanged();
-            notifyObservers("throttle");
+    public void ModelLoadXML(String chosenPath) {
+        HandleXML handleXML = new HandleXML();
+        try {
+            handleXML.deserializeFromXML(chosenPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (handleXML.WrongFormatAlert == true)
+            resultLoadXML = "WrongFormatAlert";
+        else if (handleXML.MissingArgumentsAlert == true)
+            resultLoadXML = "MissingArgumentAlert";
+        else {
+            XML_settings = handleXML;
+            resultLoadXML = "SuccessAlert";
+        }
+        setChanged();
+        notifyObservers("resultLoadXML");
+       // timeSeries = new TimeSeries(XML_settings.additionalSettings.getProperFlightFile());
+       // timeSeries.setCorrelationTresh(0);
+       // linearRegression.learnNormal(timeSeries);
+    }
 
-            altimeterstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("altimeter_indicated-altitude-ft"))].getFloats().get(numofrow);
-            setChanged();
-            notifyObservers("altimeter");
-            airspeedstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("airspeed-indicator_indicated-speed-kt"))].getFloats().get(numofrow);
-            setChanged();
-            notifyObservers("airspeed");
-            directionstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("indicated-heading-deg"))].getFloats().get(numofrow);
-            setChanged();
-            notifyObservers("direction");
-            pitchstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("attitude-indicator_internal-pitch-deg"))].getFloats().get(numofrow);
-            setChanged();
-            notifyObservers("pitch");
-            rollstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("attitude-indicator_indicated-roll-deg"))].getFloats().get(numofrow);
-            setChanged();
-            notifyObservers("roll");
-            yawstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("side-slip-deg"))].getFloats().get(numofrow);
-            setChanged();
-            notifyObservers("yaw");
-            aileronstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("aileron"))].getFloats().get(numofrow);
-            setChanged();
-            notifyObservers("aileron");
-            elevatorstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("elevator"))].getFloats().get(numofrow);
-            setChanged();
-            notifyObservers("elevator");
+    public void ModelOpenCSV(String chosenPath) {
+        int openFlag = 0;
+        TimeSeries timeSeries = new TimeSeries(chosenPath);
+        for (int i = 0; i < timeSeries.getCols().length; i++) {
+            int k = 0;
+            while (k != 10) {
+                if (timeSeries.getCols()[i].getName().intern() == XML_settings.PropertyList.get(k).getRealName().intern()) {
+                    if (CSVindexmap.get(XML_settings.PropertyList.get(k).getAssosicateName()) == null)
+                        CSVindexmap.put(XML_settings.PropertyList.get(k).getAssosicateName(), i);
+                    break;
+                }
+                k++;
+            }
+            if (CSVindexmap.size() == 10)
+                break;
+        }
+
+        for (String colname : XML_settings.RealToAssosicate.keySet()) {
+            int index = CSVindexmap.get(XML_settings.RealToAssosicate.get(colname));
+            for (Float num : timeSeries.getCols()[index].getFloats()) {
+                if (num < XML_settings.min.get(colname) || num > XML_settings.max.get(colname)) {
+                    resultOpenCSV = "Incompatibility with XML file";
+                    openFlag = 1;
+                }
+                if (openFlag == 1)
+                    break;
+            }
+            if (openFlag == 1)
+                break;
+        }
+
+        if (CSVindexmap.size() != 10)
+            resultOpenCSV = "Missing Arguments";
+        if (CSVindexmap.size() == 10 && openFlag == 0) {
+            resultOpenCSV = "OK";
+            for (TimeSeries.col col : timeSeries.getCols()) {
+                colsNames.add(col.getName());
+            }
+            CSVpath = chosenPath;
+            try {
+                fg = new Socket("localhost", 5400);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            in = new TimeSeries(Model.CSVpath);
+
+            try {
+                out = new PrintWriter(fg.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        setChanged();
+        notifyObservers("resultOpenCSV");
+    }
+
+    public void modelPlay() {
+        if (playFlag == 0) {
+            simulator10Thread = new Thread(() -> {
+                simulatorLoop(1);
+            });
+            simulator10Thread.start();
+            timer10Thread = new Thread(() -> {
+                timerLoop(1);
+            });
+            timer10Thread.start();
+        }
+        if (playFlag == 1)
+        {
+            if (simulator10Thread != null)
+            {
+                simulator10Thread.resume();
+                timer10Thread.resume();
+            }
+            else if (simulator20Thread != null)
+            {
+                simulator20Thread.resume();
+                timer20Thread.resume();
+            }
+            else if (simulator15Thread != null)
+            {
+                simulator15Thread.resume();
+                timer15Thread.resume();
+            }
+            else if (simulator05Thread != null)
+            {
+                simulator05Thread.resume();
+                timer05Thread.resume();
+            }
+            playFlag = 0;
+        }
+
+    }
+
+    public void changeSpeed(double speed) {
+        try {
+            Thread.sleep((long) (Model.XML_settings.additionalSettings.getDataSamplingRate() / speed));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void changeTimerSpeed(double speed) {
+        nowTime += 1000 * speed;
+    }
+
+    public void allChanges()
+    {
+        rudderstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("rudder"))].getFloats().get(numofrow);
+        setChanged();
+        notifyObservers("rudder");
+
+        throttlestep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("throttle"))].getFloats().get(numofrow);
+        setChanged();
+        notifyObservers("throttle");
+
+        altimeterstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("altimeter_indicated-altitude-ft"))].getFloats().get(numofrow);
+        setChanged();
+        notifyObservers("altimeter");
+
+        airspeedstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("airspeed-indicator_indicated-speed-kt"))].getFloats().get(numofrow);
+        setChanged();
+        notifyObservers("airspeed");
+
+        directionstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("indicated-heading-deg"))].getFloats().get(numofrow);
+        setChanged();
+        notifyObservers("direction");
+
+        pitchstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("attitude-indicator_internal-pitch-deg"))].getFloats().get(numofrow);
+        setChanged();
+        notifyObservers("pitch");
+
+        rollstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("attitude-indicator_indicated-roll-deg"))].getFloats().get(numofrow);
+        setChanged();
+        notifyObservers("roll");
+
+        yawstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("side-slip-deg"))].getFloats().get(numofrow);
+        setChanged();
+        notifyObservers("yaw");
+
+        aileronstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("aileron"))].getFloats().get(numofrow);
+        setChanged();
+        notifyObservers("aileron");
+
+        elevatorstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("elevator"))].getFloats().get(numofrow);
+        setChanged();
+        notifyObservers("elevator");
 /*
             colValues = in.getCols()[in.getColIndex(nameOfCol)].getFloats().get(numofrow);
             setChanged();
@@ -301,6 +309,15 @@ public class Model extends AllModels {
 
 
              */
+    }
+
+    public void simulatorLoop(double speed) {
+        while (numofrow != in.getRows().size() - 1) {
+            out.println(in.getRows().get(numofrow));
+            out.flush();
+
+            setChanged();
+
             changeSpeed(speed);
             numofrow++;
         }
@@ -320,8 +337,10 @@ public class Model extends AllModels {
                 e.printStackTrace();
             }
             changeTimerSpeed(speed);
+
             if (nowTime >= ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate() / 10)) * 1000)
                 break;
+
             time = simpleDateFormat.format(nowTime - 7200000);
             setChanged();
             notifyObservers("time");
@@ -457,7 +476,7 @@ public class Model extends AllModels {
             simulator05Thread.suspend();
             timer05Thread.suspend();
         }
-        flag = 1;
+        playFlag = 1;
     }
 
     public void modelPlus15() {
@@ -520,14 +539,8 @@ public class Model extends AllModels {
         simulator05Thread = null;
         simulator15Thread = null;
         simulator20Thread = null;
-        flag = 0;
+        playFlag = 0;
     }
-
-    String nameOfCol;
-    String nameOfCoralatedCol;
-
-    TimeSeries timeSeries;
-    LinearRegression linearRegression = new LinearRegression();
 
     public void modelSetLeftLineChart(String colName)
     {

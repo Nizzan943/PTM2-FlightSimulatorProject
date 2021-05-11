@@ -52,10 +52,12 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         board.getChildren().add(myMenu.set());
-        myMenu.loadXML.setOnAction((e) -> LoadXML()); //load XML func
+        myMenu.loadXML.setOnAction((e) -> LoadXML());
+
         board.getChildren().addAll(myListView.set());
-        myListView.open.setOnAction((e) -> openCSV()); //open CSV func
+        myListView.open.setOnAction((e) -> openCSV());
       //  myListView.listView.setOnMouseClicked((e) -> setLineCharts((String)myListView.listView.getSelectionModel().getSelectedItem()));
+
         board.getChildren().addAll(myButtons.set());
         myButtons.play.setOnAction((e) -> Play());
         myButtons.pause.setOnAction((e) -> Pause());
@@ -65,59 +67,75 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         myButtons.plus30.setOnAction((e) -> Plus30());
         myButtons.minus30.setOnAction((e) -> Minus30());
         myButtons.playSpeedDropDown.setOnAction((e) -> GetChoice()); //GetChoice func
+
         board.getChildren().addAll(myJoystick.set());
+
         board.getChildren().addAll(myClocksPannel.set());
+
         board.getChildren().addAll(myGraphs.set());
     }
 
+    ArrayList<String> colsNames = new ArrayList<>();
+
+    ViewModel viewModel;
+
+    String speed;
+
     StringProperty resultOpenCSV;
     StringProperty chosenCSVFilePath;
+    StringProperty time;
+    StringProperty resultLoadXML;
+    StringProperty chosenXMLFilePath;
+
     DoubleProperty minRudder;
     DoubleProperty maxRudder;
     DoubleProperty minThrottle;
     DoubleProperty maxThrottle;
     DoubleProperty maxtimeSlider;
-    ArrayList<String> colsNames = new ArrayList<>();
-    ViewModel viewModel;
 
-    StringProperty time;
     FloatProperty rudderstep;
     FloatProperty throttlestep;
-
     FloatProperty aileronstep;
     FloatProperty elevatorstep;
-
     FloatProperty altimeterstep;
     FloatProperty airspeedstep;
     FloatProperty directionstep;
     FloatProperty pitchstep;
     FloatProperty rollstep;
     FloatProperty yawstep;
-
     FloatProperty colValues;
     FloatProperty coralatedColValue;
 
-    String speed;
-
+    int numOfRow = 0;
+    int playStart = 0;
 
     public void setViewModel(ViewModel viewModel) {
         this.viewModel = viewModel;
+
         resultOpenCSV = new SimpleStringProperty();
+        resultOpenCSV.bind(viewModel.getOpenCSVResult());
+
+        resultLoadXML = new SimpleStringProperty();
+        resultLoadXML.bind(viewModel.getLoadXMLResult());
+
         chosenCSVFilePath = new SimpleStringProperty();
         viewModel.getChosenCSVFilePath().bind(chosenCSVFilePath);
-        resultOpenCSV.bind(viewModel.getOpenCSVResult());
-        resultLoadXML = new SimpleStringProperty();
+
         chosenXMLFilePath = new SimpleStringProperty();
         viewModel.getChosenXMLFilePath().bind(chosenXMLFilePath);
-        resultLoadXML.bind(viewModel.getLoadXMLResult());
+
         minRudder = new SimpleDoubleProperty();
         minRudder.bind(viewModel.getMinRudder());
+
         maxRudder = new SimpleDoubleProperty();
         maxRudder.bind(viewModel.getMaxRudder());
+
         minThrottle = new SimpleDoubleProperty();
         minThrottle.bind(viewModel.getMinThrottle());
+
         maxThrottle = new SimpleDoubleProperty();
         maxThrottle.bind(viewModel.getMaxThrottle());
+
         maxtimeSlider = new SimpleDoubleProperty();
         maxtimeSlider.bind(viewModel.getMaxTimeSlider());
 
@@ -126,24 +144,31 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
 
         rudderstep = new SimpleFloatProperty();
         rudderstep.bind(viewModel.getRudderstep());
+
         throttlestep = new SimpleFloatProperty();
         throttlestep.bind(viewModel.getThrottlestep());
 
         altimeterstep = new SimpleFloatProperty();
         altimeterstep.bind(viewModel.getAltimeterstep());
+
         airspeedstep = new SimpleFloatProperty();
         airspeedstep.bind(viewModel.getAirspeedstep());
+
         directionstep = new SimpleFloatProperty();
         directionstep.bind(viewModel.getDirectionstep());
+
         pitchstep = new SimpleFloatProperty();
         pitchstep.bind(viewModel.getPitchstep());
+
         rollstep = new SimpleFloatProperty();
         rollstep.bind(viewModel.getRollstep());
+
         yawstep = new SimpleFloatProperty();
         yawstep.bind(viewModel.getYawstep());
 
         aileronstep = new SimpleFloatProperty();
         aileronstep.bind(viewModel.getAileronstep());
+
         elevatorstep = new SimpleFloatProperty();
         elevatorstep.bind(viewModel.getElevatorstep());
 
@@ -190,16 +215,62 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
                 myClocksPannel.pitch.setText("pitch: 0.0");
                 myClocksPannel.roll.setText("roll: 0.0");
                 myClocksPannel.yaw.setText("yaw: 0.0");
-
-
             }
         }
     }
 
-    StringProperty resultLoadXML;
-    StringProperty chosenXMLFilePath;
+    public void setListeners()
+    {
+        colValues.addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numOfRow, colValues.getValue()))));
+            numOfRow++;
+        });
 
-    int numOfRow = 0;
+           /*
+        coralatedColValue.addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numOfRow, coralatedColValue.getValue()))));
+            numOfRow++;
+        });
+
+*/
+
+        aileronstep.addListener((observable, oldValue, newValue) -> myJoystick.innerCircle.setCenterX(aileronstep.getValue() * 100));
+
+        elevatorstep.addListener((observable, oldValue, newValue) -> myJoystick.innerCircle.setCenterY(elevatorstep.getValue() * 100));
+
+        myButtons.slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (((double)oldValue + 1 != (double)newValue) && (((double)oldValue + 0.5) != (double)newValue) && (((double)oldValue + 1.5) != (double)newValue) && (((double)oldValue + 2) != (double)newValue))
+                viewModel.VMtimeslider(myButtons.slider.getValue());
+        });
+
+        altimeterstep.addListener((observable, oldValue, newValue) -> Platform.runLater(() -> myClocksPannel.altimeter.setText("altimeter: " + altimeterstep.getValue())));
+
+        airspeedstep.addListener((observable, oldValue, newValue) -> Platform.runLater(() -> myClocksPannel.airspeed.setText("airspeed: " + airspeedstep.getValue())));
+
+        directionstep.addListener((observable, oldValue, newValue) -> Platform.runLater(() -> myClocksPannel.direction.setText("direction: " + directionstep.getValue())));
+
+        pitchstep.addListener((observable, oldValue, newValue) -> Platform.runLater(() -> myClocksPannel.pitch.setText("pitch: " + pitchstep.getValue())));
+
+        rollstep.addListener((observable, oldValue, newValue) -> Platform.runLater(() -> myClocksPannel.roll.setText("roll: " + rollstep.getValue())));
+
+        yawstep.addListener((observable, oldValue, newValue) -> Platform.runLater(() -> myClocksPannel.yaw.setText("yaw: " + yawstep.getValue())));
+
+        time.addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(() -> myButtons.timer.setText(time.getValue()));
+            if (speed.intern() == "x1.0")
+                myButtons.slider.setValue(myButtons.slider.getValue() + 1);
+            if (speed.intern() == "x2.0")
+                myButtons.slider.setValue(myButtons.slider.getValue() + 2);
+            if (speed.intern() == "x1.5")
+                myButtons.slider.setValue(myButtons.slider.getValue() + 1.5);
+            if (speed.intern() == "x0.5")
+                myButtons.slider.setValue(myButtons.slider.getValue() + 0.5);
+        });
+
+        rudderstep.addListener((observable, oldValue, newValue) -> myJoystick.rudder.setValue(rudderstep.getValue()));
+
+        throttlestep.addListener((observable, oldValue, newValue) -> myJoystick.throttle.setValue(throttlestep.getValue()));
+    }
 
     public void LoadXML() {
         FileChooser fc = new FileChooser();
@@ -211,11 +282,27 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         if (chosen != null) {
             viewModel.VMLoadXML();
             if (resultLoadXML.getValue().equals("WrongFormatAlert"))
-                WrongFormatAlert();
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Wrong format of XML");
+                alert.setContentText("Please check your format and try again");
+                alert.showAndWait();
+            }
             else if (resultLoadXML.getValue().equals("MissingArgumentAlert"))
-                MissingArgumentAlert();
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Missing Arguments");
+                alert.setContentText("Please check your settings and try again");
+                alert.showAndWait();
+            }
             else {
-                SuccessAlert();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText("The file was uploaded successfully");
+                alert.setContentText(null);
+                alert.showAndWait();
                 viewModel.VMsetMinRudder();
                 myJoystick.rudder.setMin(minRudder.getValue());
                 viewModel.VMsetMaxRudder();
@@ -225,155 +312,15 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
                 viewModel.VMsetMaxThrottle();
                 myJoystick.throttle.setMax(maxThrottle.getValue());
 
-
-                colValues.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numOfRow, colValues.getValue()))));
-                        numOfRow++;
-                    }
-                });
-
-                /*
-                coralatedColValue.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numOfRow, coralatedColValue.getValue()))));
-                        numOfRow++;
-                    }
-                });
-
-
-                 */
-                aileronstep.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        myJoystick.innerCircle.setCenterX(aileronstep.getValue() * 100);
-                    }
-                });
-
-                elevatorstep.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        myJoystick.innerCircle.setCenterY(elevatorstep.getValue() * 100);
-                    }
-                });
-
-                myButtons.slider.valueProperty().addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        if (((double)oldValue + 1 != (double)newValue) && (((double)oldValue + 0.5) != (double)newValue) && (((double)oldValue + 1.5) != (double)newValue) && (((double)oldValue + 2) != (double)newValue))
-                            viewModel.VMtimeslider(myButtons.slider.getValue());
-                    }
-                });
-
-                altimeterstep.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        Platform.runLater(() -> myClocksPannel.altimeter.setText("altimeter: " + altimeterstep.getValue()));
-                    }
-                });
-
-                airspeedstep.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        Platform.runLater(() -> myClocksPannel.airspeed.setText("airspeed: " + airspeedstep.getValue()));
-                    }
-                });
-
-                directionstep.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        Platform.runLater(() -> myClocksPannel.direction.setText("direction: " + directionstep.getValue()));
-                    }
-                });
-
-                pitchstep.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        Platform.runLater(() -> myClocksPannel.pitch.setText("pitch: " + pitchstep.getValue()));
-                    }
-                });
-
-                rollstep.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        Platform.runLater(() -> myClocksPannel.roll.setText("roll: " + rollstep.getValue()));
-                    }
-                });
-
-                yawstep.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        Platform.runLater(() -> myClocksPannel.yaw.setText("yaw: " + yawstep.getValue()));
-                    }
-                });
-
-                time.addListener(new ChangeListener<String>() {
-                    @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                        Platform.runLater(() -> myButtons.timer.setText(time.getValue()));
-                        if (speed.intern() == "x1.0")
-                            myButtons.slider.setValue(myButtons.slider.getValue() + 1);
-                        if (speed.intern() == "x2.0")
-                            myButtons.slider.setValue(myButtons.slider.getValue() + 2);
-                        if (speed.intern() == "x1.5")
-                            myButtons.slider.setValue(myButtons.slider.getValue() + 1.5);
-                        if (speed.intern() == "x0.5")
-                            myButtons.slider.setValue(myButtons.slider.getValue() + 0.5);
-                    }
-                });
-
-                rudderstep.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        myJoystick.rudder.setValue(rudderstep.getValue());
-                    }
-                });
-
-                throttlestep.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        myJoystick.throttle.setValue(throttlestep.getValue());
-                    }
-                });
+                setListeners();
             }
         }
     }
 
-    public void WrongFormatAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Wrong format of XML");
-        alert.setContentText("Please check your format and try again");
-
-        alert.showAndWait();
-    }
-
-    public void MissingArgumentAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Missing Arguments");
-        alert.setContentText("Please check your settings and try again");
-
-        alert.showAndWait();
-    }
-
-    public void SuccessAlert() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText("The file was uploaded successfully");
-        alert.setContentText(null);
-
-        alert.showAndWait();
-    }
-
-    int flag = 0;
-
     public void Play() {
-        if (flag == 0) {
+        if (playStart == 0) {
             myButtons.playSpeedDropDown.setValue("x1.0");
-            flag = 1;
+            playStart = 1;
         }
         viewModel.VMplay();
     }
@@ -424,6 +371,22 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         myButtons.slider.setValue(myButtons.slider.getValue() + 30);
     }
 
+    public void setLineCharts (String colName)
+    {
+        setLeftLineChart(colName);
+        setRightLineChart(colName);
+    }
+
+    public void setLeftLineChart(String colName)
+    {
+        viewModel.VMsetLeftLineChart(colName);
+    }
+
+    public void setRightLineChart(String colName)
+    {
+        viewModel.VMsetRightLineChart(colName);
+    }
+
     @Override
     public void LoadClass(String path, String className) {
 
@@ -470,24 +433,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         }
     }
 
-    public void setLineCharts (String colName)
-    {
-        setLeftLineChart(colName);
-        setRightLineChart(colName);
-    }
-
-    public void setLeftLineChart(String colName)
-    {
-        viewModel.VMsetLeftLineChart(colName);
-    }
-
-    public void setRightLineChart(String colName)
-    {
-        viewModel.VMsetRightLineChart(colName);
-    }
-
     @Override
     public void update(Observable o, Object arg) {
-
     }
 }

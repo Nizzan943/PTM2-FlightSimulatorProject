@@ -8,33 +8,33 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class ViewModel extends AllViewModels {
+
+    private ArrayList<String> colsNames;
+
     Model model;
+
     StringProperty loadXMLResult;
     StringProperty openCSVResult;
+    StringProperty chosenXMLFilePath;
+    StringProperty chosenCSVFilePath;
+    StringProperty time;
+
     DoubleProperty minRudder;
     DoubleProperty maxRudder;
     DoubleProperty minThrottle;
     DoubleProperty maxThrottle;
     DoubleProperty maxTimeSlider;
-    StringProperty chosenXMLFilePath;
-    StringProperty chosenCSVFilePath;
 
-    private ArrayList<String> colsNames;
-
-    StringProperty time;
     FloatProperty rudderstep;
     FloatProperty throttlestep;
-
     FloatProperty altimeterstep;
     FloatProperty airspeedstep;
     FloatProperty directionstep;
     FloatProperty pitchstep;
     FloatProperty rollstep;
     FloatProperty yawstep;
-
     FloatProperty aileronstep;
     FloatProperty elevatorstep;
-
     FloatProperty colValues;
     FloatProperty coralatedColValue;
 
@@ -48,6 +48,18 @@ public class ViewModel extends AllViewModels {
 
     public StringProperty getChosenCSVFilePath() {
         return chosenCSVFilePath;
+    }
+
+    public StringProperty getTime() {
+        return time;
+    }
+
+    public StringProperty getLoadXMLResult() {
+        return loadXMLResult;
+    }
+
+    public StringProperty getOpenCSVResult() {
+        return openCSVResult;
     }
 
     public DoubleProperty getMinRudder() {
@@ -68,11 +80,6 @@ public class ViewModel extends AllViewModels {
 
     public DoubleProperty getMaxTimeSlider() {
         return maxTimeSlider;
-    }
-
-
-    public StringProperty getTime() {
-        return time;
     }
 
     public FloatProperty getRudderstep() {
@@ -126,17 +133,21 @@ public class ViewModel extends AllViewModels {
 
     public ViewModel(Model model) {
         this.model = model;
+
+        colsNames = new ArrayList<>();
+
         loadXMLResult = new SimpleStringProperty();
         openCSVResult = new SimpleStringProperty();
         chosenXMLFilePath = new SimpleStringProperty();
         chosenCSVFilePath = new SimpleStringProperty();
+        time = new SimpleStringProperty();
+
         minRudder = new SimpleDoubleProperty();
         maxRudder = new SimpleDoubleProperty();
         minThrottle = new SimpleDoubleProperty();
         maxThrottle = new SimpleDoubleProperty();
         maxTimeSlider = new SimpleDoubleProperty();
-        colsNames = new ArrayList<>();
-        time = new SimpleStringProperty();
+
         rudderstep = new SimpleFloatProperty();
         throttlestep = new SimpleFloatProperty();
         altimeterstep = new SimpleFloatProperty();
@@ -151,25 +162,10 @@ public class ViewModel extends AllViewModels {
         coralatedColValue = new SimpleFloatProperty();
     }
 
-    public StringProperty getLoadXMLResult() {
-        return loadXMLResult;
-    }
-
-    public StringProperty getOpenCSVResult() {
-        return openCSVResult;
-    }
-
-    public void VMLoadXML() {
-        model.ModelLoadXML(chosenXMLFilePath.getValue());
-    }
-
-    public void VMOpenCSV() {
-        model.ModelOpenCSV(chosenCSVFilePath.getValue());
-    }
-
     @Override
     public void update(Observable o, Object arg) {
         String p = (String) arg;
+
         if (p.intern() == "resultLoadXML") {
             if (model.getResultLoadXML().intern() == "WrongFormatAlert")
                 loadXMLResult.set("WrongFormatAlert");
@@ -216,6 +212,14 @@ public class ViewModel extends AllViewModels {
             colValues.set(model.getColValues());
         if (p.intern() == "coralatedColValue")
             coralatedColValue.set(model.getCoralatedColValues());
+    }
+
+    public void VMLoadXML() {
+        model.ModelLoadXML(chosenXMLFilePath.getValue());
+    }
+
+    public void VMOpenCSV() {
+        model.ModelOpenCSV(chosenCSVFilePath.getValue());
     }
 
     public void VMplay() {
