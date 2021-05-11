@@ -337,23 +337,23 @@ public class Model extends AllModels {
         }
     }
 
+    public void suspendForPlay(Thread simulatorThread, Thread timerThread)
+    {
+        if (simulatorThread != null) {
+            simulatorThread.suspend();
+            timerThread.suspend();
+        }
+    }
+
     public void modelGetChoice(String speed) {
         if (speed.intern() == "x2.0") {
-            if (simulator05Thread != null) {
-                simulator05Thread.suspend();
-                timer05Thread.suspend();
-                simulator05Thread = null;
-            }
-            if (simulator10Thread != null) {
-                simulator10Thread.suspend();
-                timer10Thread.suspend();
-                simulator10Thread = null;
-            }
-            if (simulator15Thread != null) {
-                simulator15Thread.suspend();
-                timer15Thread.suspend();
-                simulator15Thread = null;
-            }
+            suspendForPlay(simulator05Thread, timer05Thread);
+            suspendForPlay(simulator10Thread, timer10Thread);
+            suspendForPlay(simulator15Thread, timer15Thread);
+            simulator05Thread = null;
+            simulator10Thread = null;
+            simulator15Thread = null;
+
             simulator20Thread = new Thread(() ->
             {
                 simulatorLoop(2);
@@ -367,21 +367,12 @@ public class Model extends AllModels {
         }
 
         if (speed.intern() == "x0.5") {
-            if (simulator20Thread != null) {
-                simulator20Thread.suspend();
-                timer20Thread.suspend();
-                simulator20Thread = null;
-            }
-            if (simulator10Thread != null) {
-                simulator10Thread.suspend();
-                timer10Thread.suspend();
-                simulator10Thread = null;
-            }
-            if (simulator15Thread != null) {
-                simulator15Thread.suspend();
-                timer15Thread.suspend();
-                simulator15Thread = null;
-            }
+            suspendForPlay(simulator10Thread, timer10Thread);
+            suspendForPlay(simulator15Thread, timer15Thread);
+            suspendForPlay(simulator20Thread, timer20Thread);
+            simulator10Thread = null;
+            simulator15Thread = null;
+            simulator20Thread = null;
             simulator05Thread = new Thread(() ->
             {
                 simulatorLoop(0.5);
@@ -396,41 +387,23 @@ public class Model extends AllModels {
 
         if (speed.intern() == "x1.0") {
             if (simulator15Thread != null || simulator20Thread != null || simulator05Thread != null) {
-                if (simulator05Thread != null) {
-                    simulator05Thread.suspend();
-                    timer05Thread.suspend();
-                    simulator05Thread = null;
-                }
-                if (simulator20Thread != null) {
-                    simulator20Thread.suspend();
-                    timer20Thread.suspend();
-                    simulator20Thread = null;
-                }
-                if (simulator15Thread != null) {
-                    simulator15Thread.suspend();
-                    timer15Thread.suspend();
-                    simulator15Thread = null;
-                }
+                suspendForPlay(simulator05Thread, timer05Thread);
+                suspendForPlay(simulator15Thread, timer15Thread);
+                suspendForPlay(simulator20Thread, timer20Thread);
+                simulator05Thread = null;
+                simulator15Thread = null;
+                simulator20Thread = null;
                 modelPlay();
             }
         }
 
         if (speed.intern() == "x1.5") {
-            if (simulator05Thread != null) {
-                simulator05Thread.suspend();
-                timer05Thread.suspend();
-                simulator05Thread = null;
-            }
-            if (simulator10Thread != null) {
-                simulator10Thread.suspend();
-                timer10Thread.suspend();
-                simulator10Thread = null;
-            }
-            if (simulator20Thread != null) {
-                simulator20Thread.suspend();
-                timer20Thread.suspend();
-                simulator20Thread = null;
-            }
+            suspendForPlay(simulator05Thread, timer05Thread);
+            suspendForPlay(simulator10Thread, timer10Thread);
+            suspendForPlay(simulator20Thread, timer20Thread);
+            simulator05Thread = null;
+            simulator10Thread = null;
+            simulator20Thread = null;
             simulator15Thread = new Thread(() ->
             {
                 simulatorLoop(1.5);
@@ -444,28 +417,22 @@ public class Model extends AllModels {
         }
     }
 
+    public void suspendForPause(Thread simulatorThread, Thread timerThread)
+    {
+        if (simulatorThread != null)
+        {
+            simulatorThread.suspend();
+            timerThread.suspend();
+        }
+    }
+
     public void modelpause()
     {
-        if (simulator10Thread != null)
-        {
-            simulator10Thread.suspend();
-            timer10Thread.suspend();
-        }
-        else if (simulator15Thread != null)
-        {
-            simulator15Thread.suspend();
-            timer15Thread.suspend();
-        }
-        else if (simulator20Thread != null)
-        {
-            simulator20Thread.suspend();
-            timer20Thread.suspend();
-        }
-        else if (simulator05Thread != null)
-        {
-            simulator05Thread.suspend();
-            timer05Thread.suspend();
-        }
+        suspendForPause(simulator05Thread, timer05Thread);
+        suspendForPause(simulator10Thread, timer10Thread);
+        suspendForPause(simulator15Thread, timer15Thread);
+        suspendForPause(simulator20Thread, timer20Thread);
+
         playFlag = 1;
     }
 
