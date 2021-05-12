@@ -15,6 +15,8 @@ public class MyGraphs extends Pane
 
     XYChart.Series rightSeries = new XYChart.Series();
 
+    XYChart.Series algorithmSeries = new XYChart.Series();
+
     public List<Node> set() {
         List<Node> ret = new ArrayList<>();
 
@@ -45,6 +47,20 @@ public class MyGraphs extends Pane
         rightyAxis.setTickLabelsVisible(false);
         rightSeries.setName("correlated parameter values");
         ret.add(rightLineChart);
+
+        final NumberAxis algorithmxAxis = new NumberAxis();
+        final NumberAxis algorithmyAxis = new NumberAxis();
+        final LineChart<Number,Number> algorithmLineChart = new LineChart<Number,Number>(algorithmxAxis, algorithmyAxis);
+
+        algorithmLineChart.setLayoutX(180);
+        algorithmLineChart.setLayoutY(205);
+        algorithmLineChart.setPrefSize(420,260);
+        algorithmLineChart.setCreateSymbols(false);
+        algorithmLineChart.getData().add(algorithmSeries);
+        algorithmxAxis.setTickLabelsVisible(false);
+        algorithmyAxis.setTickLabelsVisible(false);
+        algorithmSeries.setName("chosen anomaly detector");
+        ret.add(algorithmLineChart);
 
         return ret;
     }
