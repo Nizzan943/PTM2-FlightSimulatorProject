@@ -142,9 +142,9 @@ public class Model extends AllModels {
         }
         setChanged();
         notifyObservers("resultLoadXML");
-       // timeSeries = new TimeSeries(XML_settings.additionalSettings.getProperFlightFile());
-       // timeSeries.setCorrelationTresh(0);
-       // linearRegression.learnNormal(timeSeries);
+        timeSeries = new TimeSeries(XML_settings.additionalSettings.getProperFlightFile());
+        timeSeries.setCorrelationTresh(0);
+        linearRegression.learnNormal(timeSeries);
     }
 
     public void ModelOpenCSV(String chosenPath) {
@@ -288,17 +288,14 @@ public class Model extends AllModels {
         elevatorstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("elevator"))].getFloats().get(numofrow);
         setChanged();
         notifyObservers("elevator");
-/*
-            colValues = in.getCols()[in.getColIndex(nameOfCol)].getFloats().get(numofrow);
-            setChanged();
-            notifyObservers("colValues");
 
-            colValues = in.getCols()[in.getColIndex(nameOfCoralatedCol)].getFloats().get(numofrow);
-            setChanged();
-            notifyObservers("coralatedColValue");
+        colValues = in.getCols()[in.getColIndex(nameOfCol)].getFloats().get(numofrow);
+        setChanged();
+        notifyObservers("colValues");
 
-
-             */
+        coralatedColValues = in.getCols()[in.getColIndex(nameOfCoralatedCol)].getFloats().get(numofrow);
+        setChanged();
+        notifyObservers("coralatedColValue");
     }
 
     public void simulatorLoop(double speed) {

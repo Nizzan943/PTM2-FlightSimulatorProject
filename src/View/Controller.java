@@ -52,7 +52,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
 
         board.getChildren().addAll(myListView.set());
         myListView.open.setOnAction((e) -> openCSV());
-      //  myListView.listView.setOnMouseClicked((e) -> setLineCharts((String)myListView.listView.getSelectionModel().getSelectedItem()));
+        myListView.listView.setOnMouseClicked((e) -> setLineCharts((String)myListView.listView.getSelectionModel().getSelectedItem()));
 
         board.getChildren().addAll(myButtons.set());
         myButtons.play.setOnAction((e) -> Play());
@@ -222,13 +222,11 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
             numOfRow++;
         });
 
-           /*
+
         coralatedColValue.addListener((observable, oldValue, newValue) -> {
             Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numOfRow, coralatedColValue.getValue()))));
             numOfRow++;
         });
-
-*/
 
         aileronstep.addListener((observable, oldValue, newValue) -> myJoystick.innerCircle.setCenterX(aileronstep.getValue() * 100));
 
