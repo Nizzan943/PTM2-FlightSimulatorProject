@@ -13,6 +13,7 @@ import java.io.*;
 public class TimeSeries {
 
     public class col {
+
         private String name;
 
         private ArrayList<Float> floats;
@@ -34,18 +35,11 @@ public class TimeSeries {
             return floats;
         }
 
-        public void setFloats(ArrayList<Float> floats) {
-            this.floats = floats;
-        }
-
     }
 
     private col[] cols;
-    private ArrayList<String> rows = new ArrayList<>();
 
-    public void setCorrelationTresh(double correlationTresh) {
-        this.correlationTresh = correlationTresh;
-    }
+    private ArrayList<String> rows = new ArrayList<>();
 
     public double correlationTresh = 0.9;
 
@@ -53,8 +47,20 @@ public class TimeSeries {
 
     Path path_of_file;
 
+    public void setCorrelationTresh(double correlationTresh) {
+        this.correlationTresh = correlationTresh;
+    }
+
+    public col[] getCols() {
+        return cols;
+    }
+
+    public ArrayList<String> getRows() {
+        return rows;
+    }
 
     public TimeSeries(String csvFileName) {
+
         this.myCSVname = csvFileName;
         this.path_of_file = Paths.get(csvFileName);
 
@@ -80,33 +86,19 @@ public class TimeSeries {
 
                 value = line.split(",");
 
-			/*	for (int i=0;i<value.length;i++)
-				{
-					//if (value[i].equals("done"))
-						line = bufferedReader.readLine();
-				}
-				*/
-
-                //value = line.split(",");
-
                 for (int j = 0; j < value.length; j++)
                     cols[j].getFloats().add(Float.parseFloat(value[j]));
-
 
                 line = bufferedReader.readLine();
                 rows.add(line);
 
             }
+
             bufferedReader.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-
-    public col[] getCols() {
-        return cols;
     }
 
     public float[] ArrListToArr(ArrayList<Float> list) {
@@ -118,11 +110,6 @@ public class TimeSeries {
         return f;
 
     }
-
-    public ArrayList<String> getRows() {
-        return rows;
-    }
-
 
     public Point[] ArrToPoint(float[] x, float[] y) {
         Point[] p = new Point[x.length];
@@ -143,6 +130,5 @@ public class TimeSeries {
         }
         return -1;
     }
-
 
 }

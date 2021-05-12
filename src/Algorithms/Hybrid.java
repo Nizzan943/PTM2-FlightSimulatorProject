@@ -15,6 +15,7 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
 
         //linearReg
         int flag;
+        int flag2;
         LinearRegression linearReg = new LinearRegression();
         timeSeries1.setCorrelationTresh(0.95);
         linearReg.learnNormal(timeSeries1);
@@ -22,7 +23,6 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
         for (AnomalyReport report : linearReg_detect) {
             detections.add(report);
         }
-
 
         //Hybrid
         LinearRegression linearReg_hybrid = new LinearRegression();
@@ -43,12 +43,18 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
         List<AnomalyReport> Hybrid_detect = this.detect(timeSeries2);
         for (AnomalyReport report : Hybrid_detect) {
             flag = 0;
+            flag2 = 1;
             for (AnomalyReport detection : detections) {
                 String[] arr = detection.description.split("-");
                 if (report.description.contains(arr[0]) || report.description.contains(arr[1]))
                     flag = 1;
             }
-            if (flag == 0)
+            for (CorrelatedFeatures features : f)
+            {
+                if (report.description.contains(features.feature1) && report.description.contains(features.feature2))
+                    flag2 = 0;
+            }
+            if (flag == 0  && flag2 == 0)
                 detections.add(report);
         }
 
@@ -64,6 +70,8 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
             if (flag == 0)
                 detections.add(report);
         }
+
+
         return detections;
 
     }
@@ -89,7 +97,6 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
                     Circle circle = Welzl.makeCircle(pointsVector);
                     circles.add(circle);
                 }
-
 
             }
         }
@@ -132,6 +139,4 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
 
         return anomalyReports;
     }
-
-
 }

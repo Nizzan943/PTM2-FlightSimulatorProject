@@ -23,20 +23,6 @@ public class HandleXML {
     public boolean MissingArgumentsAlert = false;
 
 
-    /* public static void serializeToXML(UserSettings settings) throws IOException {
-         FileOutputStream fos = new FileOutputStream("settings.xml");
-         XMLEncoder encoder = new XMLEncoder(fos);
-         encoder.setExceptionListener(new ExceptionListener() {
-             public void exceptionThrown(Exception e) {
-                 System.out.println("Exception! :" + e.toString());
-             }
-         });
-         encoder.writeObject(settings);
-         encoder.close();
-         fos.close();
-     }
-
- */
     public void deserializeFromXML(String path) {
         XMLDecoder decoder = null;
         try {
