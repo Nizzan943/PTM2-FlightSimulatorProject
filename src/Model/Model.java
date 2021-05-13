@@ -4,6 +4,7 @@ package Model;
 import Algorithms.LinearRegression;
 import Server.*;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -57,7 +58,9 @@ public class Model extends AllModels {
     ArrayList<String> colsNames = new ArrayList<>();
     Map<String, Integer> CSVindexmap = new HashMap<>();
 
-    TimeSeries timeSeries;
+    TimeSeriesAnomalyDetector ad;
+    TimeSeries regularFlight;
+    TimeSeries anomalyFlight;
     LinearRegression linearRegression = new LinearRegression();
 
     public String gettime() {
@@ -142,9 +145,9 @@ public class Model extends AllModels {
         }
         setChanged();
         notifyObservers("resultLoadXML");
-        timeSeries = new TimeSeries(XML_settings.additionalSettings.getProperFlightFile());
-        timeSeries.setCorrelationTresh(0);
-        linearRegression.learnNormal(timeSeries);
+        regularFlight = new TimeSeries(XML_settings.additionalSettings.getProperFlightFile());
+        regularFlight.setCorrelationTresh(0);
+        linearRegression.learnNormal(regularFlight);
     }
 
     public void ModelOpenCSV(String chosenPath) {
@@ -186,6 +189,7 @@ public class Model extends AllModels {
                 colsNames.add(col.getName());
             }
             CSVpath = chosenPath;
+            anomalyFlight = new TimeSeries(CSVpath);
             try {
                 fg = new Socket("localhost", 5400);
             } catch (IOException e) {
@@ -503,16 +507,92 @@ public class Model extends AllModels {
 
     public void modelSetRightLineChart(String colName)
     {
-        //Thread a = new Thread( () ->
-        {
-            List<CorrelatedFeatures> list = linearRegression.getNormalModel();
-            for (CorrelatedFeatures features : list) {
-                if (features.feature1.intern() == colName.intern())
-                    nameOfCoralatedCol = features.feature2;
-            }
+        List<CorrelatedFeatures> list = linearRegression.getNormalModel();
+        for (CorrelatedFeatures features : list) {
+            if (features.feature1.intern() == colName.intern())
+                nameOfCoralatedCol = features.feature2;
         }
-       // });
-       // a.start();
     }
+
+    public void modelSetAlgorithmLineChart(String colName)
+    {
+        ad.learnNormal(regularFlight);
+        ad.detect(anomalyFlight);
+    }
+
+    public void modelLoadAlgorithm(String resultClassDirectory, String resultClassName)
+    {
+        URLClassLoader urlClassLoader = null;
+        try {
+            urlClassLoader = URLClassLoader.newInstance(new URL[] {
+                    new URL("file://" + resultClassDirectory)
+            });
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        Class<?> c= null;
+        try {
+            c = urlClassLoader.loadClass(resultClassName);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // create a  TimeSeriesAnomalyDetector instance
+        try {
+            ad =(TimeSeriesAnomalyDetector) c.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+    @Override
+    public void LoadClass(String path, String className) {
+
+        File file = new File(path);
+
+        URL url;
+
+        URL[] urlArray;
+
+        FileInputStream fileInputStream = null;
+
+        URLClassLoader urlClassLoader = null;
+
+        Class<?> aClass = null;
+
+        try {
+            url = file.toURI().toURL();
+
+            urlArray = new URL[]{url};
+
+            urlClassLoader = URLClassLoader.newInstance(urlArray);
+
+        } catch (MalformedURLException e) {
+
+        }
+
+        try {
+            fileInputStream = new FileInputStream(path);
+
+        } catch (FileNotFoundException e) {
+
+        }
+
+        ClassLoader.getSystemClassLoader().getResourceAsStream(fileInputStream.toString());
+
+        try {
+            aClass = urlClassLoader.loadClass(className);
+        } catch (ClassNotFoundException e) {
+        }
+
+        try {
+            aClass.newInstance();
+        } catch (IllegalAccessException | InstantiationException e) {
+        }
+    }
+     */
 }
 

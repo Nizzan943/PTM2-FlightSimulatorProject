@@ -4,25 +4,31 @@ import Server.PluginLoader;
 import Server.TimeSeriesAnomalyDetector;
 import ViewModel.ViewModel;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
+import javafx.util.Pair;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.net.MalformedURLException;
 import java.net.URLClassLoader;
 
-public class Controller extends Pane implements Observer, Initializable, PluginLoader<TimeSeriesAnomalyDetector> {
+public class Controller extends Pane implements Observer, Initializable {
 
     @FXML
     Pane board;
@@ -49,6 +55,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     public void initialize(URL location, ResourceBundle resources) {
         board.getChildren().add(myMenu.set());
         myMenu.loadXML.setOnAction((e) -> LoadXML());
+        myMenu.loadAlgorithm.setOnAction((e) -> loadAlgorithm());
 
         board.getChildren().addAll(myListView.set());
         myListView.open.setOnAction((e) -> openCSV());
@@ -369,6 +376,7 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
     {
         setLeftLineChart(colName);
         setRightLineChart(colName);
+        setAlgorithmLineChart(colName);
     }
 
     public void setLeftLineChart(String colName)
@@ -381,50 +389,45 @@ public class Controller extends Pane implements Observer, Initializable, PluginL
         viewModel.VMsetRightLineChart(colName);
     }
 
-    @Override
-    public void LoadClass(String path, String className) {
+    public void setAlgorithmLineChart(String colName)
+    {
+        viewModel.VMsetAlgorithmLineChart(colName);
+    }
 
-        File file = new File(path);
+    public void loadAlgorithm()
+    {
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Load Algorithm");
+        dialog.setHeaderText("Choose Algorithm");
 
-        URL url;
+        ButtonType OK = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(OK, ButtonType.CANCEL);
 
-        URL[] urlArray;
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
 
-        FileInputStream fileInputStream = null;
+        TextField classDirectory = new TextField();
+        classDirectory.setPromptText("class directory");
+        TextField className = new TextField();
+        className.setPromptText("class name");
 
-        URLClassLoader urlClassLoader = null;
+        grid.add(new Label("class directory:"), 0, 0);
+        grid.add(classDirectory, 1, 0);
+        grid.add(new Label("class name:"), 0, 1);
+        grid.add(className, 1, 1);
 
-        Class<?> aClass = null;
+        dialog.getDialogPane().setContent(grid);
+        dialog.showAndWait();
 
-        try {
-            url = file.toURI().toURL();
+        while (classDirectory.getText() == null);
+        String resultClassDirectory = classDirectory.getText();
 
-            urlArray = new URL[]{url};
+        while (className.getText() == null);
+        String resultClassName = className.getText();
 
-            urlClassLoader = URLClassLoader.newInstance(urlArray);
-
-        } catch (MalformedURLException e) {
-
-        }
-
-        try {
-            fileInputStream = new FileInputStream(path);
-
-        } catch (FileNotFoundException e) {
-
-        }
-
-        ClassLoader.getSystemClassLoader().getResourceAsStream(fileInputStream.toString());
-
-        try {
-            aClass = urlClassLoader.loadClass(className);
-        } catch (ClassNotFoundException e) {
-        }
-
-        try {
-            aClass.newInstance();
-        } catch (IllegalAccessException | InstantiationException e) {
-        }
+        viewModel.VMLoadAlgorithm(resultClassDirectory, resultClassName);
     }
 
     @Override

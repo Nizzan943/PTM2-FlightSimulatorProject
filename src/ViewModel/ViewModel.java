@@ -285,4 +285,14 @@ public class ViewModel extends AllViewModels {
     {
         model.modelSetRightLineChart(colName);
     }
+
+    public void VMsetAlgorithmLineChart(String colName)
+    {
+        model.modelSetAlgorithmLineChart(colName);
+    }
+
+    public void VMLoadAlgorithm(String resultClassDirectory, String resultClassName)
+    {
+        model.modelLoadAlgorithm(resultClassDirectory, resultClassName);
+    }
 }
