@@ -80,6 +80,9 @@ public class StatLib {
         for (int i = 0; i < points.length; i++)
             arrY[i] = points[i].y;
 
+        if (var(arrX) == 0)
+            return new Line(0,0);
+
         float a = cov(arrX, arrY) / var(arrX);
 
         float b = avg(arrY) - (a * avg(arrX));

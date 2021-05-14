@@ -389,6 +389,7 @@ public class Controller extends Pane implements Observer, Initializable {
 
     public void setAlgorithmLineChart(String colName)
     {
+        myGraphs.algorithmSeries.getData().clear();
         viewModel.VMsetAlgorithmLineChart(colName);
         algorithmLine = viewModel.getAlgorithmLine();
 
@@ -406,7 +407,7 @@ public class Controller extends Pane implements Observer, Initializable {
         dialog.setHeaderText("Choose Algorithm");
 
         ButtonType OK = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(OK);
+        dialog.getDialogPane().getButtonTypes().add(OK);
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
