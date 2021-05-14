@@ -57,13 +57,13 @@ public class Model extends AllModels {
     private float yawstep;
     private float colValues;
     private float coralatedColValues;
-    private float algorithmColValues;
-    private float algorithmCoralatedColValues;
 
     private Line algorithmLine;
 
-    ArrayList<String> colsNames = new ArrayList<>();
-    Map<String, Integer> CSVindexmap = new HashMap<>();
+    private ArrayList<String> colsNames = new ArrayList<>();
+    private Map<String, Integer> CSVindexmap = new HashMap<>();
+    private ArrayList<Float> algorithmColValues = new ArrayList<>();
+    private ArrayList<Float> algorithmCoralatedColValues = new ArrayList<>();
 
     TimeSeriesAnomalyDetector ad;
     TimeSeries regularFlight;
@@ -83,6 +83,14 @@ public class Model extends AllModels {
 
     public ArrayList<String> getColsNames() {
         return colsNames;
+    }
+
+    public ArrayList<Float> getAlgorithmColValues() {
+        return algorithmColValues;
+    }
+
+    public ArrayList<Float> getAlgorithmCoralatedColValues() {
+        return algorithmCoralatedColValues;
     }
 
     public float getRudderstep() {
@@ -133,13 +141,6 @@ public class Model extends AllModels {
         return coralatedColValues;
     }
 
-    public float getAlgorithmColValues() {
-        return algorithmColValues;
-    }
-
-    public float getAlgorithmCoralatedColValues() {
-        return algorithmCoralatedColValues;
-    }
 
     public int getFlightLong()
     {
@@ -323,6 +324,7 @@ public class Model extends AllModels {
         coralatedColValues = in.getCols()[in.getColIndex(nameOfCoralatedCol)].getFloats().get(numofrow);
         setChanged();
         notifyObservers("coralatedColValue");
+
     }
 
     public void simulatorLoop(double speed) {
@@ -545,6 +547,15 @@ public class Model extends AllModels {
         {
             if (features.feature1.intern() == colName.intern() && features.feature2.intern() == nameOfCoralatedCol.intern())
                 algorithmLine = features.lin_reg;
+        }
+        for (float value: regularFlight.getCols()[regularFlight.getColIndex(colName)].getFloats())
+        {
+            algorithmColValues.add(value);
+        }
+
+        for (float value: regularFlight.getCols()[regularFlight.getColIndex(nameOfCoralatedCol)].getFloats())
+        {
+            algorithmCoralatedColValues.add(value);
         }
     }
 

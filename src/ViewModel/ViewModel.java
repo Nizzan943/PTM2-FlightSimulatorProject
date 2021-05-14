@@ -2,6 +2,7 @@ package ViewModel;
 
 import Model.Model;
 import Server.Line;
+import Server.Point;
 import javafx.beans.property.*;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -9,6 +10,9 @@ import java.util.Observable;
 public class ViewModel extends AllViewModels {
 
     private ArrayList<String> colsNames;
+
+    private ArrayList<Float> algorithmColValues;
+    private ArrayList<Float> algorithmCoralatedColValues;
 
     Line algorithmLine;
 
@@ -43,6 +47,14 @@ public class ViewModel extends AllViewModels {
 
     public ArrayList<String> getColsNames() {
         return colsNames;
+    }
+
+    public ArrayList<Float> getAlgorithmColValues() {
+        return algorithmColValues;
+    }
+
+    public ArrayList<Float> getAlgorithmCoralatedColValues() {
+        return algorithmCoralatedColValues;
     }
 
     public Line getAlgorithmLine() {
@@ -142,10 +154,12 @@ public class ViewModel extends AllViewModels {
         return coralatedColValue;
     }
 
+
     public ViewModel(Model model) {
         this.model = model;
 
         colsNames = new ArrayList<>();
+        algorithmColValues = new ArrayList<>();
 
         loadXMLResult = new SimpleStringProperty();
         openCSVResult = new SimpleStringProperty();
@@ -307,6 +321,8 @@ public class ViewModel extends AllViewModels {
 
         model.modelSetAlgorithmLineChart(colName);
         algorithmLine = model.getAlgorithmLine();
+        algorithmColValues = model.getAlgorithmColValues();
+        algorithmCoralatedColValues = model.getAlgorithmCoralatedColValues();
     }
 
     public void VMLoadAlgorithm(String resultClassDirectory, String resultClassName)

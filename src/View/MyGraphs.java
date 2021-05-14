@@ -3,6 +3,7 @@ package View;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.Pane;
 
@@ -16,6 +17,8 @@ public class MyGraphs extends Pane
     XYChart.Series rightSeries = new XYChart.Series();
 
     XYChart.Series algorithmSeries = new XYChart.Series();
+    XYChart.Series algorithmSeries1 = new XYChart.Series();
+    XYChart.Series algorithmSeries2 = new XYChart.Series();
 
     public List<Node> set() {
         List<Node> ret = new ArrayList<>();
@@ -50,16 +53,19 @@ public class MyGraphs extends Pane
 
         final NumberAxis algorithmxAxis = new NumberAxis();
         final NumberAxis algorithmyAxis = new NumberAxis();
-        final LineChart<Number,Number> algorithmLineChart = new LineChart<Number,Number>(algorithmxAxis, algorithmyAxis);
+        final ScatterChart<Number,Number> algorithmLineChart = new ScatterChart<>(algorithmxAxis, algorithmyAxis);
 
         algorithmLineChart.setLayoutX(180);
         algorithmLineChart.setLayoutY(205);
         algorithmLineChart.setPrefSize(420,260);
-        algorithmLineChart.setCreateSymbols(false);
         algorithmLineChart.getData().add(algorithmSeries);
+        algorithmLineChart.getData().add(algorithmSeries1);
+        algorithmLineChart.getData().add(algorithmSeries2);
         algorithmxAxis.setTickLabelsVisible(false);
         algorithmyAxis.setTickLabelsVisible(false);
-        algorithmSeries.setName("chosen anomaly detector");
+        algorithmSeries.setName("chosen anomaly detector line");
+        algorithmSeries1.setName("regular flight values");
+        algorithmSeries2.setName("anomaly flight values");
         ret.add(algorithmLineChart);
 
         return ret;

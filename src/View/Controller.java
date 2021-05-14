@@ -224,6 +224,7 @@ public class Controller extends Pane implements Observer, Initializable {
     {
         colValues.addListener((observable, oldValue, newValue) -> {
             Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numOfRow, colValues.getValue()))));
+            Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(colValues.getValue(), coralatedColValue.getValue()))));
             numOfRow++;
         });
 
@@ -397,6 +398,12 @@ public class Controller extends Pane implements Observer, Initializable {
             float y = algorithmLine.f(i);
             int finalI = i;
             Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
+        }
+
+        for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=300)
+        {
+            int finalI = i;
+            Platform.runLater(() ->myGraphs.algorithmSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI))));
         }
     }
 
