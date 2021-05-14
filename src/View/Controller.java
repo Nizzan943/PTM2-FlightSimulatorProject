@@ -389,6 +389,13 @@ public class Controller extends Pane implements Observer, Initializable {
 
     public void setRightLineChart(String colName)
     {
+        myGraphs.rightSeries.getData().clear();
+        viewModel.VMsetAlgorithmLineChart(colName);
+        for (int i = 0; i < numofrow.getValue(); i++)
+        {
+            int finalI = i;
+            Platform.runLater(() -> myGraphs.rightSeries.getData().add(new XYChart.Data(finalI, viewModel.getAlgorithmCoralatedColValues().get(finalI))));
+        }
         viewModel.VMsetRightLineChart(colName);
     }
 
