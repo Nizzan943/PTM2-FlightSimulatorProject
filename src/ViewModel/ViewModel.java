@@ -14,36 +14,37 @@ public class ViewModel extends AllViewModels {
     private ArrayList<Float> algorithmColValues;
     private ArrayList<Float> algorithmCoralatedColValues;
 
-    Line algorithmLine;
+    private Line algorithmLine;
 
     Model model;
 
-    IntegerProperty flightLong;
+    private IntegerProperty flightLong;
+    private IntegerProperty numofrow;
 
-    StringProperty loadXMLResult;
-    StringProperty openCSVResult;
-    StringProperty chosenXMLFilePath;
-    StringProperty chosenCSVFilePath;
-    StringProperty time;
+    private StringProperty loadXMLResult;
+    private StringProperty openCSVResult;
+    private StringProperty chosenXMLFilePath;
+    private StringProperty chosenCSVFilePath;
+    private StringProperty time;
 
-    DoubleProperty minRudder;
-    DoubleProperty maxRudder;
-    DoubleProperty minThrottle;
-    DoubleProperty maxThrottle;
-    DoubleProperty maxTimeSlider;
+    private DoubleProperty minRudder;
+    private DoubleProperty maxRudder;
+    private DoubleProperty minThrottle;
+    private DoubleProperty maxThrottle;
+    private DoubleProperty maxTimeSlider;
 
-    FloatProperty rudderstep;
-    FloatProperty throttlestep;
-    FloatProperty altimeterstep;
-    FloatProperty airspeedstep;
-    FloatProperty directionstep;
-    FloatProperty pitchstep;
-    FloatProperty rollstep;
-    FloatProperty yawstep;
-    FloatProperty aileronstep;
-    FloatProperty elevatorstep;
-    FloatProperty colValues;
-    FloatProperty coralatedColValue;
+    private FloatProperty rudderstep;
+    private FloatProperty throttlestep;
+    private FloatProperty altimeterstep;
+    private FloatProperty airspeedstep;
+    private FloatProperty directionstep;
+    private  FloatProperty pitchstep;
+    private FloatProperty rollstep;
+    private FloatProperty yawstep;
+    private FloatProperty aileronstep;
+    private FloatProperty elevatorstep;
+    private FloatProperty colValues;
+    private FloatProperty coralatedColValue;
 
     public ArrayList<String> getColsNames() {
         return colsNames;
@@ -63,6 +64,11 @@ public class ViewModel extends AllViewModels {
 
     public IntegerProperty getFlightLong() {
         return flightLong;
+    }
+
+    public IntegerProperty getNumofrow()
+    {
+        return numofrow;
     }
 
     public StringProperty getChosenXMLFilePath() {
@@ -187,6 +193,7 @@ public class ViewModel extends AllViewModels {
         coralatedColValue = new SimpleFloatProperty();
 
         flightLong = new SimpleIntegerProperty();
+        numofrow = new SimpleIntegerProperty();
     }
 
     @Override
@@ -239,6 +246,8 @@ public class ViewModel extends AllViewModels {
             colValues.set(model.getColValues());
         if (p.intern() == "coralatedColValue")
             coralatedColValue.set(model.getCoralatedColValues());
+        if (p.intern() == "numofrow")
+            numofrow.set(model.getNumofrow());
     }
 
     public void VMLoadXML() {

@@ -141,6 +141,10 @@ public class Model extends AllModels {
         return coralatedColValues;
     }
 
+    public int getNumofrow()
+    {
+        return numofrow;
+    }
 
     public int getFlightLong()
     {
@@ -324,7 +328,6 @@ public class Model extends AllModels {
         coralatedColValues = in.getCols()[in.getColIndex(nameOfCoralatedCol)].getFloats().get(numofrow);
         setChanged();
         notifyObservers("coralatedColValue");
-
     }
 
     public void simulatorLoop(double speed) {
@@ -336,6 +339,8 @@ public class Model extends AllModels {
 
             changeSpeed(speed);
             numofrow++;
+            setChanged();
+            notifyObservers("numofrow");
         }
         out.close();
         try {

@@ -78,6 +78,7 @@ public class Controller extends Pane implements Observer, Initializable {
     String speed;
 
     IntegerProperty flightLong;
+    IntegerProperty numofrow;
 
     StringProperty resultOpenCSV;
     StringProperty chosenCSVFilePath;
@@ -104,7 +105,6 @@ public class Controller extends Pane implements Observer, Initializable {
     FloatProperty colValues;
     FloatProperty coralatedColValue;
 
-    int numOfRow = 0;
     int playStart = 0;
 
     public void setViewModel(ViewModel viewModel) {
@@ -178,6 +178,9 @@ public class Controller extends Pane implements Observer, Initializable {
 
         flightLong = new SimpleIntegerProperty();
         flightLong.bind(viewModel.getFlightLong());
+
+        numofrow = new SimpleIntegerProperty();
+        numofrow.bind(viewModel.getNumofrow());
     }
 
     public void openCSV() {
@@ -222,16 +225,10 @@ public class Controller extends Pane implements Observer, Initializable {
 
     public void setListeners()
     {
-        colValues.addListener((observable, oldValue, newValue) -> {
-            Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numOfRow, colValues.getValue()))));
-            Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(colValues.getValue(), coralatedColValue.getValue()))));
-            numOfRow++;
-        });
-
-
-        coralatedColValue.addListener((observable, oldValue, newValue) -> {
-            Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numOfRow, coralatedColValue.getValue()))));
-            numOfRow++;
+        numofrow.addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numofrow.getValue(), colValues.getValue()))));
+            Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numofrow.getValue(), coralatedColValue.getValue()))));
+            //Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(colValues.getValue(), coralatedColValue.getValue()))));
         });
 
         aileronstep.addListener((observable, oldValue, newValue) -> myJoystick.innerCircle.setCenterX(aileronstep.getValue() * 100));
@@ -390,21 +387,26 @@ public class Controller extends Pane implements Observer, Initializable {
 
     public void setAlgorithmLineChart(String colName)
     {
-        myGraphs.algorithmSeries.getData().clear();
         viewModel.VMsetAlgorithmLineChart(colName);
         algorithmLine = viewModel.getAlgorithmLine();
 
-        for (int i = 0; i < flightLong.getValue(); i++) {
+        for (int i = -300; i < 450; i++) {
             float y = algorithmLine.f(i);
             int finalI = i;
             Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
         }
+        myGraphs.algorithmSeries.getData().clear();
 
-        for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=300)
+        /*
+        for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=30)
         {
             int finalI = i;
             Platform.runLater(() ->myGraphs.algorithmSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI))));
+            //if (i % 30 == 0)
+             //   myGraphs.algorithmSeries1.getData().clear();
         }
+
+         */
     }
 
     public void loadAlgorithm()
