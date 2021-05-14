@@ -1,6 +1,7 @@
 package ViewModel;
 
 import Model.Model;
+import Server.Line;
 import javafx.beans.property.*;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -9,7 +10,11 @@ public class ViewModel extends AllViewModels {
 
     private ArrayList<String> colsNames;
 
+    Line algorithmLine;
+
     Model model;
+
+    IntegerProperty flightLong;
 
     StringProperty loadXMLResult;
     StringProperty openCSVResult;
@@ -38,6 +43,14 @@ public class ViewModel extends AllViewModels {
 
     public ArrayList<String> getColsNames() {
         return colsNames;
+    }
+
+    public Line getAlgorithmLine() {
+        return algorithmLine;
+    }
+
+    public IntegerProperty getFlightLong() {
+        return flightLong;
     }
 
     public StringProperty getChosenXMLFilePath() {
@@ -158,6 +171,8 @@ public class ViewModel extends AllViewModels {
         elevatorstep = new SimpleFloatProperty();
         colValues = new SimpleFloatProperty();
         coralatedColValue = new SimpleFloatProperty();
+
+        flightLong = new SimpleIntegerProperty();
     }
 
     @Override
@@ -218,6 +233,7 @@ public class ViewModel extends AllViewModels {
 
     public void VMOpenCSV() {
         model.ModelOpenCSV(chosenCSVFilePath.getValue());
+        flightLong.set(model.getFlightLong());
     }
 
     public void VMplay() {
@@ -288,7 +304,9 @@ public class ViewModel extends AllViewModels {
 
     public void VMsetAlgorithmLineChart(String colName)
     {
+
         model.modelSetAlgorithmLineChart(colName);
+        algorithmLine = model.getAlgorithmLine();
     }
 
     public void VMLoadAlgorithm(String resultClassDirectory, String resultClassName)

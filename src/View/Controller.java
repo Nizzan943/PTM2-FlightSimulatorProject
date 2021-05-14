@@ -1,32 +1,23 @@
 package View;
 
-import Server.PluginLoader;
-import Server.TimeSeriesAnomalyDetector;
+import Server.Line;
+import Server.Point;
 import ViewModel.ViewModel;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.TilePane;
-import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.util.Pair;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.*;
-import java.net.MalformedURLException;
-import java.net.URLClassLoader;
 
 public class Controller extends Pane implements Observer, Initializable {
 
@@ -80,9 +71,13 @@ public class Controller extends Pane implements Observer, Initializable {
 
     ArrayList<String> colsNames = new ArrayList<>();
 
+    Line algorithmLine;
+
     ViewModel viewModel;
 
     String speed;
+
+    IntegerProperty flightLong;
 
     StringProperty resultOpenCSV;
     StringProperty chosenCSVFilePath;
@@ -180,6 +175,9 @@ public class Controller extends Pane implements Observer, Initializable {
 
         coralatedColValue = new SimpleFloatProperty();
         coralatedColValue.bind(viewModel.getCoralatedColValue());
+
+        flightLong = new SimpleIntegerProperty();
+        flightLong.bind(viewModel.getFlightLong());
     }
 
     public void openCSV() {
@@ -392,6 +390,13 @@ public class Controller extends Pane implements Observer, Initializable {
     public void setAlgorithmLineChart(String colName)
     {
         viewModel.VMsetAlgorithmLineChart(colName);
+        algorithmLine = viewModel.getAlgorithmLine();
+
+        for (int i = 0; i < flightLong.getValue(); i++) {
+            float y = algorithmLine.f(i);
+            int finalI = i;
+            Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
+        }
     }
 
     public void loadAlgorithm()
@@ -401,7 +406,7 @@ public class Controller extends Pane implements Observer, Initializable {
         dialog.setHeaderText("Choose Algorithm");
 
         ButtonType OK = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(OK, ButtonType.CANCEL);
+        dialog.getDialogPane().getButtonTypes().addAll(OK);
 
         GridPane grid = new GridPane();
         grid.setHgap(10);

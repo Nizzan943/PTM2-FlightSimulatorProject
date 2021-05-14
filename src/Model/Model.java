@@ -1,7 +1,9 @@
 
 package Model;
 
+import Algorithms.Hybrid;
 import Algorithms.LinearRegression;
+import Algorithms.ZScore;
 import Server.*;
 import java.io.*;
 import java.net.MalformedURLException;
@@ -29,6 +31,7 @@ public class Model extends AllModels {
 
     int playFlag = 0;
     int numofrow = 0;
+    int flightLong;
     long nowTime = 0;
 
     Socket fg = null;
@@ -54,13 +57,16 @@ public class Model extends AllModels {
     private float yawstep;
     private float colValues;
     private float coralatedColValues;
+    private float algorithmColValues;
+    private float algorithmCoralatedColValues;
+
+    private Line algorithmLine;
 
     ArrayList<String> colsNames = new ArrayList<>();
     Map<String, Integer> CSVindexmap = new HashMap<>();
 
     TimeSeriesAnomalyDetector ad;
     TimeSeries regularFlight;
-    TimeSeries anomalyFlight;
     LinearRegression linearRegression = new LinearRegression();
 
     public String gettime() {
@@ -127,6 +133,23 @@ public class Model extends AllModels {
         return coralatedColValues;
     }
 
+    public float getAlgorithmColValues() {
+        return algorithmColValues;
+    }
+
+    public float getAlgorithmCoralatedColValues() {
+        return algorithmCoralatedColValues;
+    }
+
+    public int getFlightLong()
+    {
+        return flightLong;
+    }
+
+    public Line getAlgorithmLine() {
+        return algorithmLine;
+    }
+
 
     public void ModelLoadXML(String chosenPath) {
         HandleXML handleXML = new HandleXML();
@@ -142,12 +165,12 @@ public class Model extends AllModels {
         else {
             XML_settings = handleXML;
             resultLoadXML = "SuccessAlert";
+            regularFlight = new TimeSeries(XML_settings.additionalSettings.getProperFlightFile());
+            regularFlight.setCorrelationTresh(0);
+            linearRegression.learnNormal(regularFlight);
         }
         setChanged();
         notifyObservers("resultLoadXML");
-        regularFlight = new TimeSeries(XML_settings.additionalSettings.getProperFlightFile());
-        regularFlight.setCorrelationTresh(0);
-        linearRegression.learnNormal(regularFlight);
     }
 
     public void ModelOpenCSV(String chosenPath) {
@@ -189,7 +212,6 @@ public class Model extends AllModels {
                 colsNames.add(col.getName());
             }
             CSVpath = chosenPath;
-            anomalyFlight = new TimeSeries(CSVpath);
             try {
                 fg = new Socket("localhost", 5400);
             } catch (IOException e) {
@@ -197,6 +219,7 @@ public class Model extends AllModels {
             }
 
             in = new TimeSeries(Model.CSVpath);
+            flightLong = in.getCols()[0].getFloats().size() + 1;
 
             try {
                 out = new PrintWriter(fg.getOutputStream());
@@ -516,83 +539,37 @@ public class Model extends AllModels {
 
     public void modelSetAlgorithmLineChart(String colName)
     {
-        ad.learnNormal(regularFlight);
-        ad.detect(anomalyFlight);
+        modelSetRightLineChart(colName);
+        List<CorrelatedFeatures> list = linearRegression.getNormalModel();
+        for (CorrelatedFeatures features : list)
+        {
+            if (features.feature1.intern() == colName.intern() && features.feature2.intern() == nameOfCoralatedCol.intern())
+                algorithmLine = features.lin_reg;
+        }
     }
 
     public void modelLoadAlgorithm(String resultClassDirectory, String resultClassName)
     {
-        URLClassLoader urlClassLoader = null;
+        URL[] urls = new URL[1];
         try {
-            urlClassLoader = URLClassLoader.newInstance(new URL[] {
-                    new URL("file://" + resultClassDirectory)
-            });
+            urls[0] = new URL("file://" + resultClassDirectory);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        Class<?> c= null;
+        URLClassLoader classLoader = new URLClassLoader(urls);
+        Class<?> classInstance = null;
         try {
-            c = urlClassLoader.loadClass(resultClassName);
+            classInstance = classLoader.loadClass(resultClassName);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-        // create a  TimeSeriesAnomalyDetector instance
         try {
-            ad =(TimeSeriesAnomalyDetector) c.newInstance();
+            ad = (TimeSeriesAnomalyDetector) classInstance.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
-
-    /*
-    @Override
-    public void LoadClass(String path, String className) {
-
-        File file = new File(path);
-
-        URL url;
-
-        URL[] urlArray;
-
-        FileInputStream fileInputStream = null;
-
-        URLClassLoader urlClassLoader = null;
-
-        Class<?> aClass = null;
-
-        try {
-            url = file.toURI().toURL();
-
-            urlArray = new URL[]{url};
-
-            urlClassLoader = URLClassLoader.newInstance(urlArray);
-
-        } catch (MalformedURLException e) {
-
-        }
-
-        try {
-            fileInputStream = new FileInputStream(path);
-
-        } catch (FileNotFoundException e) {
-
-        }
-
-        ClassLoader.getSystemClassLoader().getResourceAsStream(fileInputStream.toString());
-
-        try {
-            aClass = urlClassLoader.loadClass(className);
-        } catch (ClassNotFoundException e) {
-        }
-
-        try {
-            aClass.newInstance();
-        } catch (IllegalAccessException | InstantiationException e) {
-        }
-    }
-     */
 }
 

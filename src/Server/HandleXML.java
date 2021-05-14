@@ -35,7 +35,7 @@ public class HandleXML {
             try {
                 UserSettings decodedSettings = (UserSettings) decoder.readObject();
                 PropertyList.add(decodedSettings);
-
+                
             } catch (NumberFormatException e) {
                 if (MissingArgumentsAlert == false)
                     WrongFormatAlert = true;
