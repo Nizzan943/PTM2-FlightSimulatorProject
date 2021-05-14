@@ -377,6 +377,13 @@ public class Controller extends Pane implements Observer, Initializable {
 
     public void setLeftLineChart(String colName)
     {
+        myGraphs.leftSeries.getData().clear();
+        viewModel.VMsetAlgorithmLineChart(colName);
+        for (int i = 0; i < numofrow.getValue(); i++)
+        {
+            int finalI = i;
+            Platform.runLater(() -> myGraphs.leftSeries.getData().add(new XYChart.Data(finalI, viewModel.getAlgorithmColValues().get(finalI))));
+        }
         viewModel.VMsetLeftLineChart(colName);
     }
 
