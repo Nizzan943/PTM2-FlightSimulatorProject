@@ -31,6 +31,7 @@ public class Model extends AllModels {
 
     int playFlag = 0;
     int numofrow = 0;
+    int saveI = -1;
     int flightLong;
     private int minColValue = 10000;
     private int maxColValue = -10000;
@@ -342,17 +343,21 @@ public class Model extends AllModels {
         setChanged();
         notifyObservers("coralatedColValue");
 
-        for (AnomalyReport report : reports)
+        for (int i = 0; i < reports.size(); i++)
         {
-            if (report.timeStep == numofrow)
+            if (reports.get(i).timeStep == numofrow && reports.get(i).description.contains(nameOfCol))
             {
                 setChanged();
                 notifyObservers("report");
+                saveI = i;
+                break;
             }
             else
             {
-                setChanged();
-                notifyObservers("reportDone");
+                if (saveI == i - 1) {
+                    setChanged();
+                    notifyObservers("reportDone");
+                }
             }
         }
     }
@@ -613,6 +618,7 @@ public class Model extends AllModels {
         }
         try {
             ad = (TimeSeriesAnomalyDetector) classInstance.newInstance();
+            ad.learnNormal(regularFlight);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

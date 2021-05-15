@@ -195,6 +195,7 @@ public class Controller extends Pane implements Observer, Initializable {
         numofrow.bind(viewModel.getNumofrow());
 
         report = new SimpleIntegerProperty();
+        report.set(0);
         report.bind(viewModel.getReport());
     }
 
@@ -436,6 +437,15 @@ public class Controller extends Pane implements Observer, Initializable {
         }
     }
 
+    public void setPointsLoop(int min, int max)
+    {
+        for (int i = min; i < max; i++) {
+            float y = algorithmLine.f(i);
+            int finalI = i;
+            Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
+        }
+    }
+
     public void setAlgorithmLineChart(String colName)
     {
         Platform.runLater(() -> myGraphs.algorithmSeries.getData().clear());
@@ -444,11 +454,10 @@ public class Controller extends Pane implements Observer, Initializable {
         viewModel.VMsetAlgorithmLineChart(colName);
 
         algorithmLine = viewModel.getAlgorithmLine();
-        for (int i = minColValue.getValue(); i < maxColValue.getValue(); i++) {
-            float y = algorithmLine.f(i);
-            int finalI = i;
-            Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
-        }
+        if (algorithmLine.a == 0 && algorithmLine.b == 0)
+            setPointsLoop(-100, 100);
+        else
+            setPointsLoop(minColValue.getValue(), maxColValue.getValue());
 
         for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=300)
         {
@@ -458,7 +467,7 @@ public class Controller extends Pane implements Observer, Initializable {
 
         Platform.runLater(() ->
         {
-            setCircle(0,1);
+            setCircle(0,5);
             setCircle(1, 10);
         });
 
