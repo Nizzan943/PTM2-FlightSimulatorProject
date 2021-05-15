@@ -32,7 +32,7 @@ public class MyGraphs extends Pane
     XYChart.Series algorithmSeries2 = new XYChart.Series();
     final NumberAxis algorithmxAxis = new NumberAxis();
     final NumberAxis algorithmyAxis = new NumberAxis();
-    final ScatterChart<Number,Number> algorithmLineChart = new ScatterChart<>(algorithmxAxis, algorithmyAxis);
+    final LineChart<Number,Number> algorithmLineChart = new LineChart<>(algorithmxAxis, algorithmyAxis);
 
     public List<Node> set() {
         List<Node> ret = new ArrayList<>();
@@ -69,6 +69,8 @@ public class MyGraphs extends Pane
         algorithmLineChart.getData().add(algorithmSeries2);
         algorithmxAxis.setTickLabelsVisible(false);
         algorithmyAxis.setTickLabelsVisible(false);
+        algorithmLineChart.setAnimated(false);
+        algorithmLineChart.setCreateSymbols(true);
         algorithmSeries1.setName("anomaly detector");
         Platform.runLater(() -> algorithmLineChart.lookup(".chart-plot-background").setStyle("-fx-background-color: WHITE;"));
         ret.add(algorithmLineChart);

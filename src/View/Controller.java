@@ -245,7 +245,6 @@ public class Controller extends Pane implements Observer, Initializable {
             Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numofrow.getValue(), colValues.getValue()))));
             Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numofrow.getValue(), coralatedColValue.getValue()))));
             Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(colValues.getValue(), coralatedColValue.getValue()))));
-            Platform.runLater(() -> setCircle(2, 10));
             if (numofrow.getValue() % 30 == 0)
                 Platform.runLater(() -> myGraphs.algorithmSeries2.getData().clear());
         });
@@ -426,26 +425,6 @@ public class Controller extends Pane implements Observer, Initializable {
         viewModel.VMsetRightLineChart(colName);
     }
 
-    public void setCircle(int numOfSeries, int width_height)
-    {
-        for (XYChart.Data<Number, Number> data : myGraphs.algorithmLineChart.getData().get(numOfSeries).getData()) {
-            // this node is StackPane
-            StackPane stackPane = (StackPane) data.getNode();
-            stackPane.setPrefWidth(width_height);
-            stackPane.setPrefHeight(width_height);
-            stackPane.setShape(new Circle(1));
-        }
-    }
-
-    public void setPointsLoop(int min, int max)
-    {
-        for (int i = min; i < max; i++) {
-            float y = algorithmLine.f(i);
-            int finalI = i;
-            Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
-        }
-    }
-
     public void setAlgorithmLineChart(String colName)
     {
         Platform.runLater(() -> myGraphs.algorithmSeries.getData().clear());
@@ -454,23 +433,17 @@ public class Controller extends Pane implements Observer, Initializable {
         viewModel.VMsetAlgorithmLineChart(colName);
 
         algorithmLine = viewModel.getAlgorithmLine();
-        if (algorithmLine.a == 0 && algorithmLine.b == 0)
-            setPointsLoop(-100, 100);
-        else
-            setPointsLoop(minColValue.getValue(), maxColValue.getValue());
+        for (int i = minColValue.getValue(); i < maxColValue.getValue(); i++) {
+            float y = algorithmLine.f(i);
+            int finalI = i;
+            Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
+        }
 
         for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=300)
         {
             int finalI = i;
             Platform.runLater(() ->myGraphs.algorithmSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI))));
         }
-
-        Platform.runLater(() ->
-        {
-            setCircle(0,5);
-            setCircle(1, 10);
-        });
-
     }
 
     public void loadAlgorithm()

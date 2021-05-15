@@ -32,6 +32,7 @@ public class Main extends Application {
         viewModel.addObserver(mwc);
         primaryStage.setTitle("Flight Simulator");
         primaryStage.setScene(new Scene(root, 797, 571));
+        primaryStage.getScene().getStylesheets().add(getClass().getResource("charts.css").toExternalForm());
         primaryStage.show();
     }
 
