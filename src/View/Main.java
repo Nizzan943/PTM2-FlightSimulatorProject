@@ -33,7 +33,6 @@ public class Main extends Application {
         primaryStage.setTitle("Flight Simulator");
         primaryStage.setScene(new Scene(root, 797, 571));
         primaryStage.show();
-
     }
 
     public static void main(String[] args) {

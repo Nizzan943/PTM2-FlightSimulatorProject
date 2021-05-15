@@ -12,6 +12,9 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.util.Pair;
 
@@ -79,6 +82,9 @@ public class Controller extends Pane implements Observer, Initializable {
 
     IntegerProperty flightLong;
     IntegerProperty numofrow;
+    IntegerProperty report;
+    IntegerProperty minColValue;
+    IntegerProperty maxColValue;
 
     StringProperty resultOpenCSV;
     StringProperty chosenCSVFilePath;
@@ -176,11 +182,20 @@ public class Controller extends Pane implements Observer, Initializable {
         coralatedColValue = new SimpleFloatProperty();
         coralatedColValue.bind(viewModel.getCoralatedColValue());
 
+        minColValue = new SimpleIntegerProperty();
+        minColValue.bind(viewModel.getMinColValue());
+
+        maxColValue = new SimpleIntegerProperty();
+        maxColValue.bind(viewModel.getMaxColValue());
+
         flightLong = new SimpleIntegerProperty();
         flightLong.bind(viewModel.getFlightLong());
 
         numofrow = new SimpleIntegerProperty();
         numofrow.bind(viewModel.getNumofrow());
+
+        report = new SimpleIntegerProperty();
+        report.bind(viewModel.getReport());
     }
 
     public void openCSV() {
@@ -228,7 +243,17 @@ public class Controller extends Pane implements Observer, Initializable {
         numofrow.addListener((observable, oldValue, newValue) -> {
             Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numofrow.getValue(), colValues.getValue()))));
             Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numofrow.getValue(), coralatedColValue.getValue()))));
-            //Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(colValues.getValue(), coralatedColValue.getValue()))));
+            Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(colValues.getValue(), coralatedColValue.getValue()))));
+            Platform.runLater(() -> setCircle(2, 10));
+            if (numofrow.getValue() % 30 == 0)
+                Platform.runLater(() -> myGraphs.algorithmSeries2.getData().clear());
+        });
+
+        report.addListener((observable, oldValue, newValue) -> {
+            if (report.getValue() == 1)
+                Platform.runLater(() -> myGraphs.algorithmLineChart.lookup(".chart-plot-background").setStyle("-fx-background-color: RED;"));
+            else
+                Platform.runLater(() -> myGraphs.algorithmLineChart.lookup(".chart-plot-background").setStyle("-fx-background-color: WHITE;"));
         });
 
         aileronstep.addListener((observable, oldValue, newValue) -> myJoystick.innerCircle.setCenterX(aileronstep.getValue() * 100));
@@ -377,7 +402,7 @@ public class Controller extends Pane implements Observer, Initializable {
 
     public void setLeftLineChart(String colName)
     {
-        myGraphs.leftSeries.getData().clear();
+        Platform.runLater(() ->myGraphs.leftSeries.getData().clear());
         viewModel.VMsetAlgorithmLineChart(colName);
         for (int i = 0; i < numofrow.getValue(); i++)
         {
@@ -389,38 +414,54 @@ public class Controller extends Pane implements Observer, Initializable {
 
     public void setRightLineChart(String colName)
     {
-        myGraphs.rightSeries.getData().clear();
+        Platform.runLater(() ->myGraphs.rightSeries.getData().clear());
         viewModel.VMsetAlgorithmLineChart(colName);
         for (int i = 0; i < numofrow.getValue(); i++)
         {
             int finalI = i;
             Platform.runLater(() -> myGraphs.rightSeries.getData().add(new XYChart.Data(finalI, viewModel.getAlgorithmCoralatedColValues().get(finalI))));
         }
+
         viewModel.VMsetRightLineChart(colName);
+    }
+
+    public void setCircle(int numOfSeries, int width_height)
+    {
+        for (XYChart.Data<Number, Number> data : myGraphs.algorithmLineChart.getData().get(numOfSeries).getData()) {
+            // this node is StackPane
+            StackPane stackPane = (StackPane) data.getNode();
+            stackPane.setPrefWidth(width_height);
+            stackPane.setPrefHeight(width_height);
+            stackPane.setShape(new Circle(1));
+        }
     }
 
     public void setAlgorithmLineChart(String colName)
     {
-        viewModel.VMsetAlgorithmLineChart(colName);
-        algorithmLine = viewModel.getAlgorithmLine();
+        Platform.runLater(() -> myGraphs.algorithmSeries.getData().clear());
+        Platform.runLater(() -> myGraphs.algorithmSeries1.getData().clear());
 
-        for (int i = -300; i < 450; i++) {
+        viewModel.VMsetAlgorithmLineChart(colName);
+
+        algorithmLine = viewModel.getAlgorithmLine();
+        for (int i = minColValue.getValue(); i < maxColValue.getValue(); i++) {
             float y = algorithmLine.f(i);
             int finalI = i;
             Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
         }
-        myGraphs.algorithmSeries.getData().clear();
 
-        /*
-        for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=30)
+        for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=300)
         {
             int finalI = i;
             Platform.runLater(() ->myGraphs.algorithmSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI))));
-            //if (i % 30 == 0)
-             //   myGraphs.algorithmSeries1.getData().clear();
         }
 
-         */
+        Platform.runLater(() ->
+        {
+            setCircle(0,1);
+            setCircle(1, 10);
+        });
+
     }
 
     public void loadAlgorithm()

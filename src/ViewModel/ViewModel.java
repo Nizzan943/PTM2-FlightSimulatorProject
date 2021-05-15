@@ -20,6 +20,9 @@ public class ViewModel extends AllViewModels {
 
     private IntegerProperty flightLong;
     private IntegerProperty numofrow;
+    private IntegerProperty report;
+    private IntegerProperty minColValue;
+    private IntegerProperty maxColValue;
 
     private StringProperty loadXMLResult;
     private StringProperty openCSVResult;
@@ -38,7 +41,7 @@ public class ViewModel extends AllViewModels {
     private FloatProperty altimeterstep;
     private FloatProperty airspeedstep;
     private FloatProperty directionstep;
-    private  FloatProperty pitchstep;
+    private FloatProperty pitchstep;
     private FloatProperty rollstep;
     private FloatProperty yawstep;
     private FloatProperty aileronstep;
@@ -69,6 +72,21 @@ public class ViewModel extends AllViewModels {
     public IntegerProperty getNumofrow()
     {
         return numofrow;
+    }
+
+    public IntegerProperty getReport()
+    {
+        return report;
+    }
+
+    public IntegerProperty getMinColValue()
+    {
+        return minColValue;
+    }
+
+    public IntegerProperty getMaxColValue()
+    {
+        return maxColValue;
     }
 
     public StringProperty getChosenXMLFilePath() {
@@ -160,7 +178,6 @@ public class ViewModel extends AllViewModels {
         return coralatedColValue;
     }
 
-
     public ViewModel(Model model) {
         this.model = model;
 
@@ -194,6 +211,11 @@ public class ViewModel extends AllViewModels {
 
         flightLong = new SimpleIntegerProperty();
         numofrow = new SimpleIntegerProperty();
+        report = new SimpleIntegerProperty();
+        report.set(0);
+        minColValue = new SimpleIntegerProperty();
+        maxColValue = new SimpleIntegerProperty();
+
     }
 
     @Override
@@ -248,6 +270,10 @@ public class ViewModel extends AllViewModels {
             coralatedColValue.set(model.getCoralatedColValues());
         if (p.intern() == "numofrow")
             numofrow.set(model.getNumofrow());
+        if (p.intern() == "report")
+            report.set(1);
+        if (p.intern() == "reportDone")
+            report.set(0);
     }
 
     public void VMLoadXML() {
@@ -331,6 +357,8 @@ public class ViewModel extends AllViewModels {
         model.modelSetAlgorithmLineChart(colName);
         algorithmLine = model.getAlgorithmLine();
         algorithmColValues = model.getAlgorithmColValues();
+        maxColValue.set(model.getMaxColValue());
+        minColValue.set(model.getMinColValue());
         algorithmCoralatedColValues = model.getAlgorithmCoralatedColValues();
     }
 

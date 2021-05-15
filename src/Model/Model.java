@@ -32,6 +32,8 @@ public class Model extends AllModels {
     int playFlag = 0;
     int numofrow = 0;
     int flightLong;
+    private int minColValue = 10000;
+    private int maxColValue = -10000;
     long nowTime = 0;
 
     Socket fg = null;
@@ -68,6 +70,7 @@ public class Model extends AllModels {
     TimeSeriesAnomalyDetector ad;
     TimeSeries regularFlight;
     LinearRegression linearRegression = new LinearRegression();
+    List<AnomalyReport> reports = new ArrayList<>();
 
     public String gettime() {
         return time;
@@ -139,6 +142,16 @@ public class Model extends AllModels {
 
     public float getCoralatedColValues() {
         return coralatedColValues;
+    }
+
+    public int getMinColValue()
+    {
+        return minColValue;
+    }
+
+    public int getMaxColValue()
+    {
+        return maxColValue;
     }
 
     public int getNumofrow()
@@ -328,6 +341,20 @@ public class Model extends AllModels {
         coralatedColValues = in.getCols()[in.getColIndex(nameOfCoralatedCol)].getFloats().get(numofrow);
         setChanged();
         notifyObservers("coralatedColValue");
+
+        for (AnomalyReport report : reports)
+        {
+            if (report.timeStep == numofrow)
+            {
+                setChanged();
+                notifyObservers("report");
+            }
+            else
+            {
+                setChanged();
+                notifyObservers("reportDone");
+            }
+        }
     }
 
     public void simulatorLoop(double speed) {
@@ -546,6 +573,7 @@ public class Model extends AllModels {
 
     public void modelSetAlgorithmLineChart(String colName)
     {
+        reports = ad.detect(in);
         modelSetRightLineChart(colName);
         List<CorrelatedFeatures> list = linearRegression.getNormalModel();
         for (CorrelatedFeatures features : list)
@@ -556,6 +584,10 @@ public class Model extends AllModels {
         for (float value: regularFlight.getCols()[regularFlight.getColIndex(colName)].getFloats())
         {
             algorithmColValues.add(value);
+            if (minColValue > value)
+                minColValue = (int)value;
+            if (maxColValue < value)
+                maxColValue = (int)value;
         }
 
         for (float value: regularFlight.getCols()[regularFlight.getColIndex(nameOfCoralatedCol)].getFloats())
