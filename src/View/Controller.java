@@ -83,8 +83,6 @@ public class Controller extends Pane implements Observer, Initializable {
     IntegerProperty flightLong;
     IntegerProperty numofrow;
     IntegerProperty report;
-    IntegerProperty minColValue;
-    IntegerProperty maxColValue;
 
     StringProperty resultOpenCSV;
     StringProperty chosenCSVFilePath;
@@ -181,12 +179,6 @@ public class Controller extends Pane implements Observer, Initializable {
 
         coralatedColValue = new SimpleFloatProperty();
         coralatedColValue.bind(viewModel.getCoralatedColValue());
-
-        minColValue = new SimpleIntegerProperty();
-        minColValue.bind(viewModel.getMinColValue());
-
-        maxColValue = new SimpleIntegerProperty();
-        maxColValue.bind(viewModel.getMaxColValue());
 
         flightLong = new SimpleIntegerProperty();
         flightLong.bind(viewModel.getFlightLong());
@@ -433,12 +425,21 @@ public class Controller extends Pane implements Observer, Initializable {
         viewModel.VMsetAlgorithmLineChart(colName);
 
         algorithmLine = viewModel.getAlgorithmLine();
-        for (int i = minColValue.getValue(); i < maxColValue.getValue(); i++) {
-            float y = algorithmLine.f(i);
-            int finalI = i;
-            Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
+        if (viewModel.getMinColValue() == 0 && viewModel.getMaxColValue() == 0)
+        {
+            for (int i = -20; i < 20; i++) {
+                float y = algorithmLine.f(i);
+                int finalI = i;
+                Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
+            }
         }
-
+        else {
+            for (int i = viewModel.getMinColValue(); i < viewModel.getMaxColValue(); i++) {
+                float y = algorithmLine.f(i);
+                int finalI = i;
+                Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
+            }
+        }
         for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=300)
         {
             int finalI = i;

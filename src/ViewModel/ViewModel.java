@@ -18,11 +18,12 @@ public class ViewModel extends AllViewModels {
 
     Model model;
 
+    private int minColValue;
+    private int maxColValue;
+
     private IntegerProperty flightLong;
     private IntegerProperty numofrow;
     private IntegerProperty report;
-    private IntegerProperty minColValue;
-    private IntegerProperty maxColValue;
 
     private StringProperty loadXMLResult;
     private StringProperty openCSVResult;
@@ -65,6 +66,16 @@ public class ViewModel extends AllViewModels {
         return algorithmLine;
     }
 
+    public int getMinColValue()
+    {
+        return minColValue;
+    }
+
+    public int getMaxColValue()
+    {
+        return maxColValue;
+    }
+
     public IntegerProperty getFlightLong() {
         return flightLong;
     }
@@ -77,16 +88,6 @@ public class ViewModel extends AllViewModels {
     public IntegerProperty getReport()
     {
         return report;
-    }
-
-    public IntegerProperty getMinColValue()
-    {
-        return minColValue;
-    }
-
-    public IntegerProperty getMaxColValue()
-    {
-        return maxColValue;
     }
 
     public StringProperty getChosenXMLFilePath() {
@@ -214,8 +215,6 @@ public class ViewModel extends AllViewModels {
         numofrow = new SimpleIntegerProperty();
         report = new SimpleIntegerProperty();
         report.set(0);
-        minColValue = new SimpleIntegerProperty();
-        maxColValue = new SimpleIntegerProperty();
 
     }
 
@@ -359,8 +358,8 @@ public class ViewModel extends AllViewModels {
         model.modelSetAlgorithmLineChart(colName);
         algorithmLine = model.getAlgorithmLine();
         algorithmColValues = model.getAlgorithmColValues();
-        maxColValue.set(model.getMaxColValue());
-        minColValue.set(model.getMinColValue());
+        maxColValue = model.getMaxColValue();
+        minColValue = model.getMinColValue();
         algorithmCoralatedColValues = model.getAlgorithmCoralatedColValues();
     }
 
