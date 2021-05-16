@@ -14,6 +14,8 @@ public class ViewModel extends AllViewModels {
     private ArrayList<Float> algorithmColValues;
     private ArrayList<Float> algorithmCoralatedColValues;
 
+    private String className;
+
     private Line algorithmLine;
 
     Model model;
@@ -64,6 +66,11 @@ public class ViewModel extends AllViewModels {
 
     public Line getAlgorithmLine() {
         return algorithmLine;
+    }
+
+    public String getClassName()
+    {
+        return className;
     }
 
     public int getMinColValue()
@@ -366,5 +373,6 @@ public class ViewModel extends AllViewModels {
     public void VMLoadAlgorithm(String resultClassDirectory, String resultClassName)
     {
         model.modelLoadAlgorithm(resultClassDirectory, resultClassName);
+        className = model.getClassName();
     }
 }

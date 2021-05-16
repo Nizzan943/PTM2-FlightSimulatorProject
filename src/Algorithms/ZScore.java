@@ -20,7 +20,6 @@ public class ZScore implements TimeSeriesAnomalyDetector {
 
         for (int j = 0; j < timeSeries.getCols().length; j++) {
             max = -1;
-            Float[] floatArray = new Float[timeSeries.getCols()[j].getFloats().size()];
             for (int i = 2; i < timeSeries.getCols()[j].getFloats().size(); i++) {
                 float xTreshold = Zscore(timeSeries.getCols()[j].getFloats().get(i), ArrayListToFloat(timeSeries.getCols()[j].getFloats().subList(0, i)));
                 if (max < xTreshold) {
@@ -35,9 +34,7 @@ public class ZScore implements TimeSeriesAnomalyDetector {
     public List<AnomalyReport> detect(TimeSeries timeSeries) {
         List<AnomalyReport> anomalyReports = new ArrayList<>();
         for (int j = 0; j < timeSeries.getCols().length; j++) {
-            float max = -1;
             String columnName = timeSeries.getCols()[j].getName();
-            Float[] floatArray = new Float[timeSeries.getCols()[j].getFloats().size()];
             for (int i = 2; i < timeSeries.getCols()[j].getFloats().size(); i++) {
                 float xTreshold = Zscore(timeSeries.getCols()[j].getFloats().get(i), ArrayListToFloat(timeSeries.getCols()[j].getFloats().subList(0, i)));
                 if (xTreshold > thresholdArray[j]) {

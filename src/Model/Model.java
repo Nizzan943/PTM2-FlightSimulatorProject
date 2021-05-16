@@ -47,6 +47,7 @@ public class Model extends AllModels {
     private String resultOpenCSV;
     String nameOfCol;
     String nameOfCoralatedCol;
+    String className;
 
     private float rudderstep;
     private float throttlestep;
@@ -83,6 +84,11 @@ public class Model extends AllModels {
 
     public String getResultLoadXML() {
         return resultLoadXML;
+    }
+
+    public String getClassName()
+    {
+        return className;
     }
 
     public ArrayList<String> getColsNames() {
@@ -578,27 +584,24 @@ public class Model extends AllModels {
 
     public void modelSetAlgorithmLineChart(String colName)
     {
+        reports = ad.detect(in);
         algorithmColValues.clear();
         algorithmCoralatedColValues.clear();
-        reports = ad.detect(in);
         modelSetRightLineChart(colName);
         List<CorrelatedFeatures> list = linearRegression.getNormalModel();
-        for (CorrelatedFeatures features : list)
-        {
+        for (CorrelatedFeatures features : list) {
             if (features.feature1.intern() == colName.intern() && features.feature2.intern() == nameOfCoralatedCol.intern())
                 algorithmLine = features.lin_reg;
         }
-        for (float value: regularFlight.getCols()[regularFlight.getColIndex(colName)].getFloats())
-        {
+        for (float value : regularFlight.getCols()[regularFlight.getColIndex(colName)].getFloats()) {
             algorithmColValues.add(value);
             if (minColValue > value)
-                minColValue = (int)value;
+                minColValue = (int) value;
             if (maxColValue < value)
-                maxColValue = (int)value;
+                maxColValue = (int) value;
         }
 
-        for (float value: regularFlight.getCols()[regularFlight.getColIndex(nameOfCoralatedCol)].getFloats())
-        {
+        for (float value : regularFlight.getCols()[regularFlight.getColIndex(nameOfCoralatedCol)].getFloats()) {
             algorithmCoralatedColValues.add(value);
         }
     }
@@ -620,6 +623,7 @@ public class Model extends AllModels {
         }
         try {
             ad = (TimeSeriesAnomalyDetector) classInstance.newInstance();
+            className =  ad.getClass().toString();
             ad.learnNormal(regularFlight);
         } catch (InstantiationException e) {
             e.printStackTrace();

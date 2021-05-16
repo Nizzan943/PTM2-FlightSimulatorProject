@@ -236,9 +236,11 @@ public class Controller extends Pane implements Observer, Initializable {
         numofrow.addListener((observable, oldValue, newValue) -> {
             Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numofrow.getValue(), colValues.getValue()))));
             Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numofrow.getValue(), coralatedColValue.getValue()))));
-            Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(colValues.getValue(), coralatedColValue.getValue()))));
-            if (numofrow.getValue() % 30 == 0)
-                Platform.runLater(() -> myGraphs.algorithmSeries2.getData().clear());
+            if (viewModel.getClassName().intern() == "class Model.LinearRegression") {
+                Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(colValues.getValue(), coralatedColValue.getValue()))));
+                if (numofrow.getValue() % 30 == 0)
+                    Platform.runLater(() -> myGraphs.algorithmSeries2.getData().clear());
+            }
         });
 
         report.addListener((observable, oldValue, newValue) -> {
@@ -419,31 +421,30 @@ public class Controller extends Pane implements Observer, Initializable {
 
     public void setAlgorithmLineChart(String colName)
     {
-        Platform.runLater(() -> myGraphs.algorithmSeries.getData().clear());
-        Platform.runLater(() -> myGraphs.algorithmSeries1.getData().clear());
+        if (viewModel.getClassName().intern() == "class Model.LinearRegression") {
+            Platform.runLater(() -> myGraphs.algorithmSeries.getData().clear());
+            Platform.runLater(() -> myGraphs.algorithmSeries1.getData().clear());
 
-        viewModel.VMsetAlgorithmLineChart(colName);
+            viewModel.VMsetAlgorithmLineChart(colName);
 
-        algorithmLine = viewModel.getAlgorithmLine();
-        if (viewModel.getMinColValue() == 0 && viewModel.getMaxColValue() == 0)
-        {
-            for (int i = -20; i < 20; i++) {
-                float y = algorithmLine.f(i);
-                int finalI = i;
-                Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
+            algorithmLine = viewModel.getAlgorithmLine();
+            if (viewModel.getMinColValue() == 0 && viewModel.getMaxColValue() == 0) {
+                for (int i = -20; i < 20; i++) {
+                    float y = algorithmLine.f(i);
+                    int finalI = i;
+                    Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
+                }
+            } else {
+                for (int i = viewModel.getMinColValue(); i < viewModel.getMaxColValue(); i++) {
+                    float y = algorithmLine.f(i);
+                    int finalI = i;
+                    Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
+                }
             }
-        }
-        else {
-            for (int i = viewModel.getMinColValue(); i < viewModel.getMaxColValue(); i++) {
-                float y = algorithmLine.f(i);
+            for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i += 300) {
                 int finalI = i;
-                Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
+                Platform.runLater(() -> myGraphs.algorithmSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI))));
             }
-        }
-        for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=300)
-        {
-            int finalI = i;
-            Platform.runLater(() ->myGraphs.algorithmSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI))));
         }
     }
 
