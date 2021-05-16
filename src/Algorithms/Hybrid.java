@@ -59,7 +59,7 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
         }
 
         //Zscore
-        ZScore zScore = new ZScore(timeSeries1);
+        ZScore zScore = new ZScore();
         zScore.learnNormal(timeSeries1);
         for (AnomalyReport report : zScore.detect(timeSeries2)) {
             flag = 0;

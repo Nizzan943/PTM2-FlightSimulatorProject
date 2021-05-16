@@ -363,11 +363,19 @@ public class ViewModel extends AllViewModels {
         algorithmColValues.clear();
         algorithmCoralatedColValues.clear();
         model.modelSetAlgorithmLineChart(colName);
-        algorithmLine = model.getAlgorithmLine();
         algorithmColValues = model.getAlgorithmColValues();
-        maxColValue = model.getMaxColValue();
-        minColValue = model.getMinColValue();
         algorithmCoralatedColValues = model.getAlgorithmCoralatedColValues();
+
+        if (className.intern() == "class Model.LinearRegression")
+        {
+            algorithmLine = model.getAlgorithmLine();
+            maxColValue = model.getMaxColValue();
+            minColValue = model.getMinColValue();
+        }
+
+        if (className.intern() == "class Model.ZScore")
+        {
+        }
     }
 
     public void VMLoadAlgorithm(String resultClassDirectory, String resultClassName)

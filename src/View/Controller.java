@@ -79,6 +79,7 @@ public class Controller extends Pane implements Observer, Initializable {
     ViewModel viewModel;
 
     String speed;
+    String theColName;
 
     IntegerProperty flightLong;
     IntegerProperty numofrow;
@@ -234,6 +235,10 @@ public class Controller extends Pane implements Observer, Initializable {
     public void setListeners()
     {
         numofrow.addListener((observable, oldValue, newValue) -> {
+            if ((int)oldValue + 1 != (int)newValue) {
+                setLeftLineChart(theColName);
+                setRightLineChart(theColName);
+            }
             Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numofrow.getValue(), colValues.getValue()))));
             Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numofrow.getValue(), coralatedColValue.getValue()))));
             if (viewModel.getClassName().intern() == "class Model.LinearRegression") {
@@ -389,6 +394,7 @@ public class Controller extends Pane implements Observer, Initializable {
 
     public void setLineCharts (String colName)
     {
+        theColName = colName;
         setLeftLineChart(colName);
         setRightLineChart(colName);
         setAlgorithmLineChart(colName);
@@ -441,10 +447,15 @@ public class Controller extends Pane implements Observer, Initializable {
                     Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
                 }
             }
-            for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i += 300) {
+            for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=150) {
                 int finalI = i;
                 Platform.runLater(() -> myGraphs.algorithmSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI))));
             }
+        }
+
+        if (viewModel.getClassName().intern() == "class Model.ZScore")
+        {
+
         }
     }
 

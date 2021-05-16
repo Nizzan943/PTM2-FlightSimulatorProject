@@ -68,10 +68,12 @@ public class Model extends AllModels {
     private Map<String, Integer> CSVindexmap = new HashMap<>();
     private ArrayList<Float> algorithmColValues = new ArrayList<>();
     private ArrayList<Float> algorithmCoralatedColValues = new ArrayList<>();
+    private ArrayList<Float> ZScoreLine = new ArrayList<>();
 
     TimeSeriesAnomalyDetector ad;
     TimeSeries regularFlight;
     LinearRegression linearRegression = new LinearRegression();
+    ZScore zScore = new ZScore();
     List<AnomalyReport> reports = new ArrayList<>();
 
     public String gettime() {
@@ -101,6 +103,10 @@ public class Model extends AllModels {
 
     public ArrayList<Float> getAlgorithmCoralatedColValues() {
         return algorithmCoralatedColValues;
+    }
+
+    public ArrayList<Float> getZScoreLine() {
+        return ZScoreLine;
     }
 
     public float getRudderstep() {
@@ -193,6 +199,7 @@ public class Model extends AllModels {
             regularFlight = new TimeSeries(XML_settings.additionalSettings.getProperFlightFile());
             regularFlight.setCorrelationTresh(0);
             linearRegression.learnNormal(regularFlight);
+            zScore.learnNormal(regularFlight);
         }
         setChanged();
         notifyObservers("resultLoadXML");
@@ -588,11 +595,7 @@ public class Model extends AllModels {
         algorithmColValues.clear();
         algorithmCoralatedColValues.clear();
         modelSetRightLineChart(colName);
-        List<CorrelatedFeatures> list = linearRegression.getNormalModel();
-        for (CorrelatedFeatures features : list) {
-            if (features.feature1.intern() == colName.intern() && features.feature2.intern() == nameOfCoralatedCol.intern())
-                algorithmLine = features.lin_reg;
-        }
+
         for (float value : regularFlight.getCols()[regularFlight.getColIndex(colName)].getFloats()) {
             algorithmColValues.add(value);
             if (minColValue > value)
@@ -603,6 +606,18 @@ public class Model extends AllModels {
 
         for (float value : regularFlight.getCols()[regularFlight.getColIndex(nameOfCoralatedCol)].getFloats()) {
             algorithmCoralatedColValues.add(value);
+        }
+
+        if (className.intern() == "class Model.LinearRegression") {
+            List<CorrelatedFeatures> list = linearRegression.getNormalModel();
+            for (CorrelatedFeatures features : list) {
+                if (features.feature1.intern() == colName.intern() && features.feature2.intern() == nameOfCoralatedCol.intern())
+                    algorithmLine = features.lin_reg;
+            }
+        }
+
+        if (className.intern() == "class Model.ZScore")
+        {
         }
     }
 

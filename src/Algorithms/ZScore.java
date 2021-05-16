@@ -16,6 +16,7 @@ public class ZScore implements TimeSeriesAnomalyDetector {
 
     @Override
     public void learnNormal(TimeSeries timeSeries) {
+        thresholdArray = new float[timeSeries.getCols().length];
         float max;
 
         for (int j = 0; j < timeSeries.getCols().length; j++) {
@@ -44,10 +45,6 @@ public class ZScore implements TimeSeriesAnomalyDetector {
             }
         }
         return anomalyReports;
-    }
-
-    public ZScore(TimeSeries timeSeries) {
-        thresholdArray = new float[timeSeries.getCols().length];
     }
 
     public static float[] ArrayListToFloat(List<Float> floatList) {
