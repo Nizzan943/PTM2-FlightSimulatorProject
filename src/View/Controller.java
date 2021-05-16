@@ -404,7 +404,7 @@ public class Controller extends Pane implements Observer, Initializable {
     {
         Platform.runLater(() ->myGraphs.leftSeries.getData().clear());
         viewModel.VMsetAlgorithmLineChart(colName);
-        for (int i = 0; i < numofrow.getValue(); i++)
+        for (int i = 0; i <= numofrow.getValue(); i++)
         {
             int finalI = i;
             Platform.runLater(() -> myGraphs.leftSeries.getData().add(new XYChart.Data(finalI, viewModel.getAlgorithmColValues().get(finalI))));
@@ -416,7 +416,7 @@ public class Controller extends Pane implements Observer, Initializable {
     {
         Platform.runLater(() ->myGraphs.rightSeries.getData().clear());
         viewModel.VMsetAlgorithmLineChart(colName);
-        for (int i = 0; i < numofrow.getValue(); i++)
+        for (int i = 0; i <= numofrow.getValue(); i++)
         {
             int finalI = i;
             Platform.runLater(() -> myGraphs.rightSeries.getData().add(new XYChart.Data(finalI, viewModel.getAlgorithmCoralatedColValues().get(finalI))));

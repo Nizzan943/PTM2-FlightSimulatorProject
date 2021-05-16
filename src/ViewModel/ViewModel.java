@@ -183,6 +183,7 @@ public class ViewModel extends AllViewModels {
 
         colsNames = new ArrayList<>();
         algorithmColValues = new ArrayList<>();
+        algorithmCoralatedColValues = new ArrayList<>();
 
         loadXMLResult = new SimpleStringProperty();
         openCSVResult = new SimpleStringProperty();
@@ -353,6 +354,8 @@ public class ViewModel extends AllViewModels {
 
     public void VMsetAlgorithmLineChart(String colName)
     {
+        algorithmColValues.clear();
+        algorithmCoralatedColValues.clear();
         model.modelSetAlgorithmLineChart(colName);
         algorithmLine = model.getAlgorithmLine();
         algorithmColValues = model.getAlgorithmColValues();

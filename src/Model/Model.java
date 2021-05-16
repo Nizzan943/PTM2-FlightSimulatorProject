@@ -578,6 +578,8 @@ public class Model extends AllModels {
 
     public void modelSetAlgorithmLineChart(String colName)
     {
+        algorithmColValues.clear();
+        algorithmCoralatedColValues.clear();
         reports = ad.detect(in);
         modelSetRightLineChart(colName);
         List<CorrelatedFeatures> list = linearRegression.getNormalModel();
