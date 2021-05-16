@@ -6,7 +6,7 @@
     -fx-background-color: gray, gray;
 }
 .default-color2.chart-line-symbol {
-    -fx-background-color: red, red;
+    -fx-background-color: blue, blue;
 }
 .default-color0.chart-line-symbol {
     -fx-background-color: transparent, transparent;
@@ -19,5 +19,5 @@
     -fx-background-color: black;
 }
 .default-color2.chart-legend-item-symbol{
-    -fx-background-color: red;
+    -fx-background-color: blue;
 }

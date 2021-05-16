@@ -1,5 +1,6 @@
 package ViewModel;
 
+import Algorithms.ZScore;
 import Model.Model;
 import Server.Line;
 import Server.Point;
@@ -13,6 +14,7 @@ public class ViewModel extends AllViewModels {
 
     private ArrayList<Float> algorithmColValues;
     private ArrayList<Float> algorithmCoralatedColValues;
+    private ArrayList<Float> ZScoreline;
 
     private String className;
 
@@ -62,6 +64,11 @@ public class ViewModel extends AllViewModels {
 
     public ArrayList<Float> getAlgorithmCoralatedColValues() {
         return algorithmCoralatedColValues;
+    }
+
+    public ArrayList<Float> getZScoreline()
+    {
+        return ZScoreline;
     }
 
     public Line getAlgorithmLine() {
@@ -192,6 +199,7 @@ public class ViewModel extends AllViewModels {
         colsNames = new ArrayList<>();
         algorithmColValues = new ArrayList<>();
         algorithmCoralatedColValues = new ArrayList<>();
+        ZScoreline = new ArrayList<>();
 
         loadXMLResult = new SimpleStringProperty();
         openCSVResult = new SimpleStringProperty();
@@ -375,6 +383,7 @@ public class ViewModel extends AllViewModels {
 
         if (className.intern() == "class Model.ZScore")
         {
+            ZScoreline = model.getZScoreLine();
         }
     }
 

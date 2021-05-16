@@ -618,6 +618,7 @@ public class Model extends AllModels {
 
         if (className.intern() == "class Model.ZScore")
         {
+            ZScoreLine = zScore.colZscores.get(regularFlight.getColIndex(colName));
         }
     }
 

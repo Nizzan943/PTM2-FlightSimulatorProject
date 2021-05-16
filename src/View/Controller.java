@@ -72,8 +72,6 @@ public class Controller extends Pane implements Observer, Initializable {
         board.getChildren().addAll(myGraphs.set());
     }
 
-    ArrayList<String> colsNames = new ArrayList<>();
-
     Line algorithmLine;
 
     ViewModel viewModel;
@@ -238,6 +236,9 @@ public class Controller extends Pane implements Observer, Initializable {
             if ((int)oldValue + 1 != (int)newValue) {
                 setLeftLineChart(theColName);
                 setRightLineChart(theColName);
+                if (viewModel.getClassName().intern() == "class Model.ZScore") {
+                    setAlgorithmLineChart(theColName);
+                }
             }
             Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numofrow.getValue(), colValues.getValue()))));
             Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numofrow.getValue(), coralatedColValue.getValue()))));
@@ -245,6 +246,9 @@ public class Controller extends Pane implements Observer, Initializable {
                 Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(colValues.getValue(), coralatedColValue.getValue()))));
                 if (numofrow.getValue() % 30 == 0)
                     Platform.runLater(() -> myGraphs.algorithmSeries2.getData().clear());
+            }
+            if (viewModel.getClassName().intern() == "class Model.ZScore") {
+                Platform.runLater(() -> myGraphs.algorithmSeries.getData().add((new XYChart.Data(numofrow.getValue(), viewModel.getZScoreline().get(numofrow.getValue())))));
             }
         });
 
@@ -455,7 +459,12 @@ public class Controller extends Pane implements Observer, Initializable {
 
         if (viewModel.getClassName().intern() == "class Model.ZScore")
         {
-
+            Platform.runLater(() -> myGraphs.algorithmSeries.getData().clear());
+            for (int i = 0; i <= numofrow.getValue(); i++)
+            {
+                int finalI = i;
+                Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, viewModel.getAlgorithmCoralatedColValues().get(finalI))));
+            }
         }
     }
 

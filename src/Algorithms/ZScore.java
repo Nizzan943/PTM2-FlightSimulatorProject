@@ -12,22 +12,29 @@ import static Server.StatLib.var;
 
 public class ZScore implements TimeSeriesAnomalyDetector {
     public float[] thresholdArray;
+    public ArrayList<ArrayList<Float>> colZscores = new ArrayList<>();
 
 
     @Override
     public void learnNormal(TimeSeries timeSeries) {
         thresholdArray = new float[timeSeries.getCols().length];
-        float max;
-
-        for (int j = 0; j < timeSeries.getCols().length; j++) {
-            max = -1;
-            for (int i = 2; i < timeSeries.getCols()[j].getFloats().size(); i++) {
-                float xTreshold = Zscore(timeSeries.getCols()[j].getFloats().get(i), ArrayListToFloat(timeSeries.getCols()[j].getFloats().subList(0, i)));
+        float max = -1;
+        float xTreshold;
+        ArrayList<Float> zscoresCol = null;
+        for (int i = 0; i < timeSeries.getCols().length; i++) {
+            zscoresCol = new ArrayList<>();
+            for (int j = 0; j < timeSeries.getCols()[i].getFloats().size(); j++) {
+                if (j != 0 && j != 1)
+                    xTreshold = Zscore(j, ArrayListToFloat(timeSeries.getCols()[i].getFloats().subList(0, j - 1)));
+                else
+                    xTreshold = 0;
+                zscoresCol.add(xTreshold);
                 if (max < xTreshold) {
                     max = xTreshold;
                 }
             }
-            thresholdArray[j] = max;
+            colZscores.add(zscoresCol);
+            thresholdArray[i] = max;
         }
     }
 
@@ -45,6 +52,8 @@ public class ZScore implements TimeSeriesAnomalyDetector {
             }
         }
         return anomalyReports;
+
+
     }
 
     public static float[] ArrayListToFloat(List<Float> floatList) {
@@ -56,6 +65,8 @@ public class ZScore implements TimeSeriesAnomalyDetector {
     }
 
     public static float Zscore(float x, float[] arr) {
+        if (var(arr) == 0)
+            return 0;
         return (float) (Math.abs((x - avg(arr))
                 / Math.sqrt(var(arr))));
     }
