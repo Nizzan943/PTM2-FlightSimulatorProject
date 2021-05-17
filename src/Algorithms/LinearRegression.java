@@ -100,7 +100,7 @@ public class LinearRegression implements TimeSeriesAnomalyDetector {
 
             for (int j = 0; j < pointsArr.length; j++)
                 if (StatLib.dev(pointsArr[j], arrCor.get(i).lin_reg) > arrCor.get(i).threshold) {
-                    AnomalyReport ar = new AnomalyReport(string1 + "-" + string2, j + 1);
+                    AnomalyReport ar = new AnomalyReport(string1 + "-" + string2, j);
 
                     list.add(ar);
                 }

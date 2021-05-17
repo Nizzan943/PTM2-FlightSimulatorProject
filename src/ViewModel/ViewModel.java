@@ -51,8 +51,6 @@ public class ViewModel extends AllViewModels {
     private FloatProperty yawstep;
     private FloatProperty aileronstep;
     private FloatProperty elevatorstep;
-    private FloatProperty colValues;
-    private FloatProperty coralatedColValue;
 
     public ArrayList<String> getColsNames() {
         return colsNames;
@@ -184,15 +182,6 @@ public class ViewModel extends AllViewModels {
         return elevatorstep;
     }
 
-    public FloatProperty getColValues() {
-        return colValues;
-    }
-
-    public FloatProperty getCoralatedColValue()
-    {
-        return coralatedColValue;
-    }
-
     public ViewModel(Model model) {
         this.model = model;
 
@@ -223,8 +212,6 @@ public class ViewModel extends AllViewModels {
         yawstep = new SimpleFloatProperty();
         aileronstep = new SimpleFloatProperty();
         elevatorstep = new SimpleFloatProperty();
-        colValues = new SimpleFloatProperty();
-        coralatedColValue = new SimpleFloatProperty();
 
         flightLong = new SimpleIntegerProperty();
         numofrow = new SimpleIntegerProperty();
@@ -279,10 +266,6 @@ public class ViewModel extends AllViewModels {
             aileronstep.set(model.getAileronstep());
         if (p.intern() == "elevator")
             elevatorstep.set(model.getElevatorstep());
-        if (p.intern() == "colValues")
-            colValues.set(model.getColValues());
-        if (p.intern() == "coralatedColValue")
-            coralatedColValue.set(model.getCoralatedColValues());
         if (p.intern() == "numofrow")
             numofrow.set(model.getNumofrow());
         if (p.intern() == "report")
@@ -368,8 +351,6 @@ public class ViewModel extends AllViewModels {
 
     public void VMsetAlgorithmLineChart(String colName)
     {
-        algorithmColValues.clear();
-        algorithmCoralatedColValues.clear();
         model.modelSetAlgorithmLineChart(colName);
         algorithmColValues = model.getAlgorithmColValues();
         algorithmCoralatedColValues = model.getAlgorithmCoralatedColValues();

@@ -59,8 +59,6 @@ public class Model extends AllModels {
     private float elevatorstep;
     private float rollstep;
     private float yawstep;
-    private float colValues;
-    private float coralatedColValues;
 
     private Line algorithmLine;
 
@@ -147,14 +145,6 @@ public class Model extends AllModels {
 
     public float getYawstep() {
         return yawstep;
-    }
-
-    public float getColValues() {
-        return colValues;
-    }
-
-    public float getCoralatedColValues() {
-        return coralatedColValues;
     }
 
     public int getMinColValue()
@@ -347,14 +337,6 @@ public class Model extends AllModels {
         elevatorstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("elevator"))].getFloats().get(numofrow);
         setChanged();
         notifyObservers("elevator");
-
-        colValues = in.getCols()[in.getColIndex(nameOfCol)].getFloats().get(numofrow);
-        setChanged();
-        notifyObservers("colValues");
-
-        coralatedColValues = in.getCols()[in.getColIndex(nameOfCoralatedCol)].getFloats().get(numofrow);
-        setChanged();
-        notifyObservers("coralatedColValue");
 
         for (int i = 0; i < reports.size(); i++)
         {
@@ -592,9 +574,9 @@ public class Model extends AllModels {
     public void modelSetAlgorithmLineChart(String colName)
     {
         reports = ad.detect(in);
+        modelSetRightLineChart(colName);
         algorithmColValues.clear();
         algorithmCoralatedColValues.clear();
-        modelSetRightLineChart(colName);
 
         for (float value : regularFlight.getCols()[regularFlight.getColIndex(colName)].getFloats()) {
             algorithmColValues.add(value);
