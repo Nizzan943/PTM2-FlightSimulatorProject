@@ -9,71 +9,38 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
 
     public ArrayList<Circle> circles = new ArrayList<>();
     public ArrayList<AnomalyReport> detections = new ArrayList<>();
+    public Map<String, String> whichAlgorithm = new HashMap<>();
 
 
-    public List<AnomalyReport> HybridAlgorithm(TimeSeries timeSeries1, TimeSeries timeSeries2) {
+    public void HybridAlgorithm(TimeSeries timeSeries) {
 
-        //linearReg
-        int flag;
-        int flag2;
         LinearRegression linearReg = new LinearRegression();
-        timeSeries1.setCorrelationTresh(0.95);
-        linearReg.learnNormal(timeSeries1);
-        List<AnomalyReport> linearReg_detect = linearReg.detect(timeSeries2);
-        for (AnomalyReport report : linearReg_detect) {
-            detections.add(report);
+        timeSeries.setCorrelationTresh(0.95);
+        linearReg.learnNormal(timeSeries);
+        List<CorrelatedFeatures> correlatedFeatures = linearReg.getNormalModel();
+        for (CorrelatedFeatures features: correlatedFeatures)
+        {
+            whichAlgorithm.put(features.feature1, "LinearRegression");
+            whichAlgorithm.put(features.feature2, "LinearRegression");
         }
 
-        //Hybrid
         LinearRegression linearReg_hybrid = new LinearRegression();
-        timeSeries1.setCorrelationTresh(0);
-        linearReg_hybrid.learnNormal(timeSeries1);
-        List<CorrelatedFeatures> f = linearReg_hybrid.getNormalModel();
-        List<CorrelatedFeatures> temp = new ArrayList<CorrelatedFeatures>();
-        for (CorrelatedFeatures feature : f) {
-            temp.add(feature);
-        }
-        f.clear();
-        for (CorrelatedFeatures feature : temp) {
-            if (Math.abs(feature.corrlation) >= 0.5)
-                f.add(feature);
+        timeSeries.setCorrelationTresh(0.5);
+        linearReg_hybrid.learnNormal(timeSeries);
+        List<CorrelatedFeatures> correlatedFeatures1 = linearReg_hybrid.getNormalModel();
+        for (CorrelatedFeatures features: correlatedFeatures1)
+        {
+            if (!whichAlgorithm.containsKey(features.feature1))
+                whichAlgorithm.put(features.feature1, "Hybrid");
+            if (!whichAlgorithm.containsKey(features.feature2))
+                whichAlgorithm.put(features.feature2, "Hybrid");
         }
 
-        this.learnNormal(timeSeries1);
-        List<AnomalyReport> Hybrid_detect = this.detect(timeSeries2);
-        for (AnomalyReport report : Hybrid_detect) {
-            flag = 0;
-            flag2 = 1;
-            for (AnomalyReport detection : detections) {
-                String[] arr = detection.description.split("-");
-                if (report.description.contains(arr[0]) || report.description.contains(arr[1]))
-                    flag = 1;
-            }
-            for (CorrelatedFeatures features : f)
-            {
-                if (report.description.contains(features.feature1) && report.description.contains(features.feature2))
-                    flag2 = 0;
-            }
-            if (flag == 0  && flag2 == 0)
-                detections.add(report);
+        for (TimeSeries.col col :timeSeries.getCols())
+        {
+            if (!whichAlgorithm.containsKey(col.getName()))
+                whichAlgorithm.put(col.getName(), "ZScore");
         }
-
-        //Zscore
-        ZScore zScore = new ZScore();
-        zScore.learnNormal(timeSeries1);
-        for (AnomalyReport report : zScore.detect(timeSeries2)) {
-            flag = 0;
-            for (AnomalyReport detection : detections) {
-                if (detection.description.contains(report.description))
-                    flag = 1;
-            }
-            if (flag == 0)
-                detections.add(report);
-        }
-
-
-        return detections;
-
     }
 
     @Override

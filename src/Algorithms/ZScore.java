@@ -51,7 +51,6 @@ public class ZScore implements TimeSeriesAnomalyDetector {
                     xTreshold = 0;
                 if (xTreshold > thresholdArray[i]) {
                     anomalyReports.add(new AnomalyReport(columnName, j));
-                    break;
                 }
             }
         }

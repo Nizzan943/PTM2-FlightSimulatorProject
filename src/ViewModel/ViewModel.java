@@ -14,6 +14,8 @@ public class ViewModel extends AllViewModels {
 
     private ArrayList<Float> algorithmColValues;
     private ArrayList<Float> algorithmCoralatedColValues;
+    private ArrayList<Float> anomalyAlgorithmColValues;
+    private ArrayList<Float> anomalyAlgorithmCoralatedColValues;
     private ArrayList<Float> ZScoreline;
 
     private String className;
@@ -62,6 +64,16 @@ public class ViewModel extends AllViewModels {
 
     public ArrayList<Float> getAlgorithmCoralatedColValues() {
         return algorithmCoralatedColValues;
+    }
+
+    public ArrayList<Float> getAnomalyAlgorithmColValues()
+    {
+        return anomalyAlgorithmColValues;
+    }
+
+    public ArrayList<Float> getAnomalyAlgorithmCoralatedColValues()
+    {
+        return anomalyAlgorithmCoralatedColValues;
     }
 
     public ArrayList<Float> getZScoreline()
@@ -352,11 +364,14 @@ public class ViewModel extends AllViewModels {
     public void VMsetAlgorithmLineChart(String colName)
     {
         model.modelSetAlgorithmLineChart(colName);
+        className = model.getClassName();
         algorithmColValues = model.getAlgorithmColValues();
         algorithmCoralatedColValues = model.getAlgorithmCoralatedColValues();
 
         if (className.intern() == "class Model.LinearRegression")
         {
+            anomalyAlgorithmColValues = model.getAnomalyAlgorithmColValues();
+            anomalyAlgorithmCoralatedColValues = model.getAnomalyAlgorithmCoralatedColValues();
             algorithmLine = model.getAlgorithmLine();
             maxColValue = model.getMaxColValue();
             minColValue = model.getMinColValue();
@@ -371,6 +386,5 @@ public class ViewModel extends AllViewModels {
     public void VMLoadAlgorithm(String resultClassDirectory, String resultClassName)
     {
         model.modelLoadAlgorithm(resultClassDirectory, resultClassName);
-        className = model.getClassName();
     }
 }

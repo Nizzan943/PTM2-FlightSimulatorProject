@@ -42,12 +42,13 @@ public class Model extends AllModels {
     PrintWriter out = null;
 
     private String time;
-
     private String resultLoadXML;
     private String resultOpenCSV;
     String nameOfCol;
     String nameOfCoralatedCol;
     String className;
+
+    private int realHybrid = 0;
 
     private float rudderstep;
     private float throttlestep;
@@ -66,12 +67,15 @@ public class Model extends AllModels {
     private Map<String, Integer> CSVindexmap = new HashMap<>();
     private ArrayList<Float> algorithmColValues = new ArrayList<>();
     private ArrayList<Float> algorithmCoralatedColValues = new ArrayList<>();
+    private ArrayList<Float> anomalyAlgorithmCoralatedColValues = new ArrayList<>();
+    private ArrayList<Float> anomalyAlgorithmColValues = new ArrayList<>();
     private ArrayList<Float> ZScoreLine = new ArrayList<>();
 
     TimeSeriesAnomalyDetector ad;
     TimeSeries regularFlight;
     LinearRegression linearRegression = new LinearRegression();
     ZScore zScore = new ZScore();
+    Hybrid hybrid = new Hybrid();
     List<AnomalyReport> reports = new ArrayList<>();
 
     public String gettime() {
@@ -103,8 +107,23 @@ public class Model extends AllModels {
         return algorithmCoralatedColValues;
     }
 
+    public ArrayList<Float> getAnomalyAlgorithmColValues()
+    {
+        return anomalyAlgorithmColValues;
+    }
+
+    public ArrayList<Float> getAnomalyAlgorithmCoralatedColValues()
+    {
+        return anomalyAlgorithmCoralatedColValues;
+    }
+
     public ArrayList<Float> getZScoreLine() {
         return ZScoreLine;
+    }
+
+    public int getRealHybrid()
+    {
+        return realHybrid;
     }
 
     public float getRudderstep() {
@@ -190,6 +209,8 @@ public class Model extends AllModels {
             regularFlight.setCorrelationTresh(0);
             linearRegression.learnNormal(regularFlight);
             zScore.learnNormal(regularFlight);
+            hybrid.HybridAlgorithm(regularFlight);
+            hybrid.learnNormal(regularFlight);
         }
         setChanged();
         notifyObservers("resultLoadXML");
@@ -573,6 +594,8 @@ public class Model extends AllModels {
 
     public void modelSetAlgorithmLineChart(String colName)
     {
+        if (realHybrid == 1)
+            className = "class Model.Hybrid";
         reports = ad.detect(in);
         modelSetRightLineChart(colName);
         algorithmColValues.clear();
@@ -590,11 +613,33 @@ public class Model extends AllModels {
             algorithmCoralatedColValues.add(value);
         }
 
+        if (className.intern() == "class Model.Hybrid")
+        {
+            realHybrid = 1;
+            if (hybrid.whichAlgorithm.get(colName).intern() == "LinearRegression") {
+                className = "class Model.LinearRegression";
+            }
+            if (hybrid.whichAlgorithm.get(colName).intern() == "ZScore") {
+                className = "class Model.ZScore";
+            }
+            if (hybrid.whichAlgorithm.get(colName).intern() == "Hybrid") {
+            }
+        }
+
         if (className.intern() == "class Model.LinearRegression") {
+            for (float value :in.getCols()[in.getColIndex(colName)].getFloats()) {
+                anomalyAlgorithmColValues.add(value);
+            }
+
+            for (float value : in.getCols()[in.getColIndex(nameOfCoralatedCol)].getFloats()) {
+                anomalyAlgorithmCoralatedColValues.add(value);
+            }
             List<CorrelatedFeatures> list = linearRegression.getNormalModel();
             for (CorrelatedFeatures features : list) {
-                if (features.feature1.intern() == colName.intern() && features.feature2.intern() == nameOfCoralatedCol.intern())
+                if (features.feature1.intern() == colName.intern() && features.feature2.intern() == nameOfCoralatedCol.intern()) {
                     algorithmLine = features.lin_reg;
+                    break;
+                }
             }
         }
 
@@ -602,6 +647,7 @@ public class Model extends AllModels {
         {
             ZScoreLine = zScore.colZscores.get(regularFlight.getColIndex(colName));
         }
+
     }
 
     public void modelLoadAlgorithm(String resultClassDirectory, String resultClassName)
@@ -623,6 +669,7 @@ public class Model extends AllModels {
             ad = (TimeSeriesAnomalyDetector) classInstance.newInstance();
             className =  ad.getClass().toString();
             ad.learnNormal(regularFlight);
+            realHybrid = 0;
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

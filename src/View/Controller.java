@@ -235,9 +235,8 @@ public class Controller extends Pane implements Observer, Initializable {
             Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numofrow.getValue(), viewModel.getAlgorithmColValues().get(numofrow.getValue())))));
             Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numofrow.getValue(), viewModel.getAlgorithmCoralatedColValues().get(numofrow.getValue())))));
             if (viewModel.getClassName().intern() == "class Model.LinearRegression") {
-                Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(viewModel.getAlgorithmColValues().get(numofrow.getValue()), viewModel.getAlgorithmCoralatedColValues().get(numofrow.getValue())))));
-                if (numofrow.getValue() % 30 == 0)
-                    Platform.runLater(() -> myGraphs.algorithmSeries2.getData().clear());
+                Platform.runLater(() -> myGraphs.algorithmSeries2.getData().clear());
+                Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(viewModel.getAnomalyAlgorithmColValues().get(numofrow.getValue()), viewModel.getAnomalyAlgorithmCoralatedColValues().get(numofrow.getValue())))));
             }
             if (viewModel.getClassName().intern() == "class Model.ZScore") {
                 Platform.runLater(() -> myGraphs.algorithmSeries.getData().add((new XYChart.Data(numofrow.getValue(), viewModel.getZScoreline().get(numofrow.getValue())))));
@@ -430,8 +429,8 @@ public class Controller extends Pane implements Observer, Initializable {
             viewModel.VMsetAlgorithmLineChart(colName);
 
             algorithmLine = viewModel.getAlgorithmLine();
-            if (viewModel.getMinColValue() == 0 && viewModel.getMaxColValue() == 0) {
-                for (int i = -20; i < 20; i++) {
+            if (viewModel.getMinColValue() == 0 || viewModel.getMaxColValue() == 0) {
+                for (int i = -100; i < 100; i++) {
                     float y = algorithmLine.f(i);
                     int finalI = i;
                     Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
@@ -443,7 +442,7 @@ public class Controller extends Pane implements Observer, Initializable {
                     Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, y)));
                 }
             }
-            for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=150) {
+            for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=50) {
                 int finalI = i;
                 Platform.runLater(() -> myGraphs.algorithmSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI))));
             }
@@ -457,6 +456,11 @@ public class Controller extends Pane implements Observer, Initializable {
                 int finalI = i;
                 Platform.runLater(() -> myGraphs.algorithmSeries.getData().add(new XYChart.Data(finalI, viewModel.getZScoreline().get(finalI))));
             }
+        }
+
+        if (viewModel.getClassName().intern() == "class Model.Hybrid")
+        {
+
         }
     }
 
