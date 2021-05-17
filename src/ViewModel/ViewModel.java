@@ -381,6 +381,12 @@ public class ViewModel extends AllViewModels {
         {
             ZScoreline = model.getZScoreLine();
         }
+
+        if (className.intern() == "class Model.Hybrid")
+        {
+            anomalyAlgorithmColValues = model.getAnomalyAlgorithmColValues();
+            anomalyAlgorithmCoralatedColValues = model.getAnomalyAlgorithmCoralatedColValues();
+        }
     }
 
     public void VMLoadAlgorithm(String resultClassDirectory, String resultClassName)

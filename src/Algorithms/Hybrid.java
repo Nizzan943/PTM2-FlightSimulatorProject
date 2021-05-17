@@ -8,7 +8,6 @@ import java.util.*;
 public class Hybrid implements TimeSeriesAnomalyDetector {
 
     public ArrayList<Circle> circles = new ArrayList<>();
-    public ArrayList<AnomalyReport> detections = new ArrayList<>();
     public Map<String, String> whichAlgorithm = new HashMap<>();
     public ArrayList<CorrelatedFeatures> theCorrelatedFeatures = new ArrayList<>();
 

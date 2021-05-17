@@ -623,6 +623,13 @@ public class Model extends AllModels {
                 className = "class Model.ZScore";
             }
             if (hybrid.whichAlgorithm.get(colName).intern() == "Hybrid") {
+                for (float value :in.getCols()[in.getColIndex(colName)].getFloats()) {
+                    anomalyAlgorithmColValues.add(value);
+                }
+
+                for (float value : in.getCols()[in.getColIndex(nameOfCoralatedCol)].getFloats()) {
+                    anomalyAlgorithmCoralatedColValues.add(value);
+                }
             }
         }
 
