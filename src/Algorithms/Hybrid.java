@@ -10,6 +10,7 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
     public ArrayList<Circle> circles = new ArrayList<>();
     public Map<String, String> whichAlgorithm = new HashMap<>();
     public ArrayList<CorrelatedFeatures> theCorrelatedFeatures = new ArrayList<>();
+    public Map<String, Circle> whoCircle = new HashMap<>();
 
 
     public void HybridAlgorithm(TimeSeries timeSeries) {
@@ -54,6 +55,7 @@ public class Hybrid implements TimeSeriesAnomalyDetector {
                 pointsVector.add(new Point(column_i.get(t), column_j.get(t)));
             }
             Circle circle = Welzl.makeCircle(pointsVector);
+            whoCircle.put(features.feature1, circle);
             circles.add(circle);
         }
     }

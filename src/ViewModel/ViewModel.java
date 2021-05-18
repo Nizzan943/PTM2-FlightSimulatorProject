@@ -1,5 +1,6 @@
 package ViewModel;
 
+import Algorithms.Circle;
 import Algorithms.ZScore;
 import Model.Model;
 import Server.Line;
@@ -21,6 +22,7 @@ public class ViewModel extends AllViewModels {
     private String className;
 
     private Line algorithmLine;
+    private Circle algorithmCircle;
 
     Model model;
 
@@ -83,6 +85,11 @@ public class ViewModel extends AllViewModels {
 
     public Line getAlgorithmLine() {
         return algorithmLine;
+    }
+
+    public Circle getAlgorithmCircle()
+    {
+        return algorithmCircle;
     }
 
     public String getClassName()
@@ -386,6 +393,7 @@ public class ViewModel extends AllViewModels {
         {
             anomalyAlgorithmColValues = model.getAnomalyAlgorithmColValues();
             anomalyAlgorithmCoralatedColValues = model.getAnomalyAlgorithmCoralatedColValues();
+            algorithmCircle = model.getAlgorithmCircle();
         }
     }
 

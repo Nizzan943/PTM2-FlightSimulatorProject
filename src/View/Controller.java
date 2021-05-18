@@ -427,9 +427,10 @@ public class Controller extends Pane implements Observer, Initializable {
 
     public void setAlgorithmLineChart(String colName)
     {
+        Platform.runLater(() -> myGraphs.algorithmSeries.getData().clear());
+        Platform.runLater(() -> myGraphs.algorithmSeries1.getData().clear());
+
         if (viewModel.getClassName().intern() == "class Model.LinearRegression") {
-            Platform.runLater(() -> myGraphs.algorithmSeries.getData().clear());
-            Platform.runLater(() -> myGraphs.algorithmSeries1.getData().clear());
 
             viewModel.VMsetAlgorithmLineChart(colName);
 
@@ -455,8 +456,6 @@ public class Controller extends Pane implements Observer, Initializable {
 
         if (viewModel.getClassName().intern() == "class Model.ZScore")
         {
-            Platform.runLater(() -> myGraphs.algorithmSeries.getData().clear());
-            Platform.runLater(() -> myGraphs.algorithmSeries1.getData().clear());
             for (int i = 0; i <= numofrow.getValue(); i++)
             {
                 int finalI = i;
@@ -466,7 +465,17 @@ public class Controller extends Pane implements Observer, Initializable {
 
         if (viewModel.getClassName().intern() == "class Model.Hybrid")
         {
-            Platform.runLater(() -> myGraphs.algorithmSeries1.getData().clear());
+            Platform.runLater(() -> myGraphs.algorithmSeries3.getData().add(new XYChart.Data(viewModel.getAlgorithmCircle().c.x / 1000, viewModel.getAlgorithmCircle().c.y / 1000)));
+            Platform.runLater(() -> {
+                XYChart.Series<Number, Number> series = myGraphs.algorithmLineChart.getData().get(3);
+                for (XYChart.Data<Number, Number> data : series.getData()) {
+                    StackPane stackPane = (StackPane) data.getNode();
+                    stackPane.setPrefWidth(viewModel.getAlgorithmCircle().r * 500);
+                    stackPane.setPrefHeight(viewModel.getAlgorithmCircle().r * 500);
+                }
+            });
+
+
             for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=50) {
                 int finalI = i;
                 Platform.runLater(() -> myGraphs.algorithmSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI))));

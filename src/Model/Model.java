@@ -1,10 +1,9 @@
 
 package Model;
 
-import Algorithms.Hybrid;
-import Algorithms.LinearRegression;
-import Algorithms.ZScore;
+import Algorithms.*;
 import Server.*;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.Socket;
@@ -62,6 +61,7 @@ public class Model extends AllModels {
     private float yawstep;
 
     private Line algorithmLine;
+    private Circle algorithmCircle;
 
     private ArrayList<String> colsNames = new ArrayList<>();
     private Map<String, Integer> CSVindexmap = new HashMap<>();
@@ -119,11 +119,6 @@ public class Model extends AllModels {
 
     public ArrayList<Float> getZScoreLine() {
         return ZScoreLine;
-    }
-
-    public int getRealHybrid()
-    {
-        return realHybrid;
     }
 
     public float getRudderstep() {
@@ -188,6 +183,11 @@ public class Model extends AllModels {
 
     public Line getAlgorithmLine() {
         return algorithmLine;
+    }
+
+    public Circle getAlgorithmCircle()
+    {
+        return algorithmCircle;
     }
 
 
@@ -600,6 +600,8 @@ public class Model extends AllModels {
         modelSetRightLineChart(colName);
         algorithmColValues.clear();
         algorithmCoralatedColValues.clear();
+        anomalyAlgorithmColValues.clear();
+        anomalyAlgorithmCoralatedColValues.clear();
 
         for (float value : regularFlight.getCols()[regularFlight.getColIndex(colName)].getFloats()) {
             algorithmColValues.add(value);
@@ -630,6 +632,8 @@ public class Model extends AllModels {
                 for (float value : in.getCols()[in.getColIndex(nameOfCoralatedCol)].getFloats()) {
                     anomalyAlgorithmCoralatedColValues.add(value);
                 }
+
+                algorithmCircle = hybrid.whoCircle.get(colName);
             }
         }
 

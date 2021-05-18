@@ -6,6 +6,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -30,6 +31,7 @@ public class MyGraphs extends Pane
     XYChart.Series algorithmSeries = new XYChart.Series();
     XYChart.Series algorithmSeries1 = new XYChart.Series();
     XYChart.Series algorithmSeries2 = new XYChart.Series();
+    XYChart.Series algorithmSeries3 = new XYChart.Series();
     final NumberAxis algorithmxAxis = new NumberAxis();
     final NumberAxis algorithmyAxis = new NumberAxis();
     final LineChart<Number,Number> algorithmLineChart = new LineChart<>(algorithmxAxis, algorithmyAxis);
@@ -67,6 +69,20 @@ public class MyGraphs extends Pane
         algorithmLineChart.getData().add(algorithmSeries);
         algorithmLineChart.getData().add(algorithmSeries1);
         algorithmLineChart.getData().add(algorithmSeries2);
+        algorithmLineChart.getData().add(algorithmSeries3);
+
+        /*
+        algorithmSeries3.getData().add(new XYChart.Data(0.0000005, 1));
+        Platform.runLater(() -> {
+            XYChart.Series<Number, Number> series = algorithmLineChart.getData().get(3);
+            for (XYChart.Data<Number, Number> data : series.getData()) {
+                StackPane stackPane = (StackPane) data.getNode();
+                stackPane.setPrefWidth(100);
+                stackPane.setPrefHeight(100);
+            }
+        });
+
+         */
         algorithmxAxis.setTickLabelsVisible(false);
         algorithmyAxis.setTickLabelsVisible(false);
         algorithmLineChart.setAnimated(false);
@@ -74,6 +90,7 @@ public class MyGraphs extends Pane
         algorithmSeries.setName("algorithm line");
         algorithmSeries1.setName("regular flight");
         algorithmSeries2.setName("anomaly flight");
+        algorithmSeries3.setName("");
         Platform.runLater(() -> algorithmLineChart.lookup(".chart-plot-background").setStyle("-fx-background-color: WHITE;"));
         ret.add(algorithmLineChart);
 
