@@ -34,6 +34,7 @@ public class ViewModel extends AllViewModels {
     private IntegerProperty report;
 
     private StringProperty loadXMLResult;
+    private StringProperty resultLoadAlgorithm;
     private StringProperty openCSVResult;
     private StringProperty chosenXMLFilePath;
     private StringProperty chosenCSVFilePath;
@@ -141,6 +142,11 @@ public class ViewModel extends AllViewModels {
         return openCSVResult;
     }
 
+    public StringProperty getResultLoadAlgorithm()
+    {
+        return resultLoadAlgorithm;
+    }
+
     public DoubleProperty getMinRudder() {
         return minRudder;
     }
@@ -211,6 +217,7 @@ public class ViewModel extends AllViewModels {
 
         loadXMLResult = new SimpleStringProperty();
         openCSVResult = new SimpleStringProperty();
+        resultLoadAlgorithm = new SimpleStringProperty();
         chosenXMLFilePath = new SimpleStringProperty();
         chosenCSVFilePath = new SimpleStringProperty();
         time = new SimpleStringProperty();
@@ -291,6 +298,13 @@ public class ViewModel extends AllViewModels {
             report.set(1);
         if (p.intern() == "reportDone")
             report.set(0);
+        if (p.intern() == "resultLoadAlgorithm")
+        {
+            if (model.getResultLoadAlgorithm().intern() == "failed")
+                resultLoadAlgorithm.set("failed");
+            else
+                resultLoadAlgorithm.set("success");
+        }
     }
 
     public void VMLoadXML() {

@@ -93,6 +93,7 @@ public class Controller extends Pane implements Observer, Initializable {
     StringProperty time;
     StringProperty resultLoadXML;
     StringProperty chosenXMLFilePath;
+    StringProperty resultLoadAlgorithm;
 
     DoubleProperty minRudder;
     DoubleProperty maxRudder;
@@ -121,6 +122,9 @@ public class Controller extends Pane implements Observer, Initializable {
 
         resultLoadXML = new SimpleStringProperty();
         resultLoadXML.bind(viewModel.getLoadXMLResult());
+
+        resultLoadAlgorithm = new SimpleStringProperty();
+        resultLoadAlgorithm.bind(viewModel.getResultLoadAlgorithm());
 
         chosenCSVFilePath = new SimpleStringProperty();
         viewModel.getChosenCSVFilePath().bind(chosenCSVFilePath);
@@ -517,6 +521,23 @@ public class Controller extends Pane implements Observer, Initializable {
         String resultClassName = className.getText();
 
         viewModel.VMLoadAlgorithm(resultClassDirectory, resultClassName);
+
+        if (resultLoadAlgorithm.getValue().equals("failed"))
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("load algorithm failed");
+            alert.setContentText("Please try again");
+            alert.showAndWait();
+        }
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("The algorithm was loaded successfully");
+            alert.setContentText(null);
+            alert.showAndWait();
+        }
     }
 
     @Override

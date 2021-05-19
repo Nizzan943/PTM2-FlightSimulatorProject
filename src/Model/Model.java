@@ -43,6 +43,7 @@ public class Model extends AllModels {
     private String time;
     private String resultLoadXML;
     private String resultOpenCSV;
+    private String resultLoadAlgorithm;
     String nameOfCol;
     String nameOfCoralatedCol;
     String className;
@@ -88,6 +89,11 @@ public class Model extends AllModels {
 
     public String getResultLoadXML() {
         return resultLoadXML;
+    }
+
+    public String getResultLoadAlgorithm()
+    {
+        return resultLoadAlgorithm;
     }
 
     public String getClassName()
@@ -258,16 +264,15 @@ public class Model extends AllModels {
             try {
                 fg = new Socket("localhost", 5400);
             } catch (IOException e) {
-                e.printStackTrace();
             }
 
             in = new TimeSeries(Model.CSVpath);
             flightLong = in.getCols()[0].getFloats().size() + 1;
 
             try {
-                out = new PrintWriter(fg.getOutputStream());
+                if (fg != null)
+                    out = new PrintWriter(fg.getOutputStream());
             } catch (IOException e) {
-                e.printStackTrace();
             }
         }
         setChanged();
@@ -380,8 +385,10 @@ public class Model extends AllModels {
 
     public void simulatorLoop(double speed) {
         while (numofrow != in.getRows().size() - 1) {
-            out.println(in.getRows().get(numofrow));
-            out.flush();
+            if (out != null) {
+                out.println(in.getRows().get(numofrow));
+                out.flush();
+            }
 
             allChanges();
 
@@ -666,25 +673,28 @@ public class Model extends AllModels {
         URL[] urls = new URL[1];
         try {
             urls[0] = new URL("file://" + resultClassDirectory);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        URLClassLoader classLoader = new URLClassLoader(urls);
-        Class<?> classInstance = null;
-        try {
+            URLClassLoader classLoader = new URLClassLoader(urls);
+            Class<?> classInstance = null;
             classInstance = classLoader.loadClass(resultClassName);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
             ad = (TimeSeriesAnomalyDetector) classInstance.newInstance();
+            resultLoadAlgorithm = "success";
+            setChanged();
+            notifyObservers("resultLoadAlgorithm");
             className =  ad.getClass().toString();
             ad.learnNormal(regularFlight);
             realHybrid = 0;
+        } catch (IllegalAccessException | ClassNotFoundException e) {
+            resultLoadAlgorithm = "failed";
+            setChanged();
+            notifyObservers("resultLoadAlgorithm");
+        } catch (MalformedURLException e) {
+            resultLoadAlgorithm = "failed";
+            setChanged();
+            notifyObservers("resultLoadAlgorithm");
         } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            resultLoadAlgorithm = "failed";
+            setChanged();
+            notifyObservers("resultLoadAlgorithm");
         }
     }
 }
