@@ -71,19 +71,20 @@ public class MyGraphs extends Pane
         algorithmLineChart.getData().add(algorithmSeries2);
         algorithmLineChart.getData().add(algorithmSeries3);
 
-        //algorithmLineChart.setMaxHeight();
-
-        algorithmSeries3.getData().add(new XYChart.Data(-0.73, -0.49));
+/*
+        algorithmSeries3.getData().add(new XYChart.Data(-0.89, -0.49));
         Platform.runLater(() -> {
             XYChart.Series<Number, Number> series = algorithmLineChart.getData().get(3);
             for (XYChart.Data<Number, Number> data : series.getData()) {
                 StackPane stackPane = (StackPane) data.getNode();
-                //stackPane.setPrefWidth(100);
-                //stackPane.setPrefHeight(100);
+                stackPane.setPrefWidth(100);
+                stackPane.setPrefHeight(100);
             }
         });
 
 
+
+ */
         algorithmxAxis.setTickLabelsVisible(false);
         algorithmyAxis.setTickLabelsVisible(false);
         algorithmLineChart.setAnimated(false);

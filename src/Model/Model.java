@@ -384,7 +384,7 @@ public class Model extends AllModels {
     }
 
     public void simulatorLoop(double speed) {
-        while (numofrow != in.getRows().size() - 1) {
+        while (numofrow < in.getRows().size() - 2) {
             if (out != null) {
                 out.println(in.getRows().get(numofrow));
                 out.flush();
@@ -397,11 +397,12 @@ public class Model extends AllModels {
             setChanged();
             notifyObservers("numofrow");
         }
-        out.close();
+        modelStop();
+        if (out != null)
+            out.close();
         try {
             fg.close();
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -414,8 +415,14 @@ public class Model extends AllModels {
             }
             changeTimerSpeed(speed);
 
-            if (nowTime >= ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate() / 10)) * 1000)
+            if (nowTime >= ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate() / 10)) * 1000 - 1000)
+            {
+                nowTime = ((in.getCols()[0].getFloats().size() + 1) / (XML_settings.additionalSettings.getDataSamplingRate() / 10)) * 1000 - 1000;
+                time = simpleDateFormat.format(nowTime - 7200000);
+                setChanged();
+                notifyObservers("time");
                 break;
+            }
 
             time = simpleDateFormat.format(nowTime - 7200000);
             setChanged();
@@ -565,7 +572,7 @@ public class Model extends AllModels {
     }
 
     public double modelSetMaxTimeSlider() {
-        return ((double)(in.getCols()[0].getFloats().size() + 1) / (double)(XML_settings.additionalSettings.getDataSamplingRate() / 10));
+        return ((double)(in.getCols()[0].getFloats().size() + 1) / (double)(XML_settings.additionalSettings.getDataSamplingRate() / 10)) - 1;
     }
 
     public void modelTimeSlider(double second) {
