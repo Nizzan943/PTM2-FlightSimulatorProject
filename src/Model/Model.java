@@ -279,7 +279,7 @@ public class Model extends AllModels {
         notifyObservers("resultOpenCSV");
     }
 
-    public void resume(Thread simulatorThread, Thread timerThread)
+    protected void resume(Thread simulatorThread, Thread timerThread)
     {
         if (simulatorThread != null)
         {
@@ -310,7 +310,7 @@ public class Model extends AllModels {
         }
     }
 
-    public void changeSpeed(double speed) {
+    protected void changeSpeed(double speed) {
         try {
             Thread.sleep((long) (Model.XML_settings.additionalSettings.getDataSamplingRate() / speed));
         } catch (InterruptedException e) {
@@ -318,11 +318,11 @@ public class Model extends AllModels {
         }
     }
 
-    public void changeTimerSpeed(double speed) {
+    protected void changeTimerSpeed(double speed) {
         nowTime += 1000 * speed;
     }
 
-    public void allChanges()
+    protected void allChanges()
     {
         rudderstep = in.getCols()[CSVindexmap.get(XML_settings.RealToAssosicate.get("rudder"))].getFloats().get(numofrow);
         setChanged();
@@ -383,7 +383,7 @@ public class Model extends AllModels {
         }
     }
 
-    public void simulatorLoop(double speed) {
+    protected void simulatorLoop(double speed) {
         while (numofrow < in.getRows().size() - 2) {
             if (out != null) {
                 out.println(in.getRows().get(numofrow));
@@ -406,7 +406,7 @@ public class Model extends AllModels {
         }
     }
 
-    public void timerLoop(double speed) {
+    protected void timerLoop(double speed) {
         while (true) {
             try {
                 Thread.sleep(1000); //1 second
@@ -430,7 +430,7 @@ public class Model extends AllModels {
         }
     }
 
-    public void suspendForPlay(Thread simulatorThread, Thread timerThread)
+    protected void suspendForPlay(Thread simulatorThread, Thread timerThread)
     {
         if (simulatorThread != null) {
             simulatorThread.suspend();
@@ -510,7 +510,7 @@ public class Model extends AllModels {
         }
     }
 
-    public void suspendForPause(Thread simulatorThread, Thread timerThread)
+    protected void suspendForPause(Thread simulatorThread, Thread timerThread)
     {
         if (simulatorThread != null)
         {
@@ -545,7 +545,7 @@ public class Model extends AllModels {
         Plus_Minus_Time(30, "+");
     }
 
-    public void Plus_Minus_Time(int seconds, String math) {
+    protected void Plus_Minus_Time(int seconds, String math) {
         if (math.intern() == "+") {
             numofrow += (XML_settings.additionalSettings.getDataSamplingRate() / 10) * seconds;
             nowTime += seconds * 1000;

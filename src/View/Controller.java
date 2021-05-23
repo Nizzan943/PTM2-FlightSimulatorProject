@@ -264,7 +264,7 @@ public class Controller extends Pane implements Observer, Initializable {
         elevatorstep.addListener((observable, oldValue, newValue) -> myJoystick.innerCircle.setCenterY(elevatorstep.getValue() * 100));
 
         myButtons.slider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (((double)oldValue + 1 != (double)newValue) && (((double)oldValue + 0.5) != (double)newValue) && (((double)oldValue + 1.5) != (double)newValue) && (((double)oldValue + 2) != (double)newValue))
+           // if (((double)oldValue + 1 != (double)newValue) && (((double)oldValue + 0.5) != (double)newValue) && (((double)oldValue + 1.5) != (double)newValue) && (((double)oldValue + 2) != (double)newValue))
                 viewModel.VMtimeslider(myButtons.slider.getValue());
         });
 
@@ -480,8 +480,8 @@ public class Controller extends Pane implements Observer, Initializable {
                 XYChart.Series<Number, Number> series = myGraphs.algorithmLineChart.getData().get(3);
                 for (XYChart.Data<Number, Number> data : series.getData()) {
                     StackPane stackPane = (StackPane) data.getNode();
-                    stackPane.setPrefWidth(viewModel.getAlgorithmCircle().r * 100);
-                    stackPane.setPrefHeight(viewModel.getAlgorithmCircle().r * 100);
+                    stackPane.setPrefWidth(viewModel.getAlgorithmCircle().r * 500);
+                    stackPane.setPrefHeight(viewModel.getAlgorithmCircle().r * 500);
                 }
             });
         }

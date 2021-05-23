@@ -1,10 +1,8 @@
 package ViewModel;
 
-import Algorithms.Circle;
-import Algorithms.ZScore;
+import Server.Circle;
 import Model.Model;
 import Server.Line;
-import Server.Point;
 import javafx.beans.property.*;
 import java.util.ArrayList;
 import java.util.Observable;
