@@ -305,39 +305,48 @@ public class ViewModel extends AllViewModels {
         }
     }
 
+    @Override
     public void VMLoadXML() {
         model.ModelLoadXML(chosenXMLFilePath.getValue());
     }
 
+    @Override
     public void VMOpenCSV() {
         model.ModelOpenCSV(chosenCSVFilePath.getValue());
         flightLong.set(model.getFlightLong());
     }
 
+    @Override
     public void VMplay() {
         model.modelPlay();
     }
 
+    @Override
     public void VMGetChoice(String speed) {
         model.modelGetChoice(speed);
     }
 
+    @Override
     public void VMpause() {
         model.modelpause();
     }
 
+    @Override
     public void VMplus15() {
         model.modelPlus15();
     }
 
+    @Override
     public void VMminus15() {
         model.modelMinus15();
     }
 
+    @Override
     public void VMminus30() {
         model.modelMinus30();
     }
 
+    @Override
     public void VMplus30() {
         model.modelPlus30();
     }
@@ -366,20 +375,24 @@ public class ViewModel extends AllViewModels {
         model.modelTimeSlider(second);
     }
 
+    @Override
     public void VMstop() {
         model.modelStop();
     }
 
+    @Override
     public void VMsetLeftLineChart(String colName)
     {
         model.modelSetLeftLineChart(colName);
     }
 
+    @Override
     public void VMsetRightLineChart(String colName)
     {
         model.modelSetRightLineChart(colName);
     }
 
+    @Override
     public void VMsetAlgorithmLineChart(String colName)
     {
         model.modelSetAlgorithmLineChart(colName);
@@ -409,6 +422,7 @@ public class ViewModel extends AllViewModels {
         }
     }
 
+    @Override
     public void VMLoadAlgorithm(String resultClassDirectory, String resultClassName)
     {
         model.modelLoadAlgorithm(resultClassDirectory, resultClassName);

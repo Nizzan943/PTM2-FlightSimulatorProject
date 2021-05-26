@@ -259,9 +259,9 @@ public class Controller extends Pane implements Observer, Initializable {
                 Platform.runLater(() -> myGraphs.algorithmLineChart.lookup(".chart-plot-background").setStyle("-fx-background-color: WHITE;"));
         });
 
-        aileronstep.addListener((observable, oldValue, newValue) -> myJoystick.innerCircle.setCenterX(aileronstep.getValue() * 100));
+        aileronstep.addListener((observable, oldValue, newValue) -> myJoystick.innerCircle.setCenterX(aileronstep.getValue() * 70));
 
-        elevatorstep.addListener((observable, oldValue, newValue) -> myJoystick.innerCircle.setCenterY(elevatorstep.getValue() * 100));
+        elevatorstep.addListener((observable, oldValue, newValue) -> myJoystick.innerCircle.setCenterY(elevatorstep.getValue() * 70));
 
         myButtons.slider.valueProperty().addListener((observable, oldValue, newValue) -> {
            // if (((double)oldValue + 1 != (double)newValue) && (((double)oldValue + 0.5) != (double)newValue) && (((double)oldValue + 1.5) != (double)newValue) && (((double)oldValue + 2) != (double)newValue))

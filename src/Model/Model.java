@@ -196,7 +196,7 @@ public class Model extends AllModels {
         return algorithmCircle;
     }
 
-
+    @Override
     public void ModelLoadXML(String chosenPath) {
         HandleXML handleXML = new HandleXML();
         try {
@@ -222,6 +222,7 @@ public class Model extends AllModels {
         notifyObservers("resultLoadXML");
     }
 
+    @Override
     public void ModelOpenCSV(String chosenPath) {
         int openFlag = 0;
         TimeSeries timeSeries = new TimeSeries(chosenPath);
@@ -288,6 +289,7 @@ public class Model extends AllModels {
         }
     }
 
+    @Override
     public void modelPlay() {
         if (playFlag == 0) {
             simulator10Thread = new Thread(() -> {
@@ -438,6 +440,7 @@ public class Model extends AllModels {
         }
     }
 
+    @Override
     public void modelGetChoice(String speed) {
         if (speed.intern() == "x2.0") {
             suspendForPlay(simulator05Thread, timer05Thread);
@@ -519,6 +522,7 @@ public class Model extends AllModels {
         }
     }
 
+    @Override
     public void modelpause()
     {
         suspendForPause(simulator05Thread, timer05Thread);
@@ -529,18 +533,22 @@ public class Model extends AllModels {
         playFlag = 1;
     }
 
+    @Override
     public void modelPlus15() {
         Plus_Minus_Time(15, "+");
     }
 
+    @Override
     public void modelMinus15() {
         Plus_Minus_Time(15, "-");
     }
 
+    @Override
     public void modelMinus30() {
         Plus_Minus_Time(30, "-");
     }
 
+    @Override
     public void modelPlus30() {
         Plus_Minus_Time(30, "+");
     }
@@ -580,6 +588,7 @@ public class Model extends AllModels {
         nowTime = (long) (second * 1000);
     }
 
+    @Override
     public void modelStop()
     {
         numofrow = 0;
@@ -592,11 +601,13 @@ public class Model extends AllModels {
         playFlag = 0;
     }
 
+    @Override
     public void modelSetLeftLineChart(String colName)
     {
         nameOfCol = colName;
     }
 
+    @Override
     public void modelSetRightLineChart(String colName)
     {
         List<CorrelatedFeatures> list = linearRegression.getNormalModel();
@@ -606,6 +617,7 @@ public class Model extends AllModels {
         }
     }
 
+    @Override
     public void modelSetAlgorithmLineChart(String colName)
     {
         if (realHybrid == 1)
@@ -675,6 +687,7 @@ public class Model extends AllModels {
 
     }
 
+    @Override
     public void modelLoadAlgorithm(String resultClassDirectory, String resultClassName)
     {
         URL[] urls = new URL[1];
