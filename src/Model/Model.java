@@ -14,8 +14,8 @@ import java.util.*;
 
 public class Model extends AllModels {
 
-    static HandleXML XML_settings;
-    static String CSVpath;
+    HandleXML XML_settings;
+    String CSVpath;
 
     Thread simulator20Thread = null;
     Thread timer20Thread = null;
@@ -217,6 +217,14 @@ public class Model extends AllModels {
             zScore.learnNormal(regularFlight);
             hybrid.HybridAlgorithm(regularFlight);
             hybrid.learnNormal(regularFlight);
+            PrintWriter writer = null;
+            try {
+                writer = new PrintWriter(new FileWriter("lastXML.txt"));
+                writer.println(chosenPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            writer.close();
         }
         setChanged();
         notifyObservers("resultLoadXML");
@@ -224,6 +232,34 @@ public class Model extends AllModels {
 
     @Override
     public void ModelOpenCSV(String chosenPath) {
+        //load the last XML
+        if (XML_settings == null)
+        {
+            String chosen = null;
+            Scanner scanner;
+            try {
+                scanner = new Scanner(new BufferedReader(new FileReader("lastXML.txt")));
+                chosen = scanner.nextLine();
+                scanner.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            HandleXML handleXML = new HandleXML();
+            handleXML.deserializeFromXML(chosen);
+            try {
+                handleXML.deserializeFromXML(chosen);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            XML_settings = handleXML;
+            regularFlight = new TimeSeries(XML_settings.additionalSettings.getProperFlightFile());
+            regularFlight.setCorrelationTresh(0);
+            linearRegression.learnNormal(regularFlight);
+            zScore.learnNormal(regularFlight);
+            hybrid.HybridAlgorithm(regularFlight);
+            hybrid.learnNormal(regularFlight);
+        }
+
         int openFlag = 0;
         TimeSeries timeSeries = new TimeSeries(chosenPath);
         for (int i = 0; i < timeSeries.getCols().length; i++) {
@@ -267,7 +303,7 @@ public class Model extends AllModels {
             } catch (IOException e) {
             }
 
-            in = new TimeSeries(Model.CSVpath);
+            in = new TimeSeries(CSVpath);
             flightLong = in.getCols()[0].getFloats().size() + 1;
 
             try {
@@ -314,7 +350,7 @@ public class Model extends AllModels {
 
     protected void changeSpeed(double speed) {
         try {
-            Thread.sleep((long) (Model.XML_settings.additionalSettings.getDataSamplingRate() / speed));
+            Thread.sleep((long) (XML_settings.additionalSettings.getDataSamplingRate() / speed));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

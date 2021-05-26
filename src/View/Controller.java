@@ -70,11 +70,6 @@ public class Controller extends Pane implements Observer, Initializable {
         board.getChildren().addAll(myClocksPannel.set());
 
         board.getChildren().addAll(myGraphs.set());
-
-        Circle circle = new Circle(10);
-        circle.setLayoutX(25);
-        circle.setLayoutY(400);
-        //board.getChildren().add(circle);
     }
 
     Line algorithmLine;
@@ -113,6 +108,7 @@ public class Controller extends Pane implements Observer, Initializable {
     FloatProperty yawstep;
 
     int playStart = 0;
+    int isLoadXML = 0;
 
     public void setViewModel(ViewModel viewModel) {
         this.viewModel = viewModel;
@@ -218,6 +214,20 @@ public class Controller extends Pane implements Observer, Initializable {
                 for (String names : viewModel.getColsNames()) {
                     myListView.listView.getItems().add(names);
                 }
+
+                //load the last XML
+                if (isLoadXML == 0) {
+                    viewModel.VMsetMinRudder();
+                    myJoystick.rudder.setMin(minRudder.getValue());
+                    viewModel.VMsetMaxRudder();
+                    myJoystick.rudder.setMax(maxRudder.getValue());
+                    viewModel.VMsetMinThrottle();
+                    myJoystick.throttle.setMin(minThrottle.getValue());
+                    viewModel.VMsetMaxThrottle();
+                    myJoystick.throttle.setMax(maxThrottle.getValue());
+                    setListeners();
+                }
+
                 myButtons.timer.setText("00:00:00.000");
                 viewModel.setMaxTimeSlider();
                 myButtons.slider.setMax(maxtimeSlider.getValue());
@@ -298,47 +308,46 @@ public class Controller extends Pane implements Observer, Initializable {
     }
 
     public void LoadXML() {
+        isLoadXML = 1;
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
         fc.setTitle("Load XML file"); //headline
         fc.setInitialDirectory(new File("/")); //what happens when we click
         File chosen = fc.showOpenDialog(null);
         chosenXMLFilePath.set(chosen.getAbsolutePath());
-        if (chosen != null) {
-            viewModel.VMLoadXML();
-            if (resultLoadXML.getValue().equals("WrongFormatAlert"))
-            {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Wrong format of XML");
-                alert.setContentText("Please check your format and try again");
-                alert.showAndWait();
-            }
-            else if (resultLoadXML.getValue().equals("MissingArgumentAlert"))
-            {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Missing Arguments");
-                alert.setContentText("Please check your settings and try again");
-                alert.showAndWait();
-            }
-            else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText("The file was uploaded successfully");
-                alert.setContentText(null);
-                alert.showAndWait();
-                viewModel.VMsetMinRudder();
-                myJoystick.rudder.setMin(minRudder.getValue());
-                viewModel.VMsetMaxRudder();
-                myJoystick.rudder.setMax(maxRudder.getValue());
-                viewModel.VMsetMinThrottle();
-                myJoystick.throttle.setMin(minThrottle.getValue());
-                viewModel.VMsetMaxThrottle();
-                myJoystick.throttle.setMax(maxThrottle.getValue());
+        viewModel.VMLoadXML();
+        if (resultLoadXML.getValue().equals("WrongFormatAlert"))
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Wrong format of XML");
+            alert.setContentText("Please check your format and try again");
+            alert.showAndWait();
+        }
+        else if (resultLoadXML.getValue().equals("MissingArgumentAlert"))
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Missing Arguments");
+            alert.setContentText("Please check your settings and try again");
+            alert.showAndWait();
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText("The file was uploaded successfully");
+            alert.setContentText(null);
+            alert.showAndWait();
+            viewModel.VMsetMinRudder();
+            myJoystick.rudder.setMin(minRudder.getValue());
+            viewModel.VMsetMaxRudder();
+            myJoystick.rudder.setMax(maxRudder.getValue());
+            viewModel.VMsetMinThrottle();
+            myJoystick.throttle.setMin(minThrottle.getValue());
+            viewModel.VMsetMaxThrottle();
+            myJoystick.throttle.setMax(maxThrottle.getValue());
 
-                setListeners();
-            }
+            setListeners();
         }
     }
 
