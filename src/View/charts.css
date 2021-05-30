@@ -1,6 +1,5 @@
 .default-color1.chart-series-line { -fx-stroke: transparent; }
 .default-color2.chart-series-line { -fx-stroke: transparent; }
-.default-color3.chart-series-line { -fx-stroke: transparent; }
 .default-color0.chart-series-line { -fx-stroke: black; }
 
 .default-color1.chart-line-symbol {
@@ -8,11 +7,6 @@
 }
 .default-color2.chart-line-symbol {
     -fx-background-color: blue, blue;
-}
-.default-color3.chart-line-symbol {
-    -fx-background-color: black, white;
-    -fx-shape: "M 100 100 a 50 50 0 1 0 0.00001 0";
-    -fx-display: inline-block;
 }
 .default-color0.chart-line-symbol {
     -fx-background-color: transparent, transparent;
@@ -27,6 +21,15 @@
 .default-color2.chart-legend-item-symbol{
     -fx-background-color: blue;
 }
-.default-color3.chart-legend-item-symbol{
-    -fx-background-color: black;
+
+.chart-bubble.series0.data0.default-color0 {
+    -fx-bubble-fill: black;
+}
+
+.chart-bubble.series1.data0.default-color1 {
+    -fx-bubble-fill: gray;
+}
+
+.chart-bubble.series2.data0.default-color2 {
+    -fx-bubble-fill: blue;
 }

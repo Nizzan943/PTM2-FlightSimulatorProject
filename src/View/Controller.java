@@ -253,12 +253,16 @@ public class Controller extends Pane implements Observer, Initializable {
             }
             Platform.runLater(() -> myGraphs.leftSeries.getData().add((new XYChart.Data(numofrow.getValue(), viewModel.getAlgorithmColValues().get(numofrow.getValue())))));
             Platform.runLater(() -> myGraphs.rightSeries.getData().add((new XYChart.Data(numofrow.getValue(), viewModel.getAlgorithmCoralatedColValues().get(numofrow.getValue())))));
-            if (viewModel.getClassName().intern() == "class Model.LinearRegression" || viewModel.getClassName().intern() == "class Model.Hybrid") {
+            if (viewModel.getClassName().intern() == "class Model.LinearRegression") {
                 Platform.runLater(() -> myGraphs.algorithmSeries2.getData().clear());
                 Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(viewModel.getAnomalyAlgorithmColValues().get(numofrow.getValue()), viewModel.getAnomalyAlgorithmCoralatedColValues().get(numofrow.getValue())))));
             }
             if (viewModel.getClassName().intern() == "class Model.ZScore") {
                 Platform.runLater(() -> myGraphs.algorithmSeries.getData().add((new XYChart.Data(numofrow.getValue(), viewModel.getZScoreline().get(numofrow.getValue())))));
+            }
+            if (viewModel.getClassName().intern() == "class Model.Hybrid") {
+                Platform.runLater(() -> myGraphs.hybridSeries2.getData().clear());
+                Platform.runLater(() -> myGraphs.hybridSeries2.getData().add((new XYChart.Data(viewModel.getAnomalyAlgorithmColValues().get(numofrow.getValue()), viewModel.getAnomalyAlgorithmCoralatedColValues().get(numofrow.getValue()), (viewModel.getAlgorithmCircle().r / 7)/10))));
             }
         });
 
@@ -442,9 +446,12 @@ public class Controller extends Pane implements Observer, Initializable {
     {
         Platform.runLater(() -> myGraphs.algorithmSeries.getData().clear());
         Platform.runLater(() -> myGraphs.algorithmSeries1.getData().clear());
-        Platform.runLater(() -> myGraphs.algorithmSeries3.getData().clear());
+        Platform.runLater(() -> myGraphs.hybridSeries.getData().clear());
+        Platform.runLater(() -> myGraphs.hybridSeries1.getData().clear());
 
         if (viewModel.getClassName().intern() == "class Model.LinearRegression") {
+            myGraphs.hybridChart.setVisible(false);
+            myGraphs.algorithmLineChart.setVisible(true);
 
             viewModel.VMsetAlgorithmLineChart(colName);
 
@@ -470,6 +477,9 @@ public class Controller extends Pane implements Observer, Initializable {
 
         if (viewModel.getClassName().intern() == "class Model.ZScore")
         {
+            myGraphs.hybridChart.setVisible(false);
+            myGraphs.algorithmLineChart.setVisible(true);
+
             for (int i = 0; i <= numofrow.getValue(); i++)
             {
                 int finalI = i;
@@ -479,20 +489,15 @@ public class Controller extends Pane implements Observer, Initializable {
 
         if (viewModel.getClassName().intern() == "class Model.Hybrid")
         {
+            myGraphs.hybridChart.setVisible(true);
+            myGraphs.algorithmLineChart.setVisible(false);
+
+            Platform.runLater(() -> myGraphs.hybridSeries.getData().add(new XYChart.Data(viewModel.getAlgorithmCircle().c.x, viewModel.getAlgorithmCircle().c.y, viewModel.getAlgorithmCircle().r)));
+
             for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=50) {
                 int finalI = i;
-                Platform.runLater(() -> myGraphs.algorithmSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI))));
+                Platform.runLater(() -> myGraphs.hybridSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI), (1 / viewModel.getAlgorithmCircle().area()) / 10)));
             }
-
-            Platform.runLater(() -> myGraphs.algorithmSeries3.getData().add(new XYChart.Data(viewModel.getAlgorithmCircle().c.x / 1000, viewModel.getAlgorithmCircle().c.y / 1000)));
-            Platform.runLater(() -> {
-                XYChart.Series<Number, Number> series = myGraphs.algorithmLineChart.getData().get(3);
-                for (XYChart.Data<Number, Number> data : series.getData()) {
-                    StackPane stackPane = (StackPane) data.getNode();
-                    stackPane.setPrefWidth(viewModel.getAlgorithmCircle().r * 500);
-                    stackPane.setPrefHeight(viewModel.getAlgorithmCircle().r * 500);
-                }
-            });
         }
     }
 

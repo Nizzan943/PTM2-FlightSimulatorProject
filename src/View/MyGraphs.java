@@ -1,16 +1,15 @@
 package View;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.ScatterChart;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +30,17 @@ public class MyGraphs extends Pane
     XYChart.Series algorithmSeries = new XYChart.Series();
     XYChart.Series algorithmSeries1 = new XYChart.Series();
     XYChart.Series algorithmSeries2 = new XYChart.Series();
-    XYChart.Series algorithmSeries3 = new XYChart.Series();
     final NumberAxis algorithmxAxis = new NumberAxis();
     final NumberAxis algorithmyAxis = new NumberAxis();
     final LineChart<Number,Number> algorithmLineChart = new LineChart<>(algorithmxAxis, algorithmyAxis);
+
+    XYChart.Series hybridSeries = new XYChart.Series();
+    XYChart.Series hybridSeries1 = new XYChart.Series();
+    XYChart.Series hybridSeries2 = new XYChart.Series();
+    final NumberAxis hybridxAxis = new NumberAxis();
+    final NumberAxis hybridyAxis = new NumberAxis();
+    final CircularBubbleChart<Number,Number> hybridChart = new CircularBubbleChart<>(hybridxAxis, hybridyAxis);
+
 
     public List<Node> set() {
         List<Node> ret = new ArrayList<>();
@@ -69,32 +75,40 @@ public class MyGraphs extends Pane
         algorithmLineChart.getData().add(algorithmSeries);
         algorithmLineChart.getData().add(algorithmSeries1);
         algorithmLineChart.getData().add(algorithmSeries2);
-        algorithmLineChart.getData().add(algorithmSeries3);
-
-/*
-        algorithmSeries3.getData().add(new XYChart.Data(-0.89, -0.49));
-        Platform.runLater(() -> {
-            XYChart.Series<Number, Number> series = algorithmLineChart.getData().get(3);
-            for (XYChart.Data<Number, Number> data : series.getData()) {
-                StackPane stackPane = (StackPane) data.getNode();
-                stackPane.setPrefWidth(100);
-                stackPane.setPrefHeight(100);
-            }
-        });
-
-
-
- */
         algorithmxAxis.setTickLabelsVisible(false);
         algorithmyAxis.setTickLabelsVisible(false);
         algorithmLineChart.setAnimated(false);
         algorithmLineChart.setCreateSymbols(true);
+        //algorithmLineChart.setVisible(false);
         algorithmSeries.setName("algorithm line");
         algorithmSeries1.setName("regular flight");
         algorithmSeries2.setName("anomaly flight");
-        algorithmSeries3.setName("");
         Platform.runLater(() -> algorithmLineChart.lookup(".chart-plot-background").setStyle("-fx-background-color: WHITE;"));
         ret.add(algorithmLineChart);
+
+        hybridChart.setLayoutX(180);
+        hybridChart.setLayoutY(205);
+        hybridChart.setPrefSize(420,260);
+        hybridChart.getData().add(hybridSeries);
+        hybridChart.getData().add(hybridSeries1);
+        hybridChart.getData().add(hybridSeries2);
+        hybridxAxis.setTickLabelsVisible(false);
+        hybridyAxis.setTickLabelsVisible(false);
+        hybridChart.setAnimated(false);
+        hybridChart.setVisible(false);
+        hybridSeries.setName("algorithm line");
+        hybridSeries1.setName("regular flight");
+        hybridSeries2.setName("anomaly flight");
+
+        /*
+        hybridSeries.getData().add(new XYChart.Data(1, 2, 0.25));
+        hybridSeries1.getData().add(new XYChart.Data(2, 4));
+        hybridSeries2.getData().add(new XYChart.Data(3, 8));
+
+
+         */
+        Platform.runLater(() -> hybridChart.lookup(".chart-plot-background").setStyle("-fx-background-color: WHITE;"));
+        ret.add(hybridChart);
 
         return ret;
     }
@@ -114,5 +128,23 @@ public class MyGraphs extends Pane
 
             lineSeries.getNode().lookup(".chart-series-line").setStyle("-fx-stroke: black;");
         });
+    }
+
+    public class CircularBubbleChart<X, Y> extends BubbleChart<X, Y> {
+
+        public CircularBubbleChart(Axis<X> xAxis, Axis<Y> yAxis) {
+            super(xAxis, yAxis);
+        }
+
+        @Override
+        protected void layoutPlotChildren() {
+            super.layoutPlotChildren();
+            getData().stream().flatMap(series -> series.getData().stream())
+                    .map(Data::getNode)
+                    .map(StackPane.class::cast)
+                    .map(StackPane::getShape)
+                    .map(Ellipse.class::cast)
+                    .forEach(ellipse -> ellipse.setRadiusY(ellipse.getRadiusX()));
+        }
     }
 }
