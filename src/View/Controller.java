@@ -370,6 +370,7 @@ public class Controller extends Pane implements Observer, Initializable {
 
     public void Stop()
     {
+        playStart = 0;
         myButtons.timer.setText("00:00:00.000");
         myClocksPannel.altimeter.setText("altimeter: 0.0");
         myClocksPannel.airspeed.setText("airspeed: 0.0");
@@ -382,6 +383,7 @@ public class Controller extends Pane implements Observer, Initializable {
         myJoystick.innerCircle.setCenterY(0);
         myJoystick.throttle.setValue(0);
         myJoystick.rudder.setValue(0);
+        myButtons.playSpeedDropDown.setValue("");
         viewModel.VMstop();
     }
 
