@@ -494,11 +494,11 @@ public class Controller extends Pane implements Observer, Initializable {
             myGraphs.hybridChart.setVisible(true);
             myGraphs.algorithmLineChart.setVisible(false);
 
-            Platform.runLater(() -> myGraphs.hybridSeries.getData().add(new XYChart.Data(viewModel.getAlgorithmCircle().c.x, viewModel.getAlgorithmCircle().c.y, viewModel.getAlgorithmCircle().r)));
+            Platform.runLater(() -> myGraphs.hybridSeries.getData().add(new XYChart.Data(viewModel.getAlgorithmCircle().c.x, viewModel.getAlgorithmCircle().c.y, viewModel.getAlgorithmCircle().r / 2 )));
 
-            for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i+=50) {
+            for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i++) {
                 int finalI = i;
-                Platform.runLater(() -> myGraphs.hybridSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI), (1 / viewModel.getAlgorithmCircle().area()) / 10)));
+                Platform.runLater(() -> myGraphs.hybridSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI), ((viewModel.getAlgorithmCircle().r/ 100)))));
             }
         }
     }

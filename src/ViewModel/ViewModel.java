@@ -22,8 +22,6 @@ public class ViewModel extends AllViewModels {
     private Line algorithmLine;
     private Circle algorithmCircle;
 
-    Model model;
-
     private int minColValue;
     private int maxColValue;
 

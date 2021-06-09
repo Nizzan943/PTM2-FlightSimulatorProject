@@ -13,16 +13,6 @@ public class StatLib {
         return sum / x.length;
     }
 
-    public static float avgList(Object[] x) {
-        float sum = 0;
-
-        for (Object i : x)
-            sum += Float.parseFloat(i.toString());
-
-        return sum / x.length;
-    }
-
-
     // returns the variance of X and Y
     public static float var(float[] x) {
         float average = avg(x);
@@ -88,13 +78,6 @@ public class StatLib {
         float b = avg(arrY) - (a * avg(arrX));
 
         return new Line(a, b);
-    }
-
-    // returns the deviation between point p and the line equation of the points
-    public static float dev(Point p, Point[] points) {
-        Line l = linear_reg(points);
-
-        return dev(p, l);
     }
 
     // returns the deviation between point p and the line

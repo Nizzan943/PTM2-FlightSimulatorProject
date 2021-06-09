@@ -1,6 +1,8 @@
 package Server;
 
-public class AdditionalSettings {
+import java.io.Serializable;
+
+public class AdditionalSettings implements Serializable {
 
     long dataSamplingRate = (long) 1000000;
     String properFlightFile;

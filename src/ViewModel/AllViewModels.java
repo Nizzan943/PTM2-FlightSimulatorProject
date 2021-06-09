@@ -1,10 +1,14 @@
 package ViewModel;
 
+import Model.Model;
+
 import java.util.Observable;
 import java.util.Observer;
 
 public abstract class AllViewModels extends Observable implements Observer {
 
+    Model model;
+    
     public abstract void VMLoadXML();
     public abstract void VMOpenCSV();
     public abstract void VMplay();

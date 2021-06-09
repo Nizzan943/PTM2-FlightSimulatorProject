@@ -47,18 +47,6 @@ public class TimeSeries {
 
     Path path_of_file;
 
-    public void setCorrelationTresh(double correlationTresh) {
-        this.correlationTresh = correlationTresh;
-    }
-
-    public col[] getCols() {
-        return cols;
-    }
-
-    public ArrayList<String> getRows() {
-        return rows;
-    }
-
     public TimeSeries(String csvFileName) {
 
         this.myCSVname = csvFileName;
@@ -99,6 +87,18 @@ public class TimeSeries {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setCorrelationTresh(double correlationTresh) {
+        this.correlationTresh = correlationTresh;
+    }
+
+    public col[] getCols() {
+        return cols;
+    }
+
+    public ArrayList<String> getRows() {
+        return rows;
     }
 
     public float[] ArrListToArr(ArrayList<Float> list) {

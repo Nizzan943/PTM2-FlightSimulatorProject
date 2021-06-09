@@ -15,26 +15,4 @@ public class CorrelatedFeatures {
         this.lin_reg = lin_reg;
         this.threshold = threshold;
     }
-
-    public String getFeature1() {
-        return feature1;
-    }
-
-    public String getFeature2() {
-        return feature2;
-    }
-
-    public float getCorrlation() {
-        return corrlation;
-    }
-
-    public Line getLin_reg() {
-        return lin_reg;
-    }
-
-    public float getThreshold() {
-        return threshold;
-    }
-
-
 }
