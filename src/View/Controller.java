@@ -261,8 +261,8 @@ public class Controller extends Pane implements Observer, Initializable {
                 Platform.runLater(() -> myGraphs.algorithmSeries.getData().add((new XYChart.Data(numofrow.getValue(), viewModel.getZScoreline().get(numofrow.getValue())))));
             }
             if (viewModel.getClassName().intern() == "class Model.Hybrid") {
-                Platform.runLater(() -> myGraphs.hybridSeries2.getData().clear());
-                Platform.runLater(() -> myGraphs.hybridSeries2.getData().add((new XYChart.Data(viewModel.getAnomalyAlgorithmColValues().get(numofrow.getValue()), viewModel.getAnomalyAlgorithmCoralatedColValues().get(numofrow.getValue()), (viewModel.getAlgorithmCircle().r / 7)/10))));
+                Platform.runLater(() -> myGraphs.algorithmSeries2.getData().clear());
+                Platform.runLater(() -> myGraphs.algorithmSeries2.getData().add((new XYChart.Data(viewModel.getAnomalyAlgorithmColValues().get(numofrow.getValue()), viewModel.getAnomalyAlgorithmCoralatedColValues().get(numofrow.getValue())))));
             }
         });
 
@@ -448,12 +448,8 @@ public class Controller extends Pane implements Observer, Initializable {
     {
         Platform.runLater(() -> myGraphs.algorithmSeries.getData().clear());
         Platform.runLater(() -> myGraphs.algorithmSeries1.getData().clear());
-        Platform.runLater(() -> myGraphs.hybridSeries.getData().clear());
-        Platform.runLater(() -> myGraphs.hybridSeries1.getData().clear());
 
         if (viewModel.getClassName().intern() == "class Model.LinearRegression") {
-            myGraphs.hybridChart.setVisible(false);
-            myGraphs.algorithmLineChart.setVisible(true);
 
             viewModel.VMsetAlgorithmLineChart(colName);
 
@@ -479,8 +475,6 @@ public class Controller extends Pane implements Observer, Initializable {
 
         if (viewModel.getClassName().intern() == "class Model.ZScore")
         {
-            myGraphs.hybridChart.setVisible(false);
-            myGraphs.algorithmLineChart.setVisible(true);
 
             for (int i = 0; i <= numofrow.getValue(); i++)
             {
@@ -491,14 +485,13 @@ public class Controller extends Pane implements Observer, Initializable {
 
         if (viewModel.getClassName().intern() == "class Model.Hybrid")
         {
-            myGraphs.hybridChart.setVisible(true);
-            myGraphs.algorithmLineChart.setVisible(false);
-
-            Platform.runLater(() -> myGraphs.hybridSeries.getData().add(new XYChart.Data(viewModel.getAlgorithmCircle().c.x, viewModel.getAlgorithmCircle().c.y, viewModel.getAlgorithmCircle().r / 2 )));
+            for (Point point : viewModel.getPointsForCircle()) {
+                Platform.runLater(() ->myGraphs.algorithmSeries.getData().add(new XYChart.Data(point.x, point.y)));
+            }
 
             for (int i = 0; i < viewModel.getAlgorithmColValues().size(); i++) {
                 int finalI = i;
-                Platform.runLater(() -> myGraphs.hybridSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI), ((viewModel.getAlgorithmCircle().r/ 100)))));
+                Platform.runLater(() -> myGraphs.algorithmSeries1.getData().add(new XYChart.Data(viewModel.getAlgorithmColValues().get(finalI), viewModel.getAlgorithmCoralatedColValues().get(finalI))));
             }
         }
     }

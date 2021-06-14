@@ -110,6 +110,7 @@ public class Model extends AllModels {
     private ArrayList<Float> anomalyAlgorithmCoralatedColValues = new ArrayList<>();
     private ArrayList<Float> anomalyAlgorithmColValues = new ArrayList<>();
     private ArrayList<Float> ZScoreLine = new ArrayList<>();
+    private ArrayList<Point> pointsForCircle = new ArrayList<>();
 
     TimeSeriesAnomalyDetector ad;
     TimeSeries regularFlight;
@@ -161,6 +162,8 @@ public class Model extends AllModels {
     public ArrayList<Float> getZScoreLine() {
         return ZScoreLine;
     }
+
+    public ArrayList<Point> getPointsForCircle() { return pointsForCircle; }
 
     public float getRudderstep() {
         return rudderstep;
@@ -726,6 +729,12 @@ public class Model extends AllModels {
                 }
 
                 algorithmCircle = hybrid.whoCircle.get(colName);
+                for(double i = 0; i<360; i+=0.5)
+                {
+                    float x=(float) (algorithmCircle.r*Math.cos(i) + algorithmCircle.c.x);
+                    float y=(float) (algorithmCircle.r*Math.sin(i) + algorithmCircle.c.y);
+                    pointsForCircle.add(new Point(x, y));
+                }
             }
         }
 
